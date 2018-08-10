@@ -1,4 +1,4 @@
-let mix = require('laravel-mix');
+let mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -11,5 +11,18 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+mix
+  .webpackConfig({
+    output: {
+      chunkFilename: "js/chunks/[name].js"
+    }
+  })
+  .js("resources/assets/js/app.js", "public/js")
+  .extract(["vue", "vuex", "vue-router", "vuetify", "vue-moment"])
+  // .sourceMaps()
+  // .sass("resources/assets/sass/app.scss", "public/css")
+  .copyDirectory("resources/assets/images", "public/images")
+  .options({
+    processCssUrls: false
+  });
+// .copyDirectory("resources/assets/fonts", "public/fonts");
