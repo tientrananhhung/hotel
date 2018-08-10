@@ -108,10 +108,14 @@ class BillController extends Controller
     {
         //get value bill and update into database
         $bill = Bill::find($id);
-        $bill->discount = $request->get('discount');
-        $bill->total = $request->get('total');
-        $bill->save();
-        return response()->json(array('success' => true));
+        if($bill == null){
+            return response()->json(array('success' => false));
+        }else{
+            $bill->discount = $request->get('discount');
+            $bill->total = $request->get('total');
+            $bill->save();
+            return response()->json(array('success' => true));
+        }
     }
 
     /**
@@ -130,5 +134,10 @@ class BillController extends Controller
             $bill->delete();
             return response()->json(array('success' => true));
         }
+    }
+
+    public function pagination(){
+        $bill = Bill::paginate(10);
+        return $bill;
     }
 }

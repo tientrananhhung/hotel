@@ -2,29 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Response;
 use Mail;
-use DB;
+use App\Mail\HappyBirthdayMailable;
 
 class MailController extends Controller
 {
-    // public function happyBirthday(Request $request)
-    // {
-    //     // $content = 'Thay mặt khách sạn ABC - K79/H20/4 Võ Duy Ninh, Sơn Trà, Đà Nẵng. Kinh chúc quý khách sinh nhật vui vẻ, vạn sự như ý, gia đình hạnh phúc và đạt được nhiều thành công trong cuộc sống';
-    //     $input = $request->all();
-    //     Mail::send('mailbirthday', array('name'=>$input["name"],'email'=>$input["email"], 'content'=>$input['comment']), function($message){
-	//         $message->to('hoctrokontum@gmail.com', 'Khách sạn ABC chúc mừng sinh nhật')->subject('Chúc mừng sinh nhật!');
-	//     });
-    //     Session::flash('flash_message', 'Send message successfully!');
-
-    //     return view('form');
-    // }
-
-    public function sendMail(){
-        $data = ['hoten', 'Tran Anh Hung Tien'];
-        Mail::send('mailbirthday', $data, function($message){
-            $message->from('hoctrokt@gmail.com', 'Khách sạn ABC');
-            $message->to('tien.trananhhung@gmail.com', 'Tiến')->subject('Khách sạn ABC chúc mừng sinh nhật quý khách');
-        });
+    public function sendMail(Request $request){
+        $customer = Customer::where('email', $request->get('email'))->first();
+        if($customer == null){
+            return response()->json(['message' => 'This customer dont have email', 'success' => false]);
+        }else{
+            // Mail::send('mailbirthday', ['name'=>$customer->name], function($message){
+            //     $message->from('hoctrokt@gmail.com', 'Khách sạn ABC');
+            //     $message->to($customer->email, $customer->name)->subject('Khách sạn ABC chúc mừng sinh nhật quý khách');
+            //     // $message->to('tien.trananhhung@gmail.com', 'Tiến')->subject('Khách sạn ABC chúc mừng sinh nhật quý khách');
+            // });
+            // return $customer;
+            Mail::to($customer->email)->send(new HappyBirthdayMailable($customer));
+            return response()->json(['message' => 'Send email completed', 'success' => true]);
+        }
     }
 }

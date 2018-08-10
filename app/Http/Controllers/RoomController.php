@@ -128,9 +128,13 @@ class RoomController extends Controller
             return $response;
         }else{
             //get value room and update into database
-            $room = Room::findOrFail($id);
-            $room->fill($request->all())->save();
-            return response()->json(['room' => $room, 'success' => true]);
+            $room = Room::find($id);
+            if($room == null){
+                return response()->json(array('success' => false));
+            }else{
+                $room->fill($request->all())->save();
+                return response()->json(['room' => $room, 'success' => true]);
+            }
         }
     }
 
@@ -150,5 +154,10 @@ class RoomController extends Controller
             $room->delete();
             return response()->json(array('success' => true));
         }
+    }
+
+    public function pagination(){
+        $room = Room::paginate(10);
+        return $room;
     }
 }
