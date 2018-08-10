@@ -207,4 +207,9 @@ class OrderController extends Controller
             return response()->json(array('success' => true));
         }
     }
+
+    public function pagination(){
+        $order = Order::paginate(10);
+        return $order;
+    }
 }

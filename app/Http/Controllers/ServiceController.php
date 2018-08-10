@@ -43,13 +43,13 @@ class ServiceController extends Controller
     {
         //Custom Notification
         $messages = [
-            'name.required'         => 'You must enter name to this field.',
-            'price.required'     => 'You must enter price to this field.'
+            'name.required'  => 'You must enter name to this field.',
+            'price.required' => 'You must enter price to this field.'
         ];
 
         $validation = [
-            'name'        => 'required',
-            'price'       => 'required'
+            'name'  => 'required',
+            'price' => 'required'
         ];
 
         $validator = Validator::make($request->all(),$validation,$messages);
@@ -103,13 +103,13 @@ class ServiceController extends Controller
     {
         //Custom Notification
         $messages = [
-            'name.required'         => 'You must enter name to this field.',
-            'price.required'     => 'You must enter price to this field.'
+            'name.required'  => 'You must enter name to this field.',
+            'price.required' => 'You must enter price to this field.'
         ];
 
         $validation = [
-            'name'        => 'required',
-            'price'       => 'required'
+            'name'  => 'required',
+            'price' => 'required'
         ];
 
         $validator = Validator::make($request->all(),$validation,$messages);
@@ -120,9 +120,13 @@ class ServiceController extends Controller
             return $response;
         }else{
             //get value user and update into database
-            $service = Service::findOrFail($id);
-            $service->fill($request->all())->save();
-            return response()->json(['service' => $service, 'success' => true]);
+            $service = Service::find($id);
+            if($service == null){
+                return response()->json(array('success' => false));
+            }else{
+                $service->fill($request->all())->save();
+                return response()->json(['service' => $service, 'success' => true]);
+            }
         }
     }
 
@@ -142,5 +146,10 @@ class ServiceController extends Controller
             $service->delete();
             return response()->json(array('success' => true));
         }
+    }
+
+    public function pagination(){
+        $services = Service::paginate(10);
+        return $services;
     }
 }

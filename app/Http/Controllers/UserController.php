@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Response;
 
 class UserController extends Controller
@@ -70,7 +72,15 @@ class UserController extends Controller
             return $response;
         }else{
             //get value user and save into database
-            $user = User::create($request->all());
+            $user = new User;
+            $user->name = $request->get('name');
+            $user->birthday = $request->get('birthday');
+            $user->address = $request->get('address');
+            $user->phone = $request->get('phone');
+            $user->email = $request->get('email');
+            $user->password = bcrypt($request->get('password'));
+            $user->isadmin = $request->get('isadmin');
+            $user->save();
             return response()->json(['user' => $user, 'success' => true]);
         }
     }
@@ -140,9 +150,14 @@ class UserController extends Controller
             return $response;
         }else{
             //get value user and update into database
-            $user = User::findOrFail($id);
-            $user->fill($request->all())->save();
-            return response()->json(['user' => $user, 'success' => true]);
+            $user = User::find($id);
+            if($user != null){
+                $user->fill($request->all())->save();
+                return response()->json(['user' => $user, 'success' => true]);
+            }else{
+                return response()->json(array('success' => false));
+            }
+            
         }
     }
 
@@ -170,5 +185,32 @@ class UserController extends Controller
         // $users->withPath('user/url');
         
         return $users;
+    }
+
+    //find by name or email
+    public function find($keyword){
+        $users = DB::table('users')->where('email', 'like', '%'.$keyword.'%')->orwhere('name', 'like', '%'.$keyword.'%')->get();
+        if($users == null){
+            return response()->json(array('success' => false));
+        }else{
+            return response()->json(['users' => $users, 'success' => true]);
+        }
+    }
+
+    public function getLogin(){
+        return view('dangnhap');
+    }
+
+    public function postLogin(Request $request){
+        if(Auth::attempt(['email'=>$request['email'], 'password'=>$request['password']])){
+            return redirect('list');
+        }else{
+            return redirect('login');
+        }
+    }
+
+    public function logout(){
+        Auth::logout();
+        return redirect('login');
     }
 }

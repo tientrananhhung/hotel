@@ -19,9 +19,9 @@ class CreateCustomersTable extends Migration
             $table->date('birthday')->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->unique();
-            $table->string('avatar')->default('avatar.png');
+            $table->string('avatar')->default('avatar.png')->nullable();
             $table->bigInteger('identity_card')->unique()->nullable();
-            $table->integer('count');
+            $table->integer('count')->nullable();
             $table->string('note')->nullable();
             $table->string('email')->unique()->nullable();
         });
