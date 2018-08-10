@@ -1,25 +1,28 @@
 <template>
   <!-- <Sliderimage></Sliderimage> -->
-  <v-layout row align-center justify-center>
-    <!-- <v-flex xs8>
-      <v-list-tile avatar :color=colortxt :class=colorbgtitle>
-        Bảng Nhân Viên
-      </v-list-tile>
-      <listroom></listroom>
-    </v-flex> -->
+  <v-container grid-list-lg>
+    <v-layout row wrap align-center justify-center>
 
-    <v-flex md2 class="green">
+      <v-flex v-for="i in status" :key=i.name xs3>
+        <v-card dark :color=i.color>
+          <v-card-text class="px-6">{{i.name}}
+          </v-card-text>
+          <div class="headline">{{i.num}}</div>
+        </v-card>
+      </v-flex>
+      <v-flex xs12>
+        <list-room :usersdatas=usersdatas></list-room>
+      </v-flex>
+    </v-layout>
+  </v-container>
 
-    </v-flex>
-
-  </v-layout>
 </template>
 
 <script>
 // @ is an alias to /src
 import HelloWorld from "../components/HelloWorld.vue";
 import Sliderimage from "../components/Sliderimage.vue";
-import Listroom from "../components/Listroom";
+import ListRoom from "../components/Listroom";
 
 import axios from "axios";
 
@@ -30,20 +33,26 @@ export default {
     return {
       colortxt: "light-green lighten-3",
       colorbgtitle: "green lighten-5",
-      usersdata: []
+      urlgetdata: "",
+      usersdatas: [],
+      status: [
+        { name: "Phòng đã đặt", color: "red", num: 15 },
+        { name: "Phòng chưa đặt", color: "green", num: 35 },
+        { name: "Nhân viên đang book", color: "yellow", num: 3 }
+      ]
     };
   },
   components: {
     HelloWorld,
     Sliderimage,
-    Listroom
+    ListRoom
   },
   created() {
     axios
       .get("http://hotel.test/api/user")
       .then(response => {
         this.usersdata = response.data;
-        console.log(this.usersdata);
+        console.log(response.data);
       })
       .catch(error => console.log(error));
   },

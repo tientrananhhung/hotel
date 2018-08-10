@@ -1,133 +1,104 @@
 <template>
-<div>
+  <div>
 
+    <div id="linebar">
+      <v-card color="grey lighten-4" flat height="auto" fixed tile>
+        <v-toolbar dense color="green lighten-2">
+          <v-toolbar-side-icon @click.stop="drawer = !drawer">
 
-<div id="linebar">
-    <v-card
-    color="grey lighten-4"
-    flat
-    height="auto"
-    fixed
-    tile
-  >
-    <v-toolbar dense
-      color="green lighten-2"
-    >
-      <v-toolbar-side-icon @click.stop="drawer = !drawer">
+          </v-toolbar-side-icon>
+          <v-toolbar-title>
+            <router-link to="/">{{myname}}</router-link>
+          </v-toolbar-title>
+          <v-spacer></v-spacer>
 
-      </v-toolbar-side-icon>
-      <v-toolbar-title>
-        <router-link to="/">{{myname}}</router-link>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
+          <v-btn icon>
+            <v-icon>grade</v-icon>
+          </v-btn>
 
-      <v-btn icon>
-        <v-icon>grade</v-icon>
-      </v-btn>
-
-        <router-link to="/form">
+          <router-link to="/login">
             <v-btn icon>
-                <v-icon>perm_identity</v-icon>
+              <v-icon>perm_identity</v-icon>
             </v-btn>
-        </router-link>
-        <router-link to="/about">
+          </router-link>
+          <router-link to="/about">
             <v-btn icon>
-            <v-icon>more_vert</v-icon>
+              <v-icon>more_vert</v-icon>
             </v-btn>
-        </router-link>
+          </router-link>
 
-    </v-toolbar>
-  </v-card>
-    
-</div>
+        </v-toolbar>
+      </v-card>
 
-<div id="navigation">
-    <v-layout
-     wrap>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="mini"
-      absolute
-      temporary 
-      color="primary"
-    >
-      <v-list class="pa-1">
-        <v-list-tile v-if="mini" @click.stop="mini = !mini">
-          <v-list-tile-action>
-            <v-icon>chevron_right</v-icon>
-          </v-list-tile-action>
-        </v-list-tile>
+    </div>
 
-        <v-list-tile avatar tag="div">
-          <v-list-tile-avatar>
-            <img src="https://yt3.ggpht.com/-TyxgQYDx-lI/AAAAAAAAAAI/AAAAAAAAAAA/UwM3eRMLuKM/s88-c-k-no-mo-rj-c0xffffff/photo.jpg">
-          </v-list-tile-avatar>
+    <div id="navigation">
+      <v-layout wrap>
+        <v-navigation-drawer v-model="drawer" :mini-variant="mini" absolute temporary color="primary">
+          <v-list class="pa-1">
+            <v-list-tile v-if="mini" @click.stop="mini = !mini">
+              <v-list-tile-action>
+                <v-icon>chevron_right</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
 
-          <v-list-tile-content>
-            <v-list-tile-title>Bùi Anh Tuấn</v-list-tile-title>
-          </v-list-tile-content>
+            <v-list-tile avatar tag="div">
+              <v-list-tile-avatar>
+                <img src="https://yt3.ggpht.com/-TyxgQYDx-lI/AAAAAAAAAAI/AAAAAAAAAAA/UwM3eRMLuKM/s88-c-k-no-mo-rj-c0xffffff/photo.jpg">
+              </v-list-tile-avatar>
 
-          <v-list-tile-action>
-            <v-btn icon @click.stop="mini = !mini">
-              <v-icon>chevron_left</v-icon>
-            </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-      </v-list>
+              <v-list-tile-content>
+                <v-list-tile-title>Bùi Anh Tuấn</v-list-tile-title>
+              </v-list-tile-content>
 
-      <v-list class="pt-0" dense>
-        <v-divider light></v-divider>
+              <v-list-tile-action>
+                <v-btn icon @click.stop="mini = !mini">
+                  <v-icon>chevron_left</v-icon>
+                </v-btn>
+              </v-list-tile-action>
+            </v-list-tile>
+          </v-list>
 
-           <v-list-tile
-          v-for="item in items"
-          :key="item.title"
-         
-        >
-          <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
+          <v-list class="pt-0" dense>
+            <v-divider light></v-divider>
 
-          <v-list-tile-content>
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+            <v-list-tile v-for="item in items" :key="item.title">
+              <v-list-tile-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-tile-action>
 
+              <v-list-tile-content>
+                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
 
+          </v-list>
+        </v-navigation-drawer>
+      </v-layout>
+    </div>
+  </div>
 
-      </v-list>
-    </v-navigation-drawer>
-  </v-layout>
-</div>
-</div>
-
-
-  
 </template>
 
 <script>
-
-
 export default {
   data() {
     return {
       drawer: null,
       msg: "Ứng dụng đầu tiên với Vue Js",
-      myname: "Bùi Anh Tuấn",
+      myname: "Hotel Manager",
       items: [
-        { title: "Home", icon: "dashboard",link:"../views/Home.vue" },
-        { title: "About", icon: "question_answer",link:"../views/About.vue"  }
+        { title: "Home", icon: "dashboard", link: "../views/Home.vue" },
+        { title: "About", icon: "question_answer", link: "../views/About.vue" }
       ],
       mini: false,
       right: null
     };
-    },
-   methods:{
-        goto: function(){
-        }
-    },
+  },
+  methods: {
+    goto: function() {}
+  }
 };
-
-
 </script>
 
 
