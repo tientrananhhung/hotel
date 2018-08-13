@@ -59,6 +59,7 @@ export default {
       colorbgtitle: "light-green lighten-2",
       urlgetdata: "",
       card1: true,
+      card2: true,
       status: [
         { name: "Phòng đã đặt", color: "deep-orange lighten-1", num: 15 },
         { name: "Phòng chưa đặt", color: "light-green lighten-2", num: 35 },
