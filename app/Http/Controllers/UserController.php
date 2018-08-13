@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 use Response;
 
 class UserController extends Controller
@@ -197,16 +198,16 @@ class UserController extends Controller
         }
     }
 
-    public function getLogin(){
-        return view('dangnhap');
-    }
-
     public function postLogin(Request $request){
-        if(Auth::attempt(['email'=>$request['email'], 'password'=>$request['password']])){
-            return redirect('list');
+
+        $remember = (Input::has('remember')) ? true : false;
+
+        if(Auth::attempt(['email'=>$request['email'], 'password'=>$request['password']], $remember)){
+            return response()->json(['user' => Auth::user(), 'success' => true]);
         }else{
-            return redirect('login');
+            return response()->json(array('success' => false));
         }
+
     }
 
     public function logout(){
