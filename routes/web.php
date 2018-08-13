@@ -24,7 +24,7 @@ Route::get('mail', function () {
 // Route::get('/mail', ['uses' => 'MailController@happyBirthday', 'as' => 'getlienhe']);
 // Route::post('/mail', ['uses' => 'MailController@sendMail', 'as' => 'postlienhe']);
 
-Route::get('/test', 'UserController@pagination');
+// Route::get('/test', 'UserController@pagination');
 
 Route::get('/login', 'UserController@getLogin');
 Route::post('/login', 'UserController@postLogin');

@@ -16,12 +16,6 @@ class MailController extends Controller
         if($customer == null){
             return response()->json(['message' => 'This customer dont have email', 'success' => false]);
         }else{
-            // Mail::send('mailbirthday', ['name'=>$customer->name], function($message){
-            //     $message->from('hoctrokt@gmail.com', 'Khách sạn ABC');
-            //     $message->to($customer->email, $customer->name)->subject('Khách sạn ABC chúc mừng sinh nhật quý khách');
-            //     // $message->to('tien.trananhhung@gmail.com', 'Tiến')->subject('Khách sạn ABC chúc mừng sinh nhật quý khách');
-            // });
-            // return $customer;
             Mail::to($customer->email)->send(new HappyBirthdayMailable($customer));
             return response()->json(['message' => 'Send email completed', 'success' => true]);
         }
