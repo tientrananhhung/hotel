@@ -72,6 +72,7 @@ Route::resource('order', 'OrderController');
 Route::resource('bill', 'BillController');
 
 // Phân trang cho user (10)
+// ví dụ /api/pusers?pages=2
 Route::get('pusers', 'UserController@pagination');
 
 // Phân trang cho service (10)

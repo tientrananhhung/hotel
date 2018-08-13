@@ -1,27 +1,56 @@
 <template>
-  <v-expansion-panel>
-    <v-expansion-panel-content v-for="i in rooms" :key="i.id" expand-icon="mdi-menu-down">
-      <div @click="roominfor(i)" slot="header">{{i.name}}</div>
-      <v-card>
-        <v-card-text class="grey lighten-3">
-          Kiểu phòng là : {{i.type}} | Địa chỉ là : {{i.price}} .
-        </v-card-text>
-      </v-card>
-    </v-expansion-panel-content>
-  </v-expansion-panel>
+  <v-layout row wrap>
+    <v-data-table :headers="headers" :items="room0s" hide-actions class="elevation-2">
+      <template slot="items" slot-scope="props">
+        <td>{{ props.item.name }}</td>
+        <td class="text-xs-right">{{ props.item.type }}</td>
+        <td class="text-xs-right">{{ props.item.price }}</td>
+        <td class="text-xs-right">
+          <dialog-room :room="props.item"></dialog-room>
+        </td>
+        <td class="text-xs-right">
+          <dialog-del-room></dialog-del-room>
+        </td>
+      </template>
+    </v-data-table>
+  </v-layout>
 </template>
 
 <script>
+import DialogRoom from "./DialogRoom/Dialogroom.vue";
+import DialogDelRoom from "./DialogRoom/Dialogdelroom.vue";
 export default {
+  components: {
+    DialogRoom,
+    DialogDelRoom
+  },
   data() {
     return {
-      arr: []
+      arr: [],
+      flagdialog: false,
+      headers: [
+        {
+          text: "Tên Phòng",
+          align: "left",
+          sortable: false,
+          value: "name"
+        },
+
+        { text: "Loại Phòng", sortable: false },
+        { text: "Giá phòng", sortable: false },
+        { text: "Chỉnh sửa", sortable: false },
+        { text: "Xóa Phòng", sortable: false }
+      ]
     };
   },
   props: {},
   computed: {
-    rooms() {
+    room0s() {
       return this.$store.state.arrrooms;
+    },
+    room1s() {
+      var rooms = this.$store.state.arrrooms.filter(t => !t.status);
+      return rooms;
     }
   },
   methods: {
@@ -32,12 +61,8 @@ export default {
       var price = item.price;
       var status = item.status;
       var type = item.type;
-
-      alert("id :" + id + " \n" + "name :" + name + "\n" + "giá :" + price);
     }
   },
-  created() {
-    console.log(this.rooms);
-  }
+  created() {}
 };
 </script>
