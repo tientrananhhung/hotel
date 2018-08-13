@@ -17,7 +17,7 @@
         <v-flex elevation-2 xs12 class="light-green lighten-2">
           <v-layout row wrap>
             <v-flex xs7>
-              <v-card-text class="headline">Danh sách phòng đặt</v-card-text>
+              <v-card-text class="headline">Danh sách phòng chưa đặt</v-card-text>
             </v-flex>
             <v-spacer></v-spacer>
             <v-flex xs5>

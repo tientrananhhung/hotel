@@ -1,9 +1,9 @@
 <template>
-    <v-app>
-        <Toolbar></Toolbar>
-        <router-view/>
-        <Footer></Footer>
-    </v-app>
+  <v-app>
+    <Toolbar></Toolbar>
+    <router-view/>
+    <Footer></Footer>
+  </v-app>
 </template>
 <script>
 import Toolbar from "./components/Toolbar.vue";
@@ -13,7 +13,8 @@ export default {
   components: {
     Toolbar,
     Footer
-  }
+  },
+  created() {}
 };
 </script>
 
