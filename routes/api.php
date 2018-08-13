@@ -78,4 +78,7 @@ Route::get('customer/find/{keyword}', 'CustomerController@find');
 Route::get('user/find/{keyword}', 'UserController@find');
 
 // Truyền Email theo dạng post
-Route::post('/mail', ['uses' => 'MailController@sendMail', 'as' => 'postlienhe']);
+Route::post('/mailhpbd', ['uses' => 'MailController@sendMail', 'as' => 'postlienhe']);
+
+//Truyền Email và Password theo dạng POST
+Route::post('/login', 'UserController@postLogin');
