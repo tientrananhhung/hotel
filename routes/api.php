@@ -71,14 +71,35 @@ Route::resource('order', 'OrderController');
  */
 Route::resource('bill', 'BillController');
 
+// Phân trang cho user (10)
+Route::get('pusers', 'UserController@pagination');
+
+// Phân trang cho service (10)
+Route::get('pservices', 'ServiceController@pagination');
+
+// Phân trang cho room (10)
+Route::get('prooms', 'RoomController@pagination');
+
+// Phân trang cho order (10)
+Route::get('porders', 'OrderController@pagination');
+
+// Phân trang cho customer (10)
+Route::get('pcustomer', 'CustomerController@pagination');
+
+// Phân trang cho bill (10)
+Route::get('pbills', 'BillController@pagination');
+
 // Find customers by name or email (Truyền một từ về name hoặc email - Dạng GET)
 Route::get('customer/find/{keyword}', 'CustomerController@find');
 
 // Find users by name or email (Truyền một từ về name hoặc email - Dạng GET)
 Route::get('user/find/{keyword}', 'UserController@find');
 
-// Truyền Email theo dạng post
+// Send mail birthday - Truyền Email theo dạng POST
 Route::post('/mailhpbd', ['uses' => 'MailController@sendMail', 'as' => 'postlienhe']);
 
-//Truyền Email và Password theo dạng POST
+// Login - Truyền Email và Password theo dạng POST
 Route::post('/login', 'UserController@postLogin');
+
+// Forgot password - Truyền Email theo dạng POST
+Route::post('/forgot', 'ResetPasswordController@postSend');
