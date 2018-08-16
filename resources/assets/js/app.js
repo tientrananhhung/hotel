@@ -5,6 +5,8 @@ import Vuetify from "vuetify";
 import router from "./router";
 import store from "./store";
 
+import "./axios";
+
 Vue.use(Vuetify);
 const app = new Vue({
   el: "#app",

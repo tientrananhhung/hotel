@@ -3,7 +3,7 @@
     <v-flex xs12>
       <v-card class="white--text light-green darken-1" flat height="auto" fixed tile>
         <v-toolbar dense class="white--text light-green darken-1">
-          <v-toolbar-side-icon @click.stop="flag = !flag">
+          <v-toolbar-side-icon @click.stop="drawer = !drawer">
           </v-toolbar-side-icon>
           <v-toolbar-title>
             <router-link to="/">{{myname}}</router-link>
@@ -28,28 +28,29 @@
         </v-toolbar>
       </v-card>
     </v-flex>
+    <naviagation-drawer v-model="drawer" :flag="drawer"></naviagation-drawer>
   </v-layout>
 </template>
 
 <script>
+import NaviagationDrawer from "./Navigationdrawer.vue";
+
 export default {
   data() {
     return {
-      flag: null,
+      drawer: true,
       msg: "Ứng dụng đầu tiên với Vue Js",
       myname: "Hotel Manager",
       mini: false,
       right: null
     };
   },
+  components: {
+    NaviagationDrawer
+  },
   methods: {},
   computed: {},
-  watch: {
-    flag() {
-      this.$store.state.drawer = this.flag;
-      console.log(this.$store.state.drawer);
-    }
-  }
+  watch: {}
 };
 </script>
 

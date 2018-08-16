@@ -10,28 +10,8 @@
           </v-card-actions>
           <p class="headline">{{i.num}}</p>
         </v-card>
-
       </v-flex>
-      <v-flex xs12>
-        <v-flex elevation-2 xs12 class="light-green lighten-2">
-          <v-layout row wrap>
-            <v-flex xs7>
-              <v-card-text class="headline">Danh sách phòng chưa đặt</v-card-text>
-            </v-flex>
-            <v-spacer></v-spacer>
-            <v-flex xs5>
-
-              <v-text-field label="Tìm kiếm" append-outer-icon="search"></v-text-field>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-        <v-container elevation-2 id="scroll-target" style="max-height: 350px" class="scroll-y">
-          <v-layout column align-center justify-center style="height: 1000px">
-            <list-room v-show="card1"></list-room>
-          </v-layout>
-        </v-container>
-
-      </v-flex>
+      <list-room></list-room>
     </v-layout>
   </v-container>
 
@@ -42,6 +22,7 @@
 import ListRoom from "../components/Listroom.vue";
 import HelloWorld from "../components/HelloWorld.vue";
 import Sliderimage from "../components/Sliderimage.vue";
+import DialogAddRoom from "../components/DialogRoom/Dialogaddroom.vue";
 
 import axios from "axios";
 import Vue from "vue";
@@ -50,7 +31,8 @@ export default {
   components: {
     HelloWorld,
     Sliderimage,
-    ListRoom
+    ListRoom,
+    DialogAddRoom
   },
   data() {
     return {
@@ -73,8 +55,6 @@ export default {
       .get("/api/room")
       .then(response => {
         this.$store.state.arrrooms = response.data;
-        console.log("home");
-        console.log(this.$store.state.arrrooms);
       })
       .catch(error => console.log(error));
   },

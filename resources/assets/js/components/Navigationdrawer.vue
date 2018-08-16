@@ -55,7 +55,14 @@ export default {
       ]
     };
   },
-  watch: {}
+  props: {
+    flag: {}
+  },
+  watch: {
+    drawer() {
+      return this.flag;
+    }
+  }
 };
 </script>
 
