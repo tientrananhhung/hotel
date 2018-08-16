@@ -5,12 +5,13 @@ import Vuetify from "vuetify";
 import router from "./router";
 import store from "./store";
 
-import "./axios";
+import axios from "./axios";
 
 Vue.use(Vuetify);
 const app = new Vue({
   el: "#app",
   router,
   store,
+  axios,
   render: h => h(App)
 });

@@ -19,7 +19,7 @@
                         <v-container grid-list-md>
                             <v-layout wrap>
                                 <v-flex xs12 sm12 md12>
-                                    <v-text-field label="Tên Phòng" :hint="texthint" required></v-text-field>
+                                    <v-text-field v-model="name" label="Tên Phòng" :hint="texthint" required></v-text-field>
                                 </v-flex>
                                 <v-flex xs12 sm6 md6>
                                     <v-text-field label="Kiểu Phòng" :hint="texthint" required></v-text-field>
@@ -54,7 +54,8 @@ export default {
     return {
       dialog: false,
       texthint: "Đây là trường bắt buộc không được để trống",
-      statusroom: true
+      statusroom: true,
+      name: ""
     };
   },
   props: {
@@ -68,7 +69,8 @@ export default {
   methods: {
     setinfor() {
       this.dialog = false;
-    }
+    },
+    addroom() {}
   },
   created() {}
 };
