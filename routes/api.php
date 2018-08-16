@@ -96,10 +96,30 @@ Route::get('customer/find/{keyword}', 'CustomerController@find');
 Route::get('user/find/{keyword}', 'UserController@find');
 
 // Send mail birthday - Truyền Email theo dạng POST
-Route::post('/mailhpbd', ['uses' => 'MailController@sendMail', 'as' => 'postlienhe']);
+Route::post('mailhpbd', ['uses' => 'MailController@sendMail', 'as' => 'postlienhe']);
 
 // Login - Truyền Email và Password theo dạng POST
-Route::post('/login', 'UserController@postLogin');
+Route::post('login', 'UserController@postLogin');
 
 // Forgot password - Truyền Email theo dạng POST
-Route::post('/forgot', 'ResetPasswordController@postSend');
+Route::post('forgot', 'ResetPasswordController@postSend');
+
+// Get email when use function Forgot Password - Truyền tham số token
+Route::post('getEmail', function(Request $request){
+    $token = $request->get('token');
+    $emails = DB::table('password_resets')->get();
+    foreach($emails as $email){
+        if (password_verify($token, $email->token)){
+            return $email->email;
+        }
+    }
+});
+
+// Get list rooms booked - 0 is booked
+Route::get('getRoomBooked', 'RoomController@getRoomBooked');
+
+// Get list rooms book - 1 is book
+Route::get('getRoomBook', 'RoomController@getRoomBook');
+
+// Get list rooms by Date - parameter date
+Route::post('postRoomByDate', 'RoomController@postRoomByDate');

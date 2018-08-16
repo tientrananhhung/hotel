@@ -61,6 +61,9 @@ class BillController extends Controller
         $bill->total = $request->get('total');
         $bill->order_id = $request->get('order_id');
         $bill->save();
+        $room = Room::find($bill->order_id);
+        $room->status = 1;
+        $room->save();
         return response()->json(array('success' => true));
     }
 

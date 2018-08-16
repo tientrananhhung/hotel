@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Room;
+use App\Order;
+use App\User;
+use App\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Arr;
 use Response;
 
 class RoomController extends Controller
@@ -159,5 +163,28 @@ class RoomController extends Controller
     public function pagination(){
         $room = Room::paginate(10);
         return $room;
+    }
+
+    public function getRoomBooked(){
+        $rooms = Room::where('status', '0')->get();
+        return response()->json($rooms);
+    }
+
+    public function getRoomBook(){
+        $rooms = Room::where('status', '1')->get();
+        return response()->json($rooms);
+    }
+
+    public function postRoomByDate(Request $request){
+        $date = $request->get('date');
+        $orders = Order::where('to', '<=', $date.' 00:00:00')->get();
+        foreach($orders as $order){
+            $rooms[] = Room::find($order->room_id);
+        }
+        if(empty($rooms)){
+            return response()->json(['success' => false]);
+        }else{
+            return response()->json(['room' => $rooms, 'success' => true]);
+        }
     }
 }

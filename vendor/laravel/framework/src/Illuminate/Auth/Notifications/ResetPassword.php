@@ -57,10 +57,11 @@ class ResetPassword extends Notification
         }
 
         return (new MailMessage)
-            ->subject(Lang::getFromJson('Reset Password Notification'))
-            ->line(Lang::getFromJson('You are receiving this email because we received a password reset request for your account.'))
-            ->action(Lang::getFromJson('Reset Password'), url(config('app.url').route('password.reset', $this->token, false)))
-            ->line(Lang::getFromJson('If you did not request a password reset, no further action is required.'));
+            ->from('hoctrokt@gmail.com', 'ABC Hotel')
+            ->subject(Lang::getFromJson('Yêu cầu đổi mật khẩu'))
+            ->line(Lang::getFromJson('Chúng tôi nhận được yêu cầu đặt lại mật khẩu. Để thay đổi mật khẩu của bạn, hãy nhấp vào liên kết bên dưới'))
+            ->action(Lang::getFromJson('Đổi mật khẩu'), url(config('http://hotel.local').route('password.reset', $this->token, false)))
+            ->line(Lang::getFromJson('Nếu bạn không yêu cầu đặt lại mật khẩu, bạn không cần thực hiện thêm hành động nào.'));
     }
 
     /**
