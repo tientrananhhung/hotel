@@ -123,7 +123,7 @@ class RoomController extends Controller
             'status' => 'required',
             'price'  => 'required'
         ];
-
+        
         $validator = Validator::make($request->all(),$validation,$messages);
 
         //return message by json if validation false
