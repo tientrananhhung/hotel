@@ -1,11 +1,15 @@
 import axios from "axios";
 //
-// axios.defaults.baseURL = "https://api.example.com";
+const instance = axios.create({
+  baseURL: "http://hotel.test/",
+  timeout: 1000,
+  headers: { "X-Custom-Header": "foobar" }
+});
 // Add a request interceptor
 axios.interceptors.request.use(
   function(config) {
     // Do something before request is sent
-    console.log(config);
+    // console.log(config);
     return config;
   },
   function(error) {
@@ -25,4 +29,4 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-export default axios;
+export default new instance({});

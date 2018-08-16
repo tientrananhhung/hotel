@@ -24,9 +24,6 @@ import HelloWorld from "../components/HelloWorld.vue";
 import Sliderimage from "../components/Sliderimage.vue";
 import DialogAddRoom from "../components/DialogRoom/Dialogaddroom.vue";
 
-import axios from "axios";
-import Vue from "vue";
-
 export default {
   components: {
     HelloWorld,
@@ -50,14 +47,7 @@ export default {
     };
   },
   computed: {},
-  created() {
-    axios
-      .get("/api/room")
-      .then(response => {
-        this.$store.state.arrrooms = response.data;
-      })
-      .catch(error => console.log(error));
-  },
+  created() {},
   methods: {
     setStatus() {}
   }

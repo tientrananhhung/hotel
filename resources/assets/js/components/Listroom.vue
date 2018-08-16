@@ -16,7 +16,7 @@
         <v-layout md12 column align-center justify-center style="height: auto; width: 100%">
 
           <v-layout row wrap>
-            <v-data-table :headers="headers" :items="rooms" hide-actions class="elevation-2">
+            <v-data-table :headers="headers" :items="arrrooms" hide-actions class="elevation-2">
               <template slot="items" slot-scope="props">
                 <td class="text-xs-left">{{ props.item.name }}</td>
                 <td class="text-xs-left">{{ props.item.type }}</td>
@@ -43,6 +43,7 @@
 import DialogEditRoom from "./DialogRoom/Dialogeditroom.vue";
 import DialogDelRoom from "./DialogRoom/Dialogdelroom.vue";
 import DialogAddRoom from "./DialogRoom/Dialogaddroom.vue";
+import axios from "axios";
 export default {
   components: {
     DialogEditRoom,
@@ -51,7 +52,7 @@ export default {
   },
   data() {
     return {
-      arr: [],
+      arrrooms: [],
       flagdialog: false,
       headers: [
         {
@@ -71,20 +72,25 @@ export default {
   props: {},
   watch: {},
   computed: {
-    rooms() {
-      return this.$store.state.arrrooms;
-    },
-    room1s() {
-      var rooms = this.$store.state.arrrooms.filter(t => !t.status);
-      return rooms;
-    }
+    // rooms() {
+    //   return this.$store.state.arrrooms;
+    // },
+    // room1s() {
+    //   var rooms = this.$store.state.arrrooms.filter(t => !t.status);
+    //   return rooms;
+    // }
   },
   methods: {},
   created() {
-    this.arr = this.$store.state.arrrooms;
+    axios({
+      method: "get",
+      url: "/api/room"
+    })
+      .then(response => {
+        this.arrrooms = response.data;
+      })
+      .catch(error => console.log(error));
   },
-  mounted() {
-    this.arr = this.$store.state.arrrooms;
-  }
+  mounted() {}
 };
 </script>

@@ -5,8 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    drawer: null,
-    arrrooms: []
+    drawer: null
   },
   mutations: {},
   actions: {}
