@@ -121,6 +121,7 @@ Route::resource('bill', 'BillController');
  * api/pbills phan trang bills
  */
 // Phân trang cho user (10)
+// ví dụ /api/pusers?pages=2
 Route::get('pusers', 'UserController@pagination');
 
 // Phân trang cho service (10)
