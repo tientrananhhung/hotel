@@ -13,11 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 /**
+ * USERS
  * api/user dạng GET sẽ lấy toàn bộ danh sách user
  * api/user dạng POST sẽ thêm mới user (name(*), birthday, address, phone(*), email, password, isadmin(*)) Trường (*) bắt buộc
  * api/user/id dạng GET là tìm một user theo id
@@ -65,6 +62,12 @@ Route::get('getRoomBook', 'RoomController@getRoomBook');
 // Get list rooms by Date - parameter date
 Route::post('postRoomByDate', 'RoomController@postRoomByDate');
 
+// Find room by name
+Route::get('room/find/{keyword}', 'RoomController@find');
+
+// Find room by customer's name
+Route::get('room/findbycustomer/{keyword}', 'OrderController@find_by_name');
+
 /**
  * SERVICES
  * api/service dạng GET sẽ lấy toàn bộ danh sách service
@@ -90,6 +93,9 @@ Route::get('customer/find/{keyword}', 'CustomerController@find');
 
 // Send mail birthday - Truyền Email theo dạng POST
 Route::post('mailhpbd', ['uses' => 'MailController@sendMail', 'as' => 'postlienhe']);
+
+// Find service by name
+Route::get('service/find/{keyword}', 'ServiceController@find');
 
 /**
  * ORDERS
