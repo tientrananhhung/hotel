@@ -2810,7 +2810,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   created: function created() {
     var _this = this;
 
-    __WEBPACK_IMPORTED_MODULE_4_axios___default.a.get("/api/room").then(function (response) {
+    __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get("/api/room").then(function (response) {
       _this.$store.state.arrrooms = response.data;
     }).catch(function (error) {
       return console.log(error);
