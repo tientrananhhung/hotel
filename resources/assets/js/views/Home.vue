@@ -71,7 +71,7 @@ export default {
   created() {
     // get rooms
     axios
-      .get("http://hotel.test/api/room")
+      .get("/api/room")
       .then(response => {
         this.$store.state.arrrooms = response.data;
         console.log("home");

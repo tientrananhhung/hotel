@@ -92,6 +92,9 @@ class OrderController extends Controller
             $order->room_id = $request->get('room_id');
             $order->created_at = Carbon::now()->toDateTimeString();
             $order->save();
+            $room = Room::find($order->room_id);
+            $room->status = 0;
+            $room->save();
             return response()->json(['order' => $order, 'success' => true]);
         }
     }
