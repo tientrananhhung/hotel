@@ -26,7 +26,28 @@ use Illuminate\Http\Request;
  */
 Route::resource('user', 'UserController');
 
+// Find users by name or email (Truyền một từ về name hoặc email - Dạng GET)
+Route::get('user/find/{keyword}', 'UserController@find');
+
+// Login - Truyền Email và Password theo dạng POST
+Route::post('login', 'UserController@postLogin');
+
+// Forgot password - Truyền Email theo dạng POST
+Route::post('forgot', 'ResetPasswordController@postSend');
+
+// Get email when use function Forgot Password - Truyền tham số token
+Route::post('getEmail', function(Request $request){
+    $token = $request->get('token');
+    $emails = DB::table('password_resets')->get();
+    foreach($emails as $email){
+        if (password_verify($token, $email->token)){
+            return $email->email;
+        }
+    }
+});
+
 /**
+ * ROOMS
  * api/room dạng GET sẽ lấy toàn bộ danh sách room
  * api/room dạng POST sẽ thêm mới room (name(*), type(*), status(*), price(*), note) Trường (*) bắt buộc
  * api/room/id dạng GET là tìm một room theo id
@@ -35,7 +56,17 @@ Route::resource('user', 'UserController');
  */
 Route::resource('room', 'RoomController');
 
+// Get list rooms booked - 0 is booked
+Route::get('getRoomBooked', 'RoomController@getRoomBooked');
+
+// Get list rooms book - 1 is book
+Route::get('getRoomBook', 'RoomController@getRoomBook');
+
+// Get list rooms by Date - parameter date
+Route::post('postRoomByDate', 'RoomController@postRoomByDate');
+
 /**
+ * SERVICES
  * api/service dạng GET sẽ lấy toàn bộ danh sách service
  * api/service dạng POST sẽ thêm mới service (name(*), price(*), description(*)) Trường (*) bắt buộc
  * api/service/id dạng GET là tìm một service theo id
@@ -45,6 +76,7 @@ Route::resource('room', 'RoomController');
 Route::resource('service', 'ServiceController');
 
 /**
+ * CUSTOMERS
  * api/customer dạng GET sẽ lấy toàn bộ danh sách customer
  * api/customer dạng POST sẽ thêm mới customer (name(*), birthday, address, phone(*), indentity_card, count, note, email) Trường (*) bắt buộc
  * api/customer/id dạng GET là tìm một customer theo id
@@ -53,7 +85,14 @@ Route::resource('service', 'ServiceController');
  */
 Route::resource('customer', 'CustomerController');
 
+// Find customers by name or email (Truyền một từ về name hoặc email - Dạng GET)
+Route::get('customer/find/{keyword}', 'CustomerController@find');
+
+// Send mail birthday - Truyền Email theo dạng POST
+Route::post('mailhpbd', ['uses' => 'MailController@sendMail', 'as' => 'postlienhe']);
+
 /**
+ * ORDERS
  * api/order dạng GET sẽ lấy toàn bộ danh sách order
  * api/order dạng POST sẽ thêm mới order (from(*), to(*), service - dạng mảng(*), from_rent(*), customer_id, user_id, room_id) Trường (*) bắt buộc
  * api/order/id dạng GET là tìm một order theo id
@@ -63,6 +102,7 @@ Route::resource('customer', 'CustomerController');
 Route::resource('order', 'OrderController');
 
 /**
+ * BILLS
  * api/bill dạng GET sẽ lấy toàn bộ danh sách bill
  * api/bill dạng POST sẽ thêm mới bill (to(*), discount, total(*), order_id(*)) Trường (*) bắt buộc
  * api/bill/id dạng GET là tìm một bill theo id
@@ -71,6 +111,15 @@ Route::resource('order', 'OrderController');
  */
 Route::resource('bill', 'BillController');
 
+/**
+ * PAGINATION
+ * api/pusers phan trang users
+ * api/pservices phan trang services
+ * api/prooms phan trang rooms
+ * api/porders phan trang orders
+ * api/pcustomers phan trang customers
+ * api/pbills phan trang bills
+ */
 // Phân trang cho user (10)
 // ví dụ /api/pusers?pages=2
 Route::get('pusers', 'UserController@pagination');
@@ -89,18 +138,3 @@ Route::get('pcustomer', 'CustomerController@pagination');
 
 // Phân trang cho bill (10)
 Route::get('pbills', 'BillController@pagination');
-
-// Find customers by name or email (Truyền một từ về name hoặc email - Dạng GET)
-Route::get('customer/find/{keyword}', 'CustomerController@find');
-
-// Find users by name or email (Truyền một từ về name hoặc email - Dạng GET)
-Route::get('user/find/{keyword}', 'UserController@find');
-
-// Send mail birthday - Truyền Email theo dạng POST
-Route::post('/mailhpbd', ['uses' => 'MailController@sendMail', 'as' => 'postlienhe']);
-
-// Login - Truyền Email và Password theo dạng POST
-Route::post('/login', 'UserController@postLogin');
-
-// Forgot password - Truyền Email theo dạng POST
-Route::post('/forgot', 'ResetPasswordController@postSend');

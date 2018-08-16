@@ -75,5 +75,19 @@
             @yield('content')
         </main>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var token = location.href.match(/([^\/]*)\/*$/)[1];
+            $.ajax({
+            url: '/api/getEmail',
+            type: 'POST',
+            data: {token: token},
+            })
+            .done(function(data) {
+                $('#email').val(data);
+            })
+        });
+    </script>
 </body>
 </html>

@@ -2810,6 +2810,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   created: function created() {
     var _this = this;
 
+
     __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get("/api/room").then(function (response) {
       _this.$store.state.arrrooms = response.data;
     }).catch(function (error) {
@@ -3904,7 +3905,7 @@ exports = module.exports = __webpack_require__(5)(false);
 
 
 // module
-exports.push([module.i, "\nh3[data-v-3d8a8097] {\n  margin: 40px 0 0;\n}\nul[data-v-3d8a8097] {\n  list-style-type: none;\n  padding: 0;\n}\nli[data-v-3d8a8097] {\n  display: inline-block;\n  margin: 0 10px;\n}\na[data-v-3d8a8097] {\n  color: #42b983;\n}\n", ""]);
+exports.push([module.i, "\nh3[data-v-3d8a8097] {\r\n  margin: 40px 0 0;\n}\nul[data-v-3d8a8097] {\r\n  list-style-type: none;\r\n  padding: 0;\n}\nli[data-v-3d8a8097] {\r\n  display: inline-block;\r\n  margin: 0 10px;\n}\na[data-v-3d8a8097] {\r\n  color: #42b983;\n}\r\n", ""]);
 
 // exports
 
