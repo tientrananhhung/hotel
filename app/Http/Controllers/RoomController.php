@@ -68,7 +68,7 @@ class RoomController extends Controller
             return $response;
         }else{
             //get value user and save into database
-            $room = User::create($request->all());
+            $room = Room::create($request->all());
             return response()->json(['room' => $room, 'success' => true]);
         }
     }
@@ -160,21 +160,25 @@ class RoomController extends Controller
         }
     }
 
+    // Paging for Rooms
     public function pagination(){
         $room = Room::paginate(10);
         return $room;
     }
 
+    // Get list rooms booked
     public function getRoomBooked(){
         $rooms = Room::where('status', '0')->get();
         return response()->json($rooms);
     }
 
+    // Get list room book
     public function getRoomBook(){
         $rooms = Room::where('status', '1')->get();
         return response()->json($rooms);
     }
 
+    // Find room by date
     public function postRoomByDate(Request $request){
         $date = $request->get('date');
         $orders = Order::where('to', '<=', $date.' 00:00:00')->get();
@@ -184,7 +188,17 @@ class RoomController extends Controller
         if(empty($rooms)){
             return response()->json(['success' => false]);
         }else{
-            return response()->json(['room' => $rooms, 'success' => true]);
+            return response()->json(['rooms' => $rooms, 'success' => true]);
+        }
+    }
+
+    // Find room by name
+    public function find($keyword){
+        $rooms = Room::where('name', 'like', '%'.$keyword.'%')->orwhere('type', 'like', '%'.$keyword.'%')->get();
+        if($room->isEmpty()){
+            return response()->json(array('success' => false));
+        }else{
+            return response()->json(['rooms' => $rooms, 'success' => true]);
         }
     }
 }
