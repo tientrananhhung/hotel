@@ -20,16 +20,10 @@
 <script>
 // @ is an alias to /src
 import ListRoom from "../components/Listroom.vue";
-import HelloWorld from "../components/HelloWorld.vue";
-import Sliderimage from "../components/Sliderimage.vue";
-import DialogAddRoom from "../components/DialogRoom/Dialogaddroom.vue";
 
 export default {
   components: {
-    HelloWorld,
-    Sliderimage,
-    ListRoom,
-    DialogAddRoom
+    ListRoom
   },
   data() {
     return {

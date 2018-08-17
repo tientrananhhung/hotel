@@ -66,19 +66,24 @@ export default {
         { text: "Chỉnh sửa", sortable: false },
         { text: "Xóa Phòng", sortable: false }
       ],
-      searchQuery: ""
+      searchQuery: "",
+      pagination: {}
     };
   },
   props: {},
   watch: {},
   computed: {
-    // rooms() {
-    //   return this.$store.state.arrrooms;
-    // },
-    // room1s() {
-    //   var rooms = this.$store.state.arrrooms.filter(t => !t.status);
-    //   return rooms;
-    // }
+    pages() {
+      if (
+        this.pagination.rowsPerPage == null ||
+        this.pagination.totalItems == null
+      )
+        return 0;
+
+      return Math.ceil(
+        this.pagination.totalItems / this.pagination.rowsPerPage
+      );
+    }
   },
   methods: {},
   created() {
