@@ -3,10 +3,12 @@
     <v-toolbar class="elevation-1" flat color="light-green lighten-2">
       <v-toolbar-title>Mục Quản Lý Nhân Viên</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
+      <v-text-field v-model="searchQuery" color="light-green darken-1" label="Tìm kiếm" append-outer-icon="search" style="margin-top: 20px"></v-text-field>
       <v-spacer></v-spacer>
+      <dialog-add-user style="margin-top: 50px"></dialog-add-user>
 
     </v-toolbar>
-    <v-data-table :headers="headers" :items="users" :search="search" :pagination.sync="pagination" hide-actions class="elevation-1">
+    <v-data-table :headers="headers" :items="users" :search="searchQuery" :pagination.sync="pagination" hide-actions class="elevation-1">
       <template slot="headerCell" slot-scope="props">
         <v-tooltip bottom>
           <span slot="activator">
@@ -40,17 +42,19 @@
 <script>
 import DialogEditRoom from "./DialogRoom/Dialogeditroom.vue";
 import DialogDelRoom from "./DialogRoom/Dialogdelroom.vue";
+import DialogAddUser from "./DialogUsers/DialogAddUser.vue";
 import axios from "axios";
 import Vue from "vue";
 
 export default {
   components: {
     DialogEditRoom,
-    DialogDelRoom
+    DialogDelRoom,
+    DialogAddUser
   },
   data() {
     return {
-      search: "",
+      searchQuery: "",
       pagination: {},
       page: 0,
       flag: true,
@@ -60,8 +64,8 @@ export default {
         { text: "Họ và Tên", value: "name", align: "left" },
         { text: "Số điện thoại", value: "birthday", align: "left" },
         { text: "Địa chỉ mail", value: "address", align: "left" },
-        { text: "Chỉnh sửa", value: "phone", align: "left" },
-        { text: "Xóa", value: "mail", align: "left" }
+        { text: "Chỉnh sửa", align: "left" },
+        { text: "Xóa", align: "left" }
       ],
       users: []
     };

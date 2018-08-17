@@ -1,9 +1,9 @@
 <template>
     <v-layout row wrap>
-        <v-card-text style="position: relative">
+        <v-card-text style=" position: relative">
             <v-fab-transition>
                 <v-btn @click="dialog = !dialog" color="light-green darken-1" dark absolute top right="">
-                    Thêm Phòng Mới
+                    Thêm Nhân Viên Mới
                 </v-btn>
             </v-fab-transition>
         </v-card-text>
@@ -13,7 +13,7 @@
 
                 <v-card>
                     <v-card-title class="light-green darken-1">
-                        <span class="headline">Thêm Phòng Mới</span>
+                        <span class="headline">Thêm Nhân Viên Mới</span>
                     </v-card-title>
                     <v-card-text>
                         <v-container grid-list-md>

@@ -1,66 +1,73 @@
 <template>
-    <v-container grid-list-xs>
-        <v-toolbar class="elevation-1" flat color="light-green lighten-2">
-            <v-toolbar-title>Mục Quản Lý Nhân Viên</v-toolbar-title>
-            <v-divider class="mx-2" inset vertical></v-divider>
-            <v-spacer></v-spacer>
+  <v-container grid-list-xs>
+    <v-toolbar class="elevation-1" flat color="light-green lighten-2">
+      <v-toolbar-title>Mục Quản Lý Phòng</v-toolbar-title>
+      <v-divider class="mx-2" inset vertical></v-divider>
+      <v-text-field v-model="searchQuery" color="light-green darken-1" label="Tìm kiếm" append-outer-icon="search" style="margin-top: 20px"></v-text-field>
+      <v-spacer></v-spacer>
+      <dialog-add-room style="margin-top: 50px"></dialog-add-room>
 
-        </v-toolbar>
-        <v-data-table :headers="headers" :items="users" :search="search" :pagination.sync="pagination" hide-actions class="elevation-1">
-            <template slot="headerCell" slot-scope="props">
-                <v-tooltip bottom>
-                    <span slot="activator">
-                        {{ props.header.text }}
-                    </span>
-                    <span>
-                        {{ props.header.text }}
-                    </span>
-                </v-tooltip>
-            </template>
-            <template slot="items" slot-scope="props">
-                <td>{{ props.item.avatar }}</td>
-                <td class="text-xs-right">{{ props.item.name }}</td>
-                <td class="text-xs-right">{{ props.item.phone }}</td>
-                <td class="text-xs-right">{{ props.item.email }}</td>
-                <td class="text-xs-right">
-                    <dialog-edit-room :room="props.item"></dialog-edit-room>
-                </td>
-                <td class="text-xs-right">
-                    <dialog-del-room :room="props.item"></dialog-del-room>
-                </td>
-            </template>
-        </v-data-table>
-        <div class="text-xs-center pt-2">
-            <v-pagination v-model="pagination.page" :length="pages" @input="onPageChange" circle></v-pagination>
-        </div>
-    </v-container>
+    </v-toolbar>
+    <v-data-table :headers="headers" :items="users" :search="searchQuery" :pagination.sync="pagination" hide-actions class="elevation-1">
+      <template slot="headerCell" slot-scope="props">
+        <v-tooltip bottom>
+          <span slot="activator">
+            {{ props.header.text }}
+          </span>
+          <span>
+            {{ props.header.text }}
+          </span>
+        </v-tooltip>
+      </template>
+      <template slot="items" slot-scope="props">
+        <td class="text-xs-left">{{ props.item.name }}</td>
+        <td class="text-xs-left">{{ props.item.type }}</td>
+        <td class="text-xs-left">{{ props.item.price }}</td>
+        <td class="text-xs-right">
+          <dialog-edit-room :room="props.item"></dialog-edit-room>
+        </td>
+        <td class="text-xs-right">
+          <dialog-del-room :room="props.item"></dialog-del-room>
+        </td>
+      </template>
+    </v-data-table>
+    <div class="text-xs-center pt-2">
+      <v-pagination v-model="pagination.page" :length="pages" @input="onPageChange" circle></v-pagination>
+    </div>
+  </v-container>
 </template>
 
 <script>
 import DialogEditRoom from "./DialogRoom/Dialogeditroom.vue";
 import DialogDelRoom from "./DialogRoom/Dialogdelroom.vue";
+import DialogAddRoom from "./DialogRoom/Dialogaddroom.vue";
 import axios from "axios";
 import Vue from "vue";
 
 export default {
   components: {
     DialogEditRoom,
-    DialogDelRoom
+    DialogDelRoom,
+    DialogAddRoom
   },
   data() {
     return {
-      search: "",
+      searchQuery: "",
       pagination: {},
       page: 0,
       flag: true,
       arrclicked: [1],
       headers: [
-        { text: "Avartar", align: "left", sortable: false, value: "avartar" },
-        { text: "Họ và Tên", value: "name", align: "left" },
-        { text: "Số điện thoại", value: "birthday", align: "left" },
-        { text: "Địa chỉ mail", value: "address", align: "left" },
-        { text: "Chỉnh sửa", value: "phone", align: "left" },
-        { text: "Xóa", value: "mail", align: "left" }
+        {
+          text: "Tên Phòng",
+          align: "left",
+          sortable: false,
+          value: "name"
+        },
+        { text: "Loại Phòng", sortable: false, value: "type" },
+        { text: "Giá phòng", sortable: false, value: "price" },
+        { text: "Chỉnh sửa", sortable: false },
+        { text: "Xóa Phòng", sortable: false }
       ],
       users: []
     };
@@ -69,7 +76,7 @@ export default {
   mounted() {
     axios({
       method: "get",
-      url: "/api/pusers"
+      url: "/api/prooms"
     })
       .then(response => {
         this.users = response.data.data;
@@ -90,7 +97,7 @@ export default {
       if (this.flag) {
         axios({
           method: "get",
-          url: "/api/pusers?page=" + newPage
+          url: "/api/prooms?page=" + newPage
         })
           .then(response => {
             var arr = this.users.concat(response.data.data);

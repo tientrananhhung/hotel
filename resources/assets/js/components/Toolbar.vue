@@ -42,7 +42,7 @@
           </v-list-tile-avatar>
 
           <v-list-tile-content>
-            <v-list-tile-title>Bùi Anh Tuấn</v-list-tile-title>
+            <v-list-tile-title>{{userlogin}}</v-list-tile-title>
           </v-list-tile-content>
 
           <v-list-tile-action>
@@ -78,18 +78,20 @@
 export default {
   data() {
     return {
+      userlogin: "Admin",
       drawer: null,
       myname: "Hotel Manager",
       mini: false,
       right: null,
       items: [
-        { title: "Bảng Điều Kiển", icon: "donut_small", link: "/home" },
-        { title: "Quản lý Phòng", icon: "meeting_room", link: "/" },
+        { title: "Bảng Điều Kiển", icon: "donut_small", link: "/" },
+        { title: "Quản lý Phòng", icon: "meeting_room", link: "/roomsmg" },
         {
           title: "Quản lý Nhân Viên",
           icon: "assignment_ind",
           link: "/usersmg"
-        }
+        },
+        { title: "Quản lý Dịch vụ", icon: "room_service", link: "/home" }
       ]
     };
   },
