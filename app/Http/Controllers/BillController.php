@@ -61,9 +61,18 @@ class BillController extends Controller
         $bill->total = $request->get('total');
         $bill->order_id = $request->get('order_id');
         $bill->save();
-        $room = Room::find($bill->order_id);
-        $room->status = 1;
-        $room->save();
+        $order = Order::find($bill->order_id);
+        $order->status = 'Đã Thanh Toán';
+        $order->save();
+
+        $orders = Order::where('room_id', $order->room_id)->where('status', 'LIKE', '%Đang%')->get();
+
+        $room = Room::find($order->room_id);
+        if($orders->isEmpty()){
+            $room->status = 1;
+            $room->save();
+        }
+        
         return response()->json(array('success' => true));
     }
 
@@ -139,6 +148,7 @@ class BillController extends Controller
         }
     }
 
+    // Paging for Bills
     public function pagination(){
         $bill = Bill::paginate(10);
         return $bill;

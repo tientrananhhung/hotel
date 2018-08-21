@@ -3,14 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
+
     // mapping table orders in database
     protected $table = 'orders';
 
     // table orders in database don't have created_date and updated_date
-    public $timestamps = false;
+    // public $timestamps = false;
 
     // Fillable fields - Use Mass Assignment
     protected $fillable = ['from', 'to', 'data', 'from_rent', 'created_at', 'updated_at', 'customer_id', 'user_id', 'room_id'];

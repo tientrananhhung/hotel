@@ -17,7 +17,7 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->datetime('from');
             $table->datetime('to');
-            $table->longText('data');
+            $table->longText('data')->nullable();
             $table->datetime('from_rent');
             $table->integer('customer_id')->unsigned();
             $table->integer('user_id')->unsigned();

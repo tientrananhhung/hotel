@@ -148,8 +148,19 @@ class ServiceController extends Controller
         }
     }
 
+    // Paging for Services
     public function pagination(){
         $services = Service::paginate(10);
         return $services;
+    }
+
+    // Find service by name
+    public function find($keyword){
+        $services = Service::where('name', 'like', '%'.$keyword.'%')->get();
+        if($services->isEmpty()){
+            return response()->json(array('success' => false));
+        }else{
+            return response()->json(['services' => $services, 'success' => true]);
+        }
     }
 }
