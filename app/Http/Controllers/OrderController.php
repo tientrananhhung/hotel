@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Response;
 use Carbon\Carbon;
+use DB;
 
 class OrderController extends Controller
 {
@@ -73,9 +74,12 @@ class OrderController extends Controller
             return $response;
         }else{
             //get value order and save into database
-            // $order = Order::create($request->all());
-
-            $services = Service::whereIn('id',$request->get('service'))->get();
+            if($request->has('service')){
+                $services = Service::whereIn('id',$request->get('service'))->get();
+            }else{
+                $services = [];
+            }
+            
             $room = Room::find($request->get('room_id'));
             $data = [
                 'services' => $services,
@@ -90,7 +94,8 @@ class OrderController extends Controller
             $order->customer_id = $request->get('customer_id');
             $order->user_id = $request->get('user_id');
             $order->room_id = $request->get('room_id');
-            $order->created_at = Carbon::now()->toDateTimeString();
+            // $order->created_at = Carbon::now()->toDateTimeString();
+            $order->status = $request->get('status');
             $order->save();
             $room = Room::find($order->room_id);
             $room->status = 0;
@@ -211,8 +216,39 @@ class OrderController extends Controller
         }
     }
 
+    // Paging for Order
     public function pagination(){
         $order = Order::paginate(10);
         return $order;
+    }
+
+    // Find order by customer's name
+    public function find_by_name($keyword){
+        $customers = Customer::where('name', 'like', '%'.$keyword.'%')->get();
+        if($customers->isEmpty()){
+            return response()->json(array('success' => false));
+        }else{
+            foreach($customers as $customer){
+                $cId[] = $customer->id;
+            }
+
+            $orders = Order::whereIn('user_id', $cId)
+            ->where('status', 'LIKE', '%Đang%')
+            ->get();
+
+            if(empty($orders)){
+                return response()->json(['success' => false]);
+            }else{
+                $orders->makeHidden(['id', 'updated_at']);
+                foreach($orders as $order){
+                    $order->data = json_decode($order->data);
+                    $order->customer_id = Customer::find($order->customer_id);
+                    $order->user_id = User::find($order->user_id);
+                    $order->room_id = Room::find($order->room_id);
+                }
+                return $orders;
+            }
+        }
+        // return $customers;
     }
 }

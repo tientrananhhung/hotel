@@ -1,17 +1,14 @@
 <div style="width:100%; display:flex; background:#d1d1d11c; justify-content: center;">
     <div style="width: 100%; text-align: center;">
         <div id="khung" style="text-align: center;">
-            <img src="https://image.freepik.com/free-vector/surprise-theme-happy-birthday-card-illustration_1344-199.jpg" alt="" style="height: 300px;"><br><br>
 
+            <h3 style="color: #ff5400;text-transform:uppercase;font-size: 40px;">ưu đãi</h3>
+            <h4 style="text-transform:uppercase;font-size: 30px;">{{$content['title']}}</h4>
 
-            <p style="font-size: 15px;">
-                Chào bạn <b>{{$customer->name}}</b>,<br><br>
+            <p style="font-size: 15px;">Chào bạn <b>{{$content['customer']->name}}</b>,<br></p>
 
-                Nhân dịp sinh nhật quý khách, Khách sạn ABC xin được tặng quý khách phiếu giảm giá <span style="color: red;">20%</span> khi sử dụng dịch vụ tại khách sạn ABC.
-                <br><br>
+            <p style="font-size: 15px;">{{$content['body']}}</p>
 
-                Chúc quý khách có một ngày sinh nhật đầy niềm vui và hạnh phúc!
-            </p>
         </div>
         <hr style="width: 500px;">
         <div id="footer" style="text-align: center;">

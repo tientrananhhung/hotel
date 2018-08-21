@@ -180,16 +180,17 @@ class RoomController extends Controller
 
     // Find room by date
     public function postRoomByDate(Request $request){
-        $date = $request->get('date');
-        $orders = Order::where('to', '<=', $date.' 00:00:00')->get();
-        foreach($orders as $order){
-            $rooms[] = Room::find($order->room_id);
-        }
-        if(empty($rooms)){
-            return response()->json(['success' => false]);
-        }else{
-            return response()->json(['rooms' => $rooms, 'success' => true]);
-        }
+        $from = $request->get('from');
+        $to = $request->get('to');
+        $orders = Order::whereBetween('from', [$from, $to])
+        ->orWhereBetween('to', [$from, $to])
+        ->where('status', 'LIKE', '%Đang%')
+        ->get()->pluck('room_id');
+        
+        // $a = $orders->pluck('room_id');
+        $rooms = Room::orderBy('status', 'DESC')->get();
+        $empty = $rooms->whereNotIn('id', $orders);
+        return $empty;
     }
 
     // Find room by name

@@ -167,19 +167,29 @@ class CustomerController extends Controller
         }
     }
 
-    // Phân trang
+    // Paging for Customers
     public function pagination(){
         $customer = Customer::paginate(10);
         return $customer;
     }
 
-    //find by name or email
+    // find by name or email
     public function find($keyword){
         $customers = DB::table('customers')->where('email', 'like', '%'.$keyword.'%')->orwhere('name', 'like', '%'.$keyword.'%')->get();
-        if($customers == null){
+        if($customers->isEmpty()){
             return response()->json(array('success' => false));
         }else{
             return response()->json(['customers' => $customers, 'success' => true]);
         }
+    }
+
+    // Get customers who have birthdays in next 1 days
+    public function customerHPBD(){
+        // Current day
+        $start = date('z') + 1;
+        // end range 7 days from now
+        $end = date('z') + 1 + 1;
+        $customers = Customer::whereRaw("DAYOFYEAR(birthday) BETWEEN $start AND $end")->orderBy('birthday', 'ASC')->get();
+        return $customers;
     }
 }

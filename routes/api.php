@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -91,18 +92,24 @@ Route::resource('customer', 'CustomerController');
 // Find customers by name or email (Truyền một từ về name hoặc email - Dạng GET)
 Route::get('customer/find/{keyword}', 'CustomerController@find');
 
-// Send mail birthday - Truyền Email theo dạng POST
+// Send mail birthday - Truyền email theo dạng POST
 Route::post('mailhpbd', ['uses' => 'MailController@sendMail', 'as' => 'postlienhe']);
 
 // Find service by name
 Route::get('service/find/{keyword}', 'ServiceController@find');
 
+// Get customers who have birthdays in next 1 days
+Route::get('hpbd', 'CustomerController@customerHPBD');
+
+// Send mail birthday - Truyền email theo dạng POST
+Route::post('mailmarketing', 'MailController@sendMarketing');
+
 /**
  * ORDERS
  * api/order dạng GET sẽ lấy toàn bộ danh sách order
- * api/order dạng POST sẽ thêm mới order (from(*), to(*), service - dạng mảng(*), from_rent(*), customer_id, user_id, room_id) Trường (*) bắt buộc
+ * api/order dạng POST sẽ thêm mới order (from(*), to(*), service - dạng mảng, from_rent(*), customer_id, user_id, room_id, status(*)) Trường (*) bắt buộc
  * api/order/id dạng GET là tìm một order theo id
- * api/order/id dạng PUT là cập nhật một order theo id (from, to, service - dạng mảng, from_rent, customer_id, user_id, room_id)
+ * api/order/id dạng PUT là cập nhật một order theo id (from, to, service - dạng mảng, from_rent, customer_id, user_id, room_id, status(*))
  * api/order/id dạng DELETE là xóa một order theo id
  */
 Route::resource('order', 'OrderController');

@@ -180,15 +180,13 @@ class UserController extends Controller
         }
     }
 
+    // Paging for Users
     public function pagination(){
         $users = User::paginate(10);
-
-        // $users->withPath('user/url');
-        
         return $users;
     }
 
-    //find by name or email
+    // Find by name or email
     public function find($keyword){
         $users = DB::table('users')->where('email', 'like', '%'.$keyword.'%')->orwhere('name', 'like', '%'.$keyword.'%')->get();
         if($users == null){
@@ -198,6 +196,7 @@ class UserController extends Controller
         }
     }
 
+    // Login
     public function postLogin(Request $request){
 
         $remember = (Input::has('remember')) ? true : false;
@@ -210,6 +209,7 @@ class UserController extends Controller
 
     }
 
+    // Logout
     public function logout(){
         Auth::logout();
         return redirect('login');
