@@ -60,7 +60,7 @@ Route::get('getRoomBooked', 'RoomController@getRoomBooked');
 // Get list rooms book - 1 is book
 Route::get('getRoomBook', 'RoomController@getRoomBook');
 
-// Get list rooms by Date - parameter date
+// Get list rooms by Date - parameter (from(*), to(*))
 Route::post('postRoomByDate', 'RoomController@postRoomByDate');
 
 // Find room by name
@@ -79,6 +79,9 @@ Route::get('room/findbycustomer/{keyword}', 'OrderController@find_by_name');
  */
 Route::resource('service', 'ServiceController');
 
+// Find service by name
+Route::get('service/find/{keyword}', 'ServiceController@find');
+
 /**
  * CUSTOMERS
  * api/customer dạng GET sẽ lấy toàn bộ danh sách customer
@@ -95,13 +98,10 @@ Route::get('customer/find/{keyword}', 'CustomerController@find');
 // Send mail birthday - Truyền email theo dạng POST
 Route::post('mailhpbd', ['uses' => 'MailController@sendMail', 'as' => 'postlienhe']);
 
-// Find service by name
-Route::get('service/find/{keyword}', 'ServiceController@find');
-
 // Get customers who have birthdays in next 1 days
 Route::get('hpbd', 'CustomerController@customerHPBD');
 
-// Send mail birthday - Truyền email theo dạng POST
+// Send mail marketing - Truyền (email(*), title(*), body(*))
 Route::post('mailmarketing', 'MailController@sendMarketing');
 
 /**
@@ -113,6 +113,9 @@ Route::post('mailmarketing', 'MailController@sendMarketing');
  * api/order/id dạng DELETE là xóa một order theo id
  */
 Route::resource('order', 'OrderController');
+
+// Find orders by customer;
+Route::get('order/find/{id}', 'OrderController@findOrderByCustomer');
 
 /**
  * BILLS

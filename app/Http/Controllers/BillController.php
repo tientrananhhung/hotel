@@ -61,9 +61,14 @@ class BillController extends Controller
         $bill->total = $request->get('total');
         $bill->order_id = $request->get('order_id');
         $bill->save();
+
         $order = Order::find($bill->order_id);
         $order->status = 'Đã Thanh Toán';
         $order->save();
+
+        $customer = Customer::find($order->customer_id);
+        $customer->count = $customer->count+1;
+        $customer->save();
 
         $orders = Order::where('room_id', $order->room_id)->where('status', 'LIKE', '%Đang%')->get();
 

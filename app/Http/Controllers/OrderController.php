@@ -97,7 +97,9 @@ class OrderController extends Controller
             // $order->created_at = Carbon::now()->toDateTimeString();
             $order->status = $request->get('status');
             $order->save();
-            $room = Room::find($order->room_id);
+            $order->data = json_decode($order->data);
+            // $room = Room::find($order->room_id);
+            
             $room->status = 0;
             $room->save();
             return response()->json(['order' => $order, 'success' => true]);
@@ -250,5 +252,18 @@ class OrderController extends Controller
             }
         }
         // return $customers;
+    }
+
+    // 
+    public function findOrderByCustomer($id){
+        $orders = Order::where('customer_id', $id)->get();
+        if($orders->isEmpty()){
+            return response()->json(array('success' => false));
+        }else{
+            foreach ($orders as $order) {
+                $order->data = json_decode($order->data);
+            }
+            return response()->json(['order' => $orders, 'success' => true]);
+        }
     }
 }
