@@ -17,7 +17,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //return a list customers
+        // return a list customers
         $customer = Customer::all();
 
         return $customer;
@@ -41,7 +41,7 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //Custom Notification
+        // Custom Notification
         $messages = [
             'name.required'          => 'You must enter name to this field.',
             'phone.required'         => 'You must enter phone number to this field.',
@@ -59,7 +59,7 @@ class CustomerController extends Controller
 
         $validator = Validator::make($request->all(),$validation,$messages);
 
-        //return message by json if validation false
+        // return message by json if validation false
         if($validator->fails()){
             $response = array('messages' => $validator->messages(), 'success' => false);
             return $response;
@@ -87,7 +87,7 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //Find a order
+        // Find a order
         $customer = Customer::find($id);
 
         if($customer == null){
@@ -117,7 +117,7 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Custom Notification
+        // Custom Notification
         $messages = [
             'name.required'          => 'You must enter name to this field.',
             'phone.required'         => 'You must enter phone number to this field.',
@@ -133,12 +133,12 @@ class CustomerController extends Controller
 
         $validator = Validator::make($request->all(),$validation,$messages);
 
-        //return message by json if validation false
+        // return message by json if validation false
         if($validator->fails()){
             $response = array('messages' => $validator->messages(), 'success' => false);
             return $response;
         }else{
-            //get value customer and update into database
+            // get value customer and update into database
             $customer = Customer::find($id);
             if($customer == null){
                 return response()->json(array('success' => false));
