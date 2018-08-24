@@ -83,6 +83,7 @@ Route::resource('bill', 'BillController')->middleware('auth:api');
 
 Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');
+Route::post('details', 'API\UserController@details')->middleware('auth:api');
 
 // Login - Truyền Email và Password theo dạng POST
 // Route::post('login', 'UserController@postLogin');
