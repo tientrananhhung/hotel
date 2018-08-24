@@ -171,7 +171,7 @@ class RoomController extends Controller
             'price'  => 'numeric',
             'note'   => 'min:1'
         ];
-
+        
         $validator = Validator::make($request->all(),$validation,$messages);
 
         //return message by json if validation false
