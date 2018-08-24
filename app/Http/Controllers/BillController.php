@@ -78,10 +78,13 @@ class BillController extends Controller
             return $response;
         }else{
             if(empty(Bill::where('order_id', $request->order_id)->first())){
+
                 $order = Order::with('room', 'user', 'customer')->find($request->order_id);
 
-                $totalDay = Carbon::parse($request->to)->diffInDays(Carbon::parse($order->from_rent));
+                // Tổng số ngày ở
+                $totalDay = Carbon::parse($request->to)->diffInDays(Carbon::parse($order->from));
 
+                // Tổng giá dịch vụ
                 $s = 0;
 
                 if(!empty($order->data->services)){
@@ -90,6 +93,7 @@ class BillController extends Controller
                     }
                 }
                 
+                // Tổng tiền
                 $total = ($totalDay * $order->room->price + $s) - $request->discount;
 
                 $bill = new Bill;
