@@ -16,11 +16,13 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        //get all user
-        $services = Service::all();
-
-        //return list user by json
-        return Response::json($services, 200, ['Content-type'=> 'application/json; charset=utf-8'], JSON_UNESCAPED_UNICODE);
+        // get all user
+        $keyword = request()->query('keyword');
+        $limit = request()->query('limit');
+        $data = Service::when($keyword, function ($query) use ($keyword) {
+            $query->where('name', 'LIKE', "%$keyword%");
+        })->paginate($limit);
+        return response()->json($data);
     }
 
     /**
@@ -44,12 +46,13 @@ class ServiceController extends Controller
         //Custom Notification
         $messages = [
             'name.required'  => 'You must enter name to this field.',
-            'price.required' => 'You must enter price to this field.'
+            'price.required' => 'You must enter price to this field.',
+            'price.numeric'  => 'You must enter price to this field.'
         ];
 
         $validation = [
-            'name'  => 'required',
-            'price' => 'required'
+            'name'   => 'required',
+            'price'  => 'required|numeric',
         ];
 
         $validator = Validator::make($request->all(),$validation,$messages);
@@ -103,13 +106,14 @@ class ServiceController extends Controller
     {
         //Custom Notification
         $messages = [
-            'name.required'  => 'You must enter name to this field.',
-            'price.required' => 'You must enter price to this field.'
+            'name.unique'   => 'This service exists.',
+            'name.min'      => 'You must enter name to this field.',
+            'price.numeric' => 'You must enter price to this field.'
         ];
 
         $validation = [
-            'name'  => 'required',
-            'price' => 'required'
+            'name'  => 'min:1|unique:services,name',
+            'price' => 'numeric'
         ];
 
         $validator = Validator::make($request->all(),$validation,$messages);
@@ -145,22 +149,6 @@ class ServiceController extends Controller
         }else{
             $service->delete();
             return response()->json(array('success' => true));
-        }
-    }
-
-    // Paging for Services
-    public function pagination(){
-        $services = Service::paginate(10);
-        return $services;
-    }
-
-    // Find service by name
-    public function find($keyword){
-        $services = Service::where('name', 'like', '%'.$keyword.'%')->get();
-        if($services->isEmpty()){
-            return response()->json(array('success' => false));
-        }else{
-            return response()->json(['services' => $services, 'success' => true]);
         }
     }
 }

@@ -16,7 +16,7 @@ class Customer extends Model
     protected $fillable = ['name', 'birthday', 'address', 'phone', 'avatar', 'identity_card', 'count', 'note', 'email'];
 
     // Relationship with table Orders
-    public function Orders()
+    public function orders()
     {
         return $this->hasMany('App\Order');
     }
