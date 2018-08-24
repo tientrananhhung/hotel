@@ -1,12 +1,17 @@
-import axios from "axios";
+// import axios from "axios";
+window.axios = require("axios");
 //
-const instance = axios.create({
-  baseURL: "http://hotel.test/",
-  timeout: 1000,
-  headers: { "X-Custom-Header": "foobar" }
-});
+window.axios.defaults.baseURL = "http://hotel.test/api";
+// axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+// axios.defaults.headers.post["Content-Type"] =
+//   "application/x-www-form-urlencoded";
+// const instance = axios.create({
+//   baseURL: "http://hotel.test/",
+//   timeout: 1000,
+//   headers: { "X-Custom-Header": "foobar" }
+// });
 // Add a request interceptor
-axios.interceptors.request.use(
+window.axios.interceptors.request.use(
   function(config) {
     // Do something before request is sent
     // console.log(config);
@@ -19,7 +24,7 @@ axios.interceptors.request.use(
 );
 
 // Add a response interceptor
-axios.interceptors.response.use(
+window.axios.interceptors.response.use(
   function(response) {
     // Do something with response data
     return response;
@@ -29,4 +34,4 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-export default new instance({});
+// export default axios;

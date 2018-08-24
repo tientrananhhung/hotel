@@ -1,9 +1,7 @@
 <template>
-    <v-layout row wrap fill-height justify-center>
-        <v-flex xs5 ma-4 elevation-2 class="">
-            <form-login ma-3></form-login>
-        </v-flex>
-    </v-layout>
+  <v-layout column fill-height justify-center align-center>
+    <form-login ma-3></form-login>
+  </v-layout>
 </template>
 
 <script>

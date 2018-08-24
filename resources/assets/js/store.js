@@ -5,8 +5,35 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    drawer: null
+    token: null,
+    user: null
   },
-  mutations: {},
-  actions: {}
+  mutations: {
+    TOKEN: (state, data) => {
+      state.token = data;
+    },
+    USER: (state, data) => {
+      Vue.$set(state, "user", data);
+    }
+  },
+  actions: {
+    Init({ dispatch }) {
+      return new Promise((resolve, reject) => {
+        let token = localStorage.getItem("token");
+        if (token) {
+          dispatch("setToken", token);
+          resolve(true);
+        } else {
+          resolve();
+        }
+      });
+    },
+    setToken({ commit }, token) {
+      commit("TOKEN", token);
+      localStorage.setItem("token", token);
+      // set token vao axios
+      // axios.defaults.headers.common["Authorization"] = 'brea '+AUTH_TOKEN;
+      // lay user
+    }
+  }
 });
