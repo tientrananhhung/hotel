@@ -23,16 +23,15 @@ class OrderController extends Controller
     public function index()
     {
         //get all order
-        $orders = Order::all();
-        foreach($orders as $order){
-            $order->data = json_decode($order->data);
-            $order->customer_id = Customer::find($order->customer_id);
-            $order->room_id = Room::find($order->room_id);
-            $order->user_id = User::find($order->user_id);
-        }
-
-        //return list user by json
-        return Response::json($orders, 200, ['Content-type'=> 'application/json; charset=utf-8'], JSON_UNESCAPED_UNICODE);
+        $keyword = request()->query('keyword');
+        $limit = request()->query('limit');
+        $data = Order::whereHas('customer', function ($query) use ($keyword) {
+            $query->where('name', 'LIKE', "%$keyword%")
+            ->orwhere('email', 'LIKE', "%$keyword%")
+            ->orwhere('phone', 'LIKE', "%$keyword%")
+            ->orwhere('identity_card', 'LIKE', "%$keyword%");
+        })->with('customer', 'user', 'room')->paginate($limit);
+        return response()->json($data);
     }
 
     /**
@@ -55,15 +54,28 @@ class OrderController extends Controller
     {
         //Custom Notification
         $messages = [
-            'from.required'      => 'You must choose date to this field.',
-            'to.required'        => 'You must choose date to this field.',
-            'from_rent.required' => 'You must choose date to this field.'
+            'from.required'        => 'You must choose date to this field.',
+            'to.required'          => 'You must choose date to this field.',
+            'from.date'            => 'You must choose date to this field.',
+            'to.date'              => 'You must choose date to this field.',
+            'customer_id.required' => 'You must choose customer to this field.',
+            'user_id.required'     => 'You must choose user to this field.',
+            'room_id.required'     => 'You must choose room to this field.',
+            'customer_id.exists'   => 'This Customer doesn\'t exists',
+            'user_id.exists'       => 'This User doesn\'t exists',
+            'room_id.exists'       => 'This Room doesn\'t exists',
+            'service.exists'       => 'This Service doesn\'t exists',
+            'status.required'      => 'You must enter status to this field.'
         ];
 
         $validation = [
-            'from'      => 'required',
-            'to'        => 'required',
-            'from_rent' => 'required',
+            'from'        => 'required|date',
+            'to'          => 'required|date',
+            'customer_id' => 'required|exists:customers,id',
+            'user_id'     => 'required|exists:users,id',
+            'room_id'     => 'required|exists:rooms,id',
+            'status'      => 'required',
+            'service'     => 'exists:services,id'
         ];
 
         $validator = Validator::make($request->all(),$validation,$messages);
@@ -86,22 +98,11 @@ class OrderController extends Controller
                 'room' => $room
             ];
 
-            $order = new Order;
-            $order->from = $request->get('from');
-            $order->to = $request->get('to');
-            $order->data = json_encode($data);
-            $order->from_rent = $request->get('from_rent');
-            $order->customer_id = $request->get('customer_id');
-            $order->user_id = $request->get('user_id');
-            $order->room_id = $request->get('room_id');
-            // $order->created_at = Carbon::now()->toDateTimeString();
-            $order->status = $request->get('status');
-            $order->save();
-            $order->data = json_decode($order->data);
-            // $room = Room::find($order->room_id);
-            
-            $room->status = 0;
-            $room->save();
+            $request->request->add(['data' => json_encode($data), 'from_rent' => $request->from]);
+            $order = Order::with('customer', 'user', 'room')->create($request->all());
+            $order->room()->update([
+                'status' => '0'
+            ]);
             return response()->json(['order' => $order, 'success' => true]);
         }
     }
@@ -115,23 +116,13 @@ class OrderController extends Controller
     public function show($id)
     {
         //Find a order
-        $order = Order::find($id);
+        $order = Order::with('customer', 'user', 'room')->find($id);
 
         if($order == null){
             return response()->json(array('success' => false));
         }else{
-            $order->data = json_decode($order->data);
-
-            $customer = Customer::find($order->customer_id);
-            $room = Room::find($order->room_id);
-            $user = User::find($order->user_id);
-
-            $order->customer_id = $customer;
-            $order->room_id = $room;
-            $order->user_id = $user;
+            return response()->json(['order' => $order, 'success' => true]);
         }
-        // return $order;
-        return response()->json(['order' => $order, 'success' => true]);
     }
 
     /**
@@ -156,15 +147,24 @@ class OrderController extends Controller
     {
         //Custom Notification
         $messages = [
-            'from.required'      => 'You must choose date to this field.',
-            'to.required'        => 'You must choose date to this field.',
-            'from_rent.required' => 'You must choose date to this field.'
+            'from.date'          => 'You must choose date to this field.',
+            'to.date'            => 'You must choose date to this field.',
+            'service.exists'     => 'This Service doesn\'t exists',
+            'from_rent.date'     => 'You must choose date to this field.',
+            'customer_id.exists' => 'This Customer doesn\'t exists',
+            'user_id.exists'     => 'This User doesn\'t exists',
+            'room_id.required'   => 'You must choose room to this field.',
+            'room_id.exists'     => 'This Room doesn\'t exists'
         ];
 
         $validation = [
-            'from'      => 'required',
-            'to'        => 'required',
-            'from_rent' => 'required',
+            'from'        => 'date',
+            'to'          => 'date',
+            'service'     => 'exists:services,id',
+            'from_rent'   => 'date',
+            'customer_id' => 'exists:customers,id',
+            'user_id'     => 'exists:users,id',
+            'room_id'     => 'required|exists:rooms,id'
         ];
 
         $validator = Validator::make($request->all(),$validation,$messages);
@@ -175,28 +175,25 @@ class OrderController extends Controller
             return $response;
         }else{
             //get value order and update into database
-            $order = Order::find($id);
+            $order = Order::with('customer', 'user', 'room')->find($id);
 
             if($order != null){
-                $services = Service::whereIn('id',$request->get('service'))->get();
+                if($request->has('service')){
+                    $services = Service::whereIn('id',$request->get('service'))->get();
+                }else{
+                    $services = [];
+                }
                 $room = Room::find($request->get('room_id'));
                 $data = [
                     'services' => $services,
                     'room' => $room
                 ];
-
-                $order->from = $request->get('from');
-                $order->to = $request->get('to');
-                $order->data = json_encode($data);
-                $order->from_rent = $request->get('from_rent');
-                $order->customer_id = $request->get('customer_id');
-                $order->user_id = $request->get('user_id');
-                $order->room_id = $request->get('room_id');
-                $order->created_at = $request->get('created_at');
-                $order->updated_at = Carbon::now()->toDateTimeString();
-                $order->save();
+                $request->request->add(['data' => json_encode($data)]);
+                $order->fill($request->all())->save();
+                return response()->json(['order' => $order, 'success' => true]);
+            }else{
+                return response()->json(['success' => false]);
             }
-            return response()->json(['order' => $order, 'success' => true]);
         }
     }
 
@@ -218,52 +215,4 @@ class OrderController extends Controller
         }
     }
 
-    // Paging for Order
-    public function pagination(){
-        $order = Order::paginate(10);
-        return $order;
-    }
-
-    // Find order by customer's name
-    public function find_by_name($keyword){
-        $customers = Customer::where('name', 'like', '%'.$keyword.'%')->get();
-        if($customers->isEmpty()){
-            return response()->json(array('success' => false));
-        }else{
-            foreach($customers as $customer){
-                $cId[] = $customer->id;
-            }
-
-            $orders = Order::whereIn('user_id', $cId)
-            ->where('status', 'LIKE', '%Đang%')
-            ->get();
-
-            if(empty($orders)){
-                return response()->json(['success' => false]);
-            }else{
-                $orders->makeHidden(['id', 'updated_at']);
-                foreach($orders as $order){
-                    $order->data = json_decode($order->data);
-                    $order->customer_id = Customer::find($order->customer_id);
-                    $order->user_id = User::find($order->user_id);
-                    $order->room_id = Room::find($order->room_id);
-                }
-                return $orders;
-            }
-        }
-        // return $customers;
-    }
-
-    // 
-    public function findOrderByCustomer($id){
-        $orders = Order::where('customer_id', $id)->get();
-        if($orders->isEmpty()){
-            return response()->json(array('success' => false));
-        }else{
-            foreach ($orders as $order) {
-                $order->data = json_decode($order->data);
-            }
-            return response()->json(['order' => $orders, 'success' => true]);
-        }
-    }
 }

@@ -18,9 +18,15 @@ class CustomerController extends Controller
     public function index()
     {
         // return a list customers
-        $customer = Customer::all();
-
-        return $customer;
+        $keyword = request()->query('keyword');
+        $limit = request()->query('limit');
+        $data = Customer::when($keyword, function ($query) use ($keyword) {
+            $query->where('name', 'LIKE', "%$keyword%")
+            ->orwhere('email', 'LIKE', "%$keyword%")
+            ->orwhere('identity_card', 'LIKE', "%$keyword%")
+            ->orwhere('phone', 'LIKE', "%$keyword%");
+        })->paginate($limit);
+        return response()->json($data);
     }
 
     /**
@@ -44,17 +50,24 @@ class CustomerController extends Controller
         // Custom Notification
         $messages = [
             'name.required'          => 'You must enter name to this field.',
+            'birthday.date'          => 'You must choose date to this field',
             'phone.required'         => 'You must enter phone number to this field.',
+            'phone.numeric'          => 'You must enter the correct phone number to this field.',
             'phone.min'              => 'You must enter the correct phone number to this field.',
             'phone.unique'           => 'this phone number exists.',
             'identity_card.required' => 'You must enter identity card to this field.',
-            'identity_card.unique'   => 'this Identity_card exists.'
+            'identity_card.numeric'  => 'You must enter the correct identity card to this field.',
+            'identity_card.unique'   => 'this Identity_card exists.',
+            'email.email'            => 'You must enter the correct email to this field.',
+            'email.unique'           => 'This email exists.'
         ];
 
         $validation = [
             'name'          => 'required',
-            'phone'         => 'required|min:10|unique:customers',
-            'identity_card' => 'required|unique:customers'
+            'birthday'      => 'date',
+            'phone'         => 'required|numeric|min:10|unique:customers,phone',
+            'identity_card' => 'required|numeric|unique:customers,identity_card',
+            'email'         => 'email|unique:customers,email'
         ];
 
         $validator = Validator::make($request->all(),$validation,$messages);
@@ -65,16 +78,7 @@ class CustomerController extends Controller
             return $response;
         }else{
             // get value customer and save into database
-            $customer = new Customer;
-            $customer->name = $request->get('name');
-            $customer->birthday = $request->get('birthday');
-            $customer->address = $request->get('address');
-            $customer->phone = $request->get('phone');
-            $customer->identity_card = $request->get('identity_card');
-            $customer->count = $request->get('count');
-            $customer->note = $request->get('note');
-            $customer->email = $request->get('email');
-            $customer->save();
+            $customer = Customer::create($request->all());
             return response()->json(['customer' => $customer, 'success' => true]);
         }
     }
@@ -93,7 +97,6 @@ class CustomerController extends Controller
         if($customer == null){
             return response()->json(array('success' => false));
         }
-        // return $order;
         return response()->json(['customer' => $customer, 'success' => true]);
     }
 
@@ -119,16 +122,22 @@ class CustomerController extends Controller
     {
         // Custom Notification
         $messages = [
-            'name.required'          => 'You must enter name to this field.',
-            'phone.required'         => 'You must enter phone number to this field.',
-            'phone.min'              => 'You must enter the correct phone number to this field.',
-            'identity_card.required' => 'You must enter identity card to this field.'
+            'phone.numeric'         => 'You must enter the correct phone number to this field.',
+            'phone.min'             => 'You must enter the correct phone number to this field.',
+            'phone.unique'          => 'This phone number exists.',
+            'identity_card.numeric' => 'You must enter the correct Identity Card to this field.',
+            'identity_card.unique'  => 'This Identity card exists.',
+            'birthday.date'         => 'You must choose a date to this field.',
+            'email.email'           => 'You must enter the correct email to this field.',
+            'name.min'              => 'This field is not null',
         ];
 
         $validation = [
-            'name'          => 'required',
-            'phone'         => 'required|min:10',
-            'identity_card' => 'required'
+            'phone'         => 'numeric|min:10|unique:customers,phone',
+            'identity_card' => 'numeric|unique:customers,identity_card',
+            'birthday'      => 'date',
+            'email'         => 'email',
+            'name'          => 'min:1'
         ];
 
         $validator = Validator::make($request->all(),$validation,$messages);
@@ -167,29 +176,14 @@ class CustomerController extends Controller
         }
     }
 
-    // Paging for Customers
-    public function pagination(){
-        $customer = Customer::paginate(10);
-        return $customer;
-    }
-
-    // find by name or email
-    public function find($keyword){
-        $customers = DB::table('customers')->where('email', 'like', '%'.$keyword.'%')->orwhere('name', 'like', '%'.$keyword.'%')->get();
-        if($customers->isEmpty()){
-            return response()->json(array('success' => false));
-        }else{
-            return response()->json(['customers' => $customers, 'success' => true]);
-        }
-    }
-
     // Get customers who have birthdays in next 1 days
-    public function customerHPBD(){
-        // Current day
-        $start = date('z') + 1;
-        // end range 7 days from now
-        $end = date('z') + 1 + 1;
-        $customers = Customer::whereRaw("DAYOFYEAR(birthday) BETWEEN $start AND $end")->orderBy('birthday', 'ASC')->get();
-        return $customers;
-    }
+    // public function customerHPBD(){
+    // Current day
+    //     $start = date('z') + 1;
+    //     // end range 7 days from now
+    //     $end = date('z') + 1 + 1;
+    //     $customers = Customer::whereRaw("DAYOFYEAR(birthday) BETWEEN $start AND $end")->orderBy('birthday', 'ASC')->get();
+    //     return $customers;
+    // }
+
 }

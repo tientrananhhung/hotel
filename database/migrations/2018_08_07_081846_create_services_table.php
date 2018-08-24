@@ -17,7 +17,7 @@ class CreateServicesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->decimal('price', 10, 0);
-            $table->string('description');
+            $table->string('description')->nullable();
         });
     }
 

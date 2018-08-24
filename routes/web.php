@@ -26,9 +26,6 @@ Route::get('mail', function () {
 
 // Route::get('/test', 'UserController@pagination');
 
-Route::get('/login', 'UserController@getLogin');
-Route::post('/login', 'UserController@postLogin');
-Route::get('/logout', 'UserController@logout');
 Route::get('/list', function(){
     return view('list');
 });
