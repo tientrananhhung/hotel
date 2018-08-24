@@ -111,7 +111,7 @@ export default {
 }
 
 #linebar a.router-link-exact-active {
-  color: whitesmoke;
+  color: rgb(0, 131, 17);
 }
 #navigation {
   background-color: rgb(21, 75, 92);
