@@ -35,10 +35,13 @@ class UserController extends Controller
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
         }
-        $input = $request->all(); 
-        $input['password'] = bcrypt($input['password']); 
+        $input = $request->all();
+        $input['password'] = bcrypt($input['password']);
+        // $input['name'] = 'admin';
+        $input['phone'] = '096542535';
+        $input['isadmin'] = '0';
         $user = User::create($input); 
-        $success['token'] = $user->createToken('MyApp')->accessToken; 
+        // $success['token'] = $user->createToken('MyApp')->accessToken; 
         $success['name'] = $user->name;
         return response()->json(['success'=>$success], $this->successStatus); 
     }
