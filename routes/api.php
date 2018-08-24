@@ -24,23 +24,6 @@ use App\User;
  */
 Route::resource('user', 'UserController')->middleware('auth:api');
 
-// Login - Truyền Email và Password theo dạng POST
-// Route::post('login', 'UserController@postLogin');
-
-// Forgot password - Truyền Email theo dạng POST
-// Route::post('forgot', 'ResetPasswordController@postSend');
-
-// Get email when use function Forgot Password - Truyền tham số token
-// Route::post('getEmail', function(Request $request){
-//     $token = $request->get('token');
-//     $emails = DB::table('password_resets')->get();
-//     foreach($emails as $email){
-//         if (password_verify($token, $email->token)){
-//             return $email->email;
-//         }
-//     }
-// });
-
 /**
  * ROOMS
  * api/room dạng GET sẽ lấy toàn bộ danh sách room - (parameter: limit = giới hạn phân trang, keyword = tìm kiếm theo name hoặc type)
@@ -73,15 +56,6 @@ Route::resource('service', 'ServiceController')->middleware('auth:api');
  */
 Route::resource('customer', 'CustomerController')->middleware('auth:api');
 
-// Send mail birthday - Truyền email theo dạng POST
-Route::post('mailhpbd', ['uses' => 'MailController@sendMail', 'as' => 'postlienhe']);
-
-// Get customers who have birthdays in next 1 days
-// Route::get('hpbd', 'CustomerController@customerHPBD');
-
-// Send mail marketing - Truyền (email(*), title(*), body(*))
-Route::post('mailmarketing', 'MailController@sendMarketing');
-
 /**
  * ORDERS
  * api/order dạng GET sẽ lấy toàn bộ danh sách order - (parameter: limit = giới hạn phân trang, keyword = tìm kiếm theo name, email, identity_card, phone)
@@ -103,8 +77,39 @@ Route::resource('order', 'OrderController')->middleware('auth:api');
 Route::resource('bill', 'BillController')->middleware('auth:api');
 
 /**
+ * LOGIN
  * api/login dạng POST sẽ đăng nhập thành công và trả về TOKEN
  */
 
 Route::post('login', 'API\UserController@login');
 // Route::post('register', 'API\UserController@register');
+
+// Login - Truyền Email và Password theo dạng POST
+// Route::post('login', 'UserController@postLogin');
+
+// Forgot password - Truyền Email theo dạng POST
+// Route::post('forgot', 'ResetPasswordController@postSend');
+
+// Get email when use function Forgot Password - Truyền tham số token
+// Route::post('getEmail', function(Request $request){
+//     $token = $request->get('token');
+//     $emails = DB::table('password_resets')->get();
+//     foreach($emails as $email){
+//         if (password_verify($token, $email->token)){
+//             return $email->email;
+//         }
+//     }
+// });
+
+
+/**
+ * Gửi mail
+ */
+// Send mail birthday - Truyền email theo dạng POST
+Route::post('mailhpbd', ['uses' => 'MailController@sendMail', 'as' => 'postlienhe'])->middleware('auth:api');
+
+// Get customers who have birthdays in next 1 days
+// Route::get('hpbd', 'CustomerController@customerHPBD');
+
+// Send mail marketing - Truyền (email(*), title(*), body(*))
+Route::post('mailmarketing', 'MailController@sendMarketing')->middleware('auth:api');
