@@ -2,7 +2,7 @@
     <v-layout row wrap>
         <v-card-text style="position: relative">
             <v-fab-transition>
-                <v-btn @click="dialog = !dialog" color="light-green darken-1" dark absolute top right="">
+                <v-btn @click="dialog = !dialog" color="blue darken-1" dark absolute top right="">
                     Thêm Phòng Mới
                 </v-btn>
             </v-fab-transition>
@@ -12,7 +12,7 @@
             <v-dialog v-model="dialog" persistent max-width="600px">
 
                 <v-card>
-                    <v-card-title class="light-green darken-1">
+                    <v-card-title class="blue lighten-1">
                         <span class="headline">Thêm Phòng Mới</span>
                     </v-card-title>
                     <v-card-text>

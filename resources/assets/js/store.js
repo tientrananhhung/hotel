@@ -32,7 +32,7 @@ export default new Vuex.Store({
       commit("TOKEN", token);
       localStorage.setItem("token", token);
       // set token vao axios
-      // axios.defaults.headers.common["Authorization"] = 'brea '+AUTH_TOKEN;
+      axios.defaults.headers.common["Authorization"] = "Bearer " + token;
       // lay user
     }
   }

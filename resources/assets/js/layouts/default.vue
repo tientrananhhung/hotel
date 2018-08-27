@@ -1,9 +1,9 @@
 <template>
-    <v-content>
-        <Toolbar></Toolbar>
-        <router-view/>
-        <Footer></Footer>
-    </v-content>
+  <v-content>
+    <Toolbar></Toolbar>
+    <router-view height="500" />
+    <Footer></Footer>
+  </v-content>
 </template>
 
 <script>

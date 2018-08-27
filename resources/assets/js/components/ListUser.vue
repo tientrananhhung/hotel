@@ -1,9 +1,9 @@
 <template>
   <v-container grid-list-xs>
-    <v-toolbar class="elevation-1" flat color="light-green lighten-2">
+    <v-toolbar class="elevation-1" flat color="blue lighten-2">
       <v-toolbar-title>Mục Quản Lý Nhân Viên</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
-      <v-text-field v-model="searchQuery" color="light-green darken-1" label="Tìm kiếm" append-outer-icon="search" style="margin-top: 20px"></v-text-field>
+      <v-text-field v-model="searchQuery" color="blue lighten-2" label="Tìm kiếm" append-outer-icon="search" style="margin-top: 20px"></v-text-field>
       <v-spacer></v-spacer>
       <dialog-add-user style="margin-top: 50px"></dialog-add-user>
 
@@ -72,10 +72,8 @@ export default {
   },
   created() {},
   mounted() {
-    axios({
-      method: "get",
-      url: "/api/pusers"
-    })
+    axios
+      .get("/user")
       .then(response => {
         this.users = response.data.data;
         this.pagination.totalItems = response.data.total;

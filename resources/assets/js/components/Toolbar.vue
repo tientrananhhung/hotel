@@ -1,11 +1,11 @@
 <template>
   <v-layout row wrap id="linebar">
     <v-flex xs12>
-      <v-card class="white--text light-green darken-1" flat height="auto" fixed tile>
-        <v-toolbar dense class="white--text light-green darken-1">
+      <v-card id="hearbar" class="white--text" flat height="auto" fixed tile>
+        <v-toolbar class="white--text blue lighten-1">
           <v-toolbar-side-icon @click.stop="drawer = !drawer">
           </v-toolbar-side-icon>
-          <v-toolbar-title>
+          <v-toolbar-title color="white--text">
             <router-link to="/">{{myname}}</router-link>
           </v-toolbar-title>
           <v-spacer></v-spacer>
@@ -85,7 +85,7 @@ export default {
       right: null,
       items: [
         { title: "Bảng Điều Kiển", icon: "donut_small", link: "/" },
-        { title: "Quản lý Phòng", icon: "meeting_room", link: "/roomsmg" },
+        { title: "Quản lý Phòng ", icon: "meeting_room", link: "/roomsmg" },
         {
           title: "Quản lý Nhân Viên",
           icon: "assignment_ind",
@@ -106,12 +106,17 @@ export default {
 <style>
 #linebar a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #494949;
+  text-decoration: none;
+}
+#hearbar a {
+  font-weight: bold;
+  color: #ffffff;
   text-decoration: none;
 }
 
 #linebar a.router-link-exact-active {
-  color: rgb(0, 131, 17);
+  color: rgb(0, 41, 155);
 }
 #navigation {
   background-color: rgb(21, 75, 92);

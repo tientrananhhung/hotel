@@ -53,7 +53,10 @@ route.beforeEach((to, from, next) => {
     let token = localStorage.getItem("token");
     if (token) {
       next(true);
-      // set chuyển trang về login thì out về home
+      // console.log($router);
+      // if (router.app.$route.name === "Login") {
+      //   router.replace({ name: "Home" });
+      // }
     } else {
       next(false);
     }

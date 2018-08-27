@@ -2,7 +2,7 @@
 window.axios = require("axios");
 //
 window.axios.defaults.baseURL = "http://hotel.test/api";
-// axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+// axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
 // axios.defaults.headers.post["Content-Type"] =
 //   "application/x-www-form-urlencoded";
 // const instance = axios.create({
@@ -12,12 +12,12 @@ window.axios.defaults.baseURL = "http://hotel.test/api";
 // });
 // Add a request interceptor
 window.axios.interceptors.request.use(
-  function(config) {
+  config => {
     // Do something before request is sent
     // console.log(config);
     return config;
   },
-  function(error) {
+  error => {
     // Do something with request error
     return Promise.reject(error);
   }
@@ -25,11 +25,12 @@ window.axios.interceptors.request.use(
 
 // Add a response interceptor
 window.axios.interceptors.response.use(
-  function(response) {
+  response => {
     // Do something with response data
     return response;
   },
-  function(error) {
+  error => {
+    // console.log("AAA", error.response.status);
     // Do something with response error
     return Promise.reject(error);
   }

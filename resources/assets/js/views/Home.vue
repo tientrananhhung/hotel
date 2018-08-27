@@ -11,20 +11,14 @@
           <p class="headline">{{i.num}}</p>
         </v-card>
       </v-flex>
-      <list-room></list-room>
+
     </v-layout>
   </v-container>
 
 </template>
 
 <script>
-// @ is an alias to /src
-import ListRoom from "../components/Listroom.vue";
-
 export default {
-  components: {
-    ListRoom
-  },
   data() {
     return {
       colortxt: "light-green lighten-3",
@@ -34,9 +28,9 @@ export default {
       card2: true,
       status: [
         { name: "Phòng đã đặt", color: "deep-orange lighten-1", num: 0 },
-        { name: "Phòng chưa đặt", color: "light-green lighten-2", num: 35 },
-        { name: "Nhân viên", color: "cyan lighten-3", num: 3 },
-        { name: "All Oder", color: "indigo lighten-2", num: 8 }
+        { name: "Phòng chưa đặt", color: "cyan lighten-1", num: 35 },
+        { name: "Nhân viên", color: "pink lighten-1", num: 3 },
+        { name: "All Oder", color: "light-green lighten-1", num: 8 }
       ]
     };
   },
