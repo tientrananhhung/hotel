@@ -16,12 +16,9 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn block color="primary" @click="login" :loading="loading">Login</v-btn>
+              <v-btn block color="primary" @click="login" :loading="loading">Đăng Nhập</v-btn>
             </v-card-actions>
           </v-card>
-          <v-alert :value="alert" type="error" transition="scale-transition">
-            Login Fail
-          </v-alert>
         </v-flex>
 
       </v-layout>
@@ -48,8 +45,7 @@ export default {
     email: "",
     password: "",
     checkbox: false,
-    loading: false,
-    alert: false
+    loading: false
   }),
 
   computed: {
@@ -62,6 +58,7 @@ export default {
     },
     emailErrors() {
       const errors = [];
+      this.alert = false;
       if (!this.$v.email.$dirty) return errors;
       !this.$v.email.email &&
         errors.push("Kiểu nhập vào không phải dạng email");
@@ -70,6 +67,7 @@ export default {
     },
     passErrors() {
       const errors = [];
+      this.alert = false;
       if (!this.$v.password.$dirty) return errors;
       !this.$v.password.required && errors.push("Bạn cần nhập mật khẩu");
       return errors;
@@ -89,12 +87,25 @@ export default {
           })
           .then(res => {
             console.log(res.data);
-            this.alert = false;
+
             this.$store.dispatch("setToken", res.data.success.token);
             this.$router.replace({ name: "Home" });
+            localStorage.setItem("EMAIL", this.email);
+
+            this.$store.commit("SNACKBAR", {
+              status: true,
+              content: "Đăng Nhập Thành Công",
+              type: "success",
+              timeout: 2000
+            });
           })
           .catch(error => {
-            this.alert = true;
+            this.$store.commit("SNACKBAR", {
+              status: true,
+              content: "Sai tên đăng nhập hoặc mật khẩu !",
+              type: "error",
+              timeout: 1500
+            });
             console.log(error.response.status);
           });
       }

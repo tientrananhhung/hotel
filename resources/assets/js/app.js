@@ -16,7 +16,7 @@ store.dispatch("Init").then(is_login => {
     render: h => h(App),
     created() {
       if (!is_login) {
-        console.log("Chua dang nhap, chuyen den trang login");
+        // console.log("Chua dang nhap, chuyen den trang login");
         location.href = "#/login";
       } else {
         if (router.app.$route.name === "Login") {

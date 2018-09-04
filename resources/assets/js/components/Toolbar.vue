@@ -1,30 +1,40 @@
 <template>
   <v-layout row wrap id="linebar">
     <v-flex xs12>
-      <v-card id="hearbar" class="white--text" flat height="auto" fixed tile>
+      <v-card id="hearbar" class="white--text" flat fixed tile>
         <v-toolbar class="white--text blue lighten-1">
           <v-toolbar-side-icon @click.stop="drawer = !drawer">
           </v-toolbar-side-icon>
           <v-toolbar-title color="white--text">
-            <router-link to="/">{{myname}}</router-link>
+            <router-link to="/">{{$store.state.user.isadmin ? "Quản lý : "+$store.state.user.name : "Nhân viên : "+$store.state.user.name}}</router-link>
           </v-toolbar-title>
           <v-spacer></v-spacer>
 
-          <v-btn icon>
-            <v-icon>grade</v-icon>
+          <router-link to="login">
+            <v-btn icon>
+              <v-icon color="white">perm_identity</v-icon>
+            </v-btn>
+          </router-link>
+          <v-btn icon @click="dialog = true">
+            <v-icon color="white">power_settings_new</v-icon>
           </v-btn>
-
-          <router-link to="/login">
-            <v-btn icon>
-              <v-icon>perm_identity</v-icon>
-            </v-btn>
-          </router-link>
-          <router-link to="/about">
-            <v-btn icon>
-              <v-icon>more_vert</v-icon>
-            </v-btn>
-          </router-link>
-
+          <v-dialog v-model="dialog" max-width="350">
+            <v-card>
+              <v-card-title class="white--text blue lighten-1 headline">Thoát Ứng Dụng</v-card-title>
+              <v-card-text>
+                Bạn có muốn đăng xuất khỏi tài khoản này ?
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" flat="flat" @click="dialog = false">
+                  Trở Lại
+                </v-btn>
+                <v-btn color="blue darken-1" flat="flat" @click="logout()">
+                  Đăng Xuất
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-toolbar>
       </v-card>
     </v-flex>
@@ -38,11 +48,11 @@
 
         <v-list-tile avatar tag="div">
           <v-list-tile-avatar>
-            <img src="https://yt3.ggpht.com/-TyxgQYDx-lI/AAAAAAAAAAI/AAAAAAAAAAA/UwM3eRMLuKM/s88-c-k-no-mo-rj-c0xffffff/photo.jpg">
+            <img src="images/person.png">
           </v-list-tile-avatar>
 
           <v-list-tile-content>
-            <v-list-tile-title>{{userlogin}}</v-list-tile-title>
+            <v-list-tile-title>{{$store.state.user.name}}</v-list-tile-title>
           </v-list-tile-content>
 
           <v-list-tile-action>
@@ -56,7 +66,7 @@
       <v-list class="pt-0" dense>
         <v-divider light></v-divider>
 
-        <v-list-tile v-for="item in items" :key="item.title">
+        <v-list-tile v-for="item in items" :key="item.title" v-if="item.role.includes(is_admin)">
           <router-link :to=item.link>
             <v-list-tile-action>
               <v-icon>{{ item.icon }}</v-icon>
@@ -84,20 +94,64 @@ export default {
       mini: false,
       right: null,
       items: [
-        { title: "Bảng Điều Kiển", icon: "donut_small", link: "/" },
-        { title: "Quản lý Phòng ", icon: "meeting_room", link: "/roomsmg" },
         {
-          title: "Quản lý Nhân Viên",
-          icon: "assignment_ind",
-          link: "/usersmg"
+          title: "Bảng Điều Kiển",
+          icon: "donut_small",
+          link: "/",
+          role: ["admin", "user"]
         },
-        { title: "Quản lý Dịch vụ", icon: "room_service", link: "/home" }
-      ]
+        {
+          title: "Phòng và Dịch Vụ",
+          icon: "meeting_room",
+          link: "/roomsmg",
+          role: ["admin"]
+        },
+        {
+          title: "Nhân Viên",
+          icon: "assignment_ind",
+          link: "/usersmg",
+          role: ["admin"]
+        },
+        {
+          title: "Khách Hàng",
+          icon: "supervisor_account",
+          link: "/customer",
+          role: ["admin", "user"]
+        },
+        {
+          title: "Đặt Phòng",
+          icon: "book",
+          link: "/booking",
+          role: ["admin", "user"]
+        },
+        {
+          title: "Thanh Toán",
+          icon: "payment",
+          link: "/billbook",
+          role: ["admin", "user"]
+        }
+      ],
+      dialog: false
     };
   },
   components: {},
-  methods: {},
-  computed: {},
+  methods: {
+    logout() {
+      this.$store.dispatch("signOut");
+      this.dialog = false;
+      this.$store.commit("SNACKBAR", {
+        status: true,
+        content: "Đã Đăng Xuất Khỏi Ứng Dụng",
+        type: "warning",
+        timeout: 2000
+      });
+    }
+  },
+  computed: {
+    is_admin() {
+      return this.$store.state.user.isadmin ? "admin" : "user";
+    }
+  },
   watch: {}
 };
 </script>

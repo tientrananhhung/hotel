@@ -3,6 +3,10 @@
     <!-- <Toolbar></Toolbar> -->
     <router-view/>
     <!-- <Footer></Footer> -->
+    <v-snackbar bottom right :timeout="$store.state.snackbar.timeout" :color="$store.state.snackbar.type" v-model="$store.state.snackbar.status">
+      {{$store.state.snackbar.content}}
+      <!-- <v-btn flat color="primary" @click.native="value = false">Close</v-btn> -->
+    </v-snackbar>
   </v-app>
 </template>
 <script>

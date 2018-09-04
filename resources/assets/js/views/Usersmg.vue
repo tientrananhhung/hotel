@@ -1,7 +1,7 @@
 <template>
-    <v-container grid-list-xs>
-        <list-users></list-users>
-    </v-container>
+  <v-layout>
+    <list-users></list-users>
+  </v-layout>
 </template>
 
 <script>

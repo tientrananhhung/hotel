@@ -2,10 +2,12 @@ import Vue from "vue";
 import Router from "vue-router";
 import Default from "./layouts/default";
 import Home from "./views/Home";
-import About from "./views/About.vue";
 import Login from "./views/Login.vue";
 import UserMg from "./views/Usersmg.vue";
 import RoomMg from "./views/Roomsmg.vue";
+import Customer from "./views/Customersmg.vue";
+import Booking from "./views/Booking.vue";
+import Billbook from "./views/Billbook.vue";
 
 Vue.use(Router);
 
@@ -15,28 +17,58 @@ const route = new Router({
       path: "/",
       component: Default,
       meta: {
-        auth: true
+        auth: true,
+        title: "Home"
       },
       children: [
         {
           path: "/",
           name: "Home",
-          component: Home
-        },
-        {
-          path: "/about",
-          name: "about",
-          component: About
+          component: Home,
+          meta: {
+            auth: true,
+            title: "Dashboard"
+          }
         },
         {
           path: "/usersmg",
           name: "usersmg",
-          component: UserMg
+          component: UserMg,
+          meta: {
+            title: "Quản Lý Nhân Viên"
+          }
         },
         {
           path: "/roomsmg",
-          name: "roomsmg",
-          component: RoomMg
+          name: "Roomsmg",
+          component: RoomMg,
+          meta: {
+            title: "Quản Lý Phòng"
+          }
+        },
+        {
+          path: "/customer",
+          name: "Customer",
+          component: Customer,
+          meta: {
+            title: "Danh Sách Khách Hàng"
+          }
+        },
+        {
+          path: "/booking",
+          name: "Booking",
+          component: Booking,
+          meta: {
+            title: "Đặt Phòng"
+          }
+        },
+        {
+          path: "/billbook",
+          name: "Billbook",
+          component: Billbook,
+          meta: {
+            title: "Thanh Toán"
+          }
         }
       ]
     },
@@ -48,20 +80,24 @@ const route = new Router({
   ]
 });
 route.beforeEach((to, from, next) => {
+  // console.log(to.name);
+  let token = localStorage.getItem("token");
   if (to.matched[0].meta && to.matched[0].meta.auth) {
     //checktoken
-    let token = localStorage.getItem("token");
     if (token) {
       next(true);
-      // console.log($router);
-      // if (router.app.$route.name === "Login") {
-      //   router.replace({ name: "Home" });
-      // }
     } else {
       next(false);
     }
   } else {
-    next(true);
+    if (token && to.name === "Login") {
+      // console.log(
+      //   "Chuyển đến trang Home khi nhấp đến Trang Login đã lưu token"
+      // );
+      next(false);
+    } else {
+      next(true);
+    }
   }
 });
 export default route;

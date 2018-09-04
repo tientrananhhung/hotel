@@ -2,35 +2,24 @@
   <v-layout pl-4 pr-4 mb-2 column>
     <v-layout class="elevation-1" row wrap>
       <v-toolbar flat color="blue--text grey lighten-2">
-        <v-toolbar-title>Bảng Phòng</v-toolbar-title>
+        <v-toolbar-title>Bảng Dịch Vụ</v-toolbar-title>
         <v-btn fab flat small color="blue" @click="getData()">
           <v-icon>autorenew</v-icon>
         </v-btn>
         <v-spacer></v-spacer>
+
       </v-toolbar>
       <v-toolbar flat color="blue--text grey lighten-2">
-        <v-flex xs5>
+        <v-flex xs8>
           <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm kiếm" append-outer-icon="search" style="margin-top: 10px"></v-text-field>
         </v-flex>
         <v-divider class="mx-3" inset vertical></v-divider>
-        <v-flex xs4>
-          <v-combobox v-model="pagination.keyword" :items="items" chips label="Loại phòng">
-            <template slot="selection" slot-scope="data">
-              <v-chip :selected="data.selected" :disabled="data.disabled" :key="JSON.stringify(data.item)" class="v-chip--select-multi " @input="data.parent.selectItem(data.item)">
-                <v-avatar class="accent white--text">
-                  {{ data.item.slice(0, 1).toUpperCase() }}
-                </v-avatar>
-                {{ data.item }}
-              </v-chip>
-            </template>
-          </v-combobox>
-        </v-flex>
         <v-spacer></v-spacer>
-        <dialog-add-room style="margin-top: -35px"></dialog-add-room>
+        <dialog-add style="margin-top: -35px"></dialog-add>
       </v-toolbar>
     </v-layout>
 
-    <v-data-table :loading="loading" :headers="headers" :items="rooms.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="rooms.total" class="elevation-1" hide-actions>
+    <v-data-table :loading="loading" :headers="headers" :items="infor.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="infor.total" hide-actions class="elevation-1">
       <template slot="headerCell" slot-scope="props">
         <v-tooltip bottom>
           <span slot="activator">
@@ -43,51 +32,48 @@
       </template>
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.name }}</td>
-        <td class="text-xs-left">{{ props.item.type }}</td>
         <td class="text-xs-left">{{ props.item.price }}</td>
         <td class="text-xs-right">
           <v-layout row wrap>
             <v-spacer></v-spacer>
-            <dialog-edit-room :room="props.item"></dialog-edit-room>
-            <dialog-del-room :room="props.item"></dialog-del-room>
+            <dialog-edit :room="props.item"></dialog-edit>
+            <dialog-del :room="props.item"></dialog-del>
           </v-layout>
         </td>
       </template>
     </v-data-table>
     <div class="text-xs-center pt-2">
-      <v-pagination color="white--text blue darken-1" v-model="pagination.page" :length="rooms.last_page" circle></v-pagination>
+      <v-pagination color="white--text blue darken-1" v-model="pagination.page" :length="infor.last_page" circle></v-pagination>
     </div>
   </v-layout>
 </template>
 
 <script>
-import DialogEditRoom from "./DialogRoom/Dialogeditroom.vue";
-import DialogDelRoom from "./DialogRoom/Dialogdelroom.vue";
-import DialogAddRoom from "./DialogRoom/Dialogaddroom.vue";
+import DialogEdit from "./DialogServices/DialogEditService.vue";
+import DialogDel from "./DialogServices/DialogDelService.vue";
+import DialogAdd from "./DialogServices/DialogAddService.vue";
 
 export default {
   components: {
-    DialogEditRoom,
-    DialogDelRoom,
-    DialogAddRoom
+    DialogEdit,
+    DialogDel,
+    DialogAdd
   },
   data() {
     return {
       headers: [
         {
-          text: "Tên Phòng",
+          text: "Tên dịch vụ",
           align: "left",
           sortable: false,
           value: "name"
         },
-        { text: "Loại Phòng", sortable: false, value: "type", align: "left" },
-        { text: "Giá phòng", sortable: false, value: "price", align: "left" },
+        { text: "Giá ", sortable: false, value: "type", align: "left" },
         { text: "Thao tác", sortable: false, align: "center" }
       ],
-      rooms: {},
+      infor: {},
       pagination: {},
-      loading: false,
-      items: ["Phòng Đôi", "Phòng Đơn", "Phòng Gia Đình", "Phòng Vip"]
+      loading: false
     };
   },
   created() {
@@ -106,13 +92,13 @@ export default {
     getData(withPagination = false) {
       this.loading = true;
       axios
-        .get("/room?limit=6", {
+        .get("/service?limit=6", {
           params: withPagination ? this.pagination : null
         })
         .then(response => {
-          this.rooms = response.data;
+          this.infor = response.data;
           this.loading = false;
-          // console.log("LOG", this.rooms.data);
+          // console.log("LOG", this.infor.data);
         });
     }
   },

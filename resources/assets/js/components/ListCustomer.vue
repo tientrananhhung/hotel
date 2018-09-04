@@ -1,18 +1,15 @@
 <template>
-  <v-layout pa-3 mb-5 column>
+  <v-layout pa-3 mt-3 mb-5 column>
     <v-toolbar class="elevation-1" flat color="blue--text grey lighten-2">
-      <v-toolbar-title>Mục Quản Lý Nhân Viên</v-toolbar-title>
+      <v-toolbar-title>Danh Sách Khách Hàng</v-toolbar-title>
+      <v-divider class="mx-2" inset vertical></v-divider>
+      <v-text-field v-model="pagination.keyword" color="blue--text blue lighten-1" label="Tìm kiếm" append-outer-icon="search" style="margin-top: 20px"></v-text-field>
+      <v-spacer></v-spacer>
       <v-btn fab flat small color="blue" @click="getData()">
         <v-icon>autorenew</v-icon>
       </v-btn>
-      <v-divider class="mx-2" inset vertical></v-divider>
-      <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm kiếm" append-outer-icon="search" style="margin-top: 20px"></v-text-field>
-      <v-spacer></v-spacer>
-
-      <dialog-add-user style="margin-top: 50px" :dialoginfor="dialoginfor"></dialog-add-user>
-
     </v-toolbar>
-    <v-data-table :loading="loading" :headers="headers" :items="users.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="users.total" hide-actions class="elevation-1">
+    <v-data-table :loading="loading" :headers="headers" :items="customer.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="customer.total" class="elevation-1" hide-actions>
       <template slot="headerCell" slot-scope="props">
         <v-tooltip bottom>
           <span slot="activator">
@@ -26,39 +23,35 @@
       <template slot="items" slot-scope="props">
         <td>
           <v-avatar ma-3 :tile="false" :size="40" color="grey lighten-4">
-            <img src="images/person.png" alt="avatar">
+            <img src="images/manager.png" alt="avatar">
           </v-avatar>
         </td>
         <td class="text-xs-right">{{ props.item.name }}</td>
         <td class="text-xs-right">{{ props.item.phone }}</td>
-        <td class="text-xs-right">{{ props.item.email }}</td>
+        <td class="text-xs-right">{{ props.item.identity_card }}</td>
         <td class="text-xs-right">
           <v-layout row wrap>
-            <dialog-edit-user :item="props.item" :dialoginfor="dialoginfor"></dialog-edit-user>
-            <dialog-del-user :item="props.item" :dialoginfor="dialoginfor"></dialog-del-user>
+            <dialog-edit :item="props.item" :dialoginfor="dialoginfor"></dialog-edit>
+            <dialog-del :item="props.item" :dialoginfor="dialoginfor"></dialog-del>
           </v-layout>
         </td>
       </template>
     </v-data-table>
     <div class="text-xs-center pt-2">
-      <v-pagination color="white--text blue darken-1" v-model="pagination.page" :length="users.last_page" circle></v-pagination>
+      <v-pagination color="white--text blue darken-1" v-model="pagination.page" :length="customer.last_page" circle></v-pagination>
     </div>
   </v-layout>
 
 </template>
 
 <script>
-import DialogEditUser from "./DialogUsers/DialogEditUser.vue";
-import DialogDelUser from "./DialogUsers/DialogDelUser.vue";
-import DialogAddUser from "./DialogUsers/DialogAddUser.vue";
-import axios from "axios";
-import Vue from "vue";
+import DialogEdit from "./DialogUsers/DialogEditUser.vue";
+import DialogDel from "./DialogUsers/DialogDelUser.vue";
 
 export default {
   components: {
-    DialogEditUser,
-    DialogDelUser,
-    DialogAddUser
+    DialogEdit,
+    DialogDel
   },
   data() {
     return {
@@ -85,14 +78,14 @@ export default {
           align: "right"
         },
         {
-          text: "Địa chỉ mail",
+          text: "Số CMND",
           sortable: false,
           value: "email",
           align: "right"
         },
         { text: "Thao Tác", sortable: false, align: "center" }
       ],
-      users: {},
+      customer: {},
       pagination: {},
       loading: false
     };
@@ -113,13 +106,13 @@ export default {
     getData(withPagination = false) {
       this.loading = true;
       axios
-        .get("/user?limit=7", {
+        .get("/customer?limit=7", {
           params: withPagination ? this.pagination : null
         })
         .then(response => {
-          this.users = response.data;
+          this.customer = response.data;
           this.loading = false;
-          // console.log("LOG", this.users);
+          // console.log("LOG", this.customer);
         });
     }
   },

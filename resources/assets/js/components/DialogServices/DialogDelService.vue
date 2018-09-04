@@ -8,25 +8,19 @@
     <v-dialog v-model="dialog" max-width="600">
       <v-card>
         <v-layout class="white--text orange lighten-2" row wrap>
-          <v-card-title class="headline">Bạn có muốn xóa phòng này ?</v-card-title>
+          <v-card-title class="headline">Xóa dịch vụ này</v-card-title>
         </v-layout>
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm12 md12>
-                <v-text-field label="Tên phòng" disabled :value="roominfor.name"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md6>
-                <v-text-field label="Kiểu Phòng" disabled :value="roominfor.type"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md6>
-                <v-text-field label="Trạng thái phòng" disabled :value='roominfor.status !=1 ? "Phòng trống" :"Phòng đã đặt"'></v-text-field>
+                <v-text-field label="Tên dịch vụ" disabled :value="infor.name"></v-text-field>
               </v-flex>
               <v-flex xs12 sm12 md12>
-                <v-text-field color="green" label="Giá phòng" disabled :value="roominfor.price"></v-text-field>
+                <v-text-field color="green" label="Giá" disabled :value="infor.price"></v-text-field>
               </v-flex>
               <v-flex xs12>
-                <v-textarea color="green" type="text" name="input-5-3" label="Mô tả" disabled :value="roominfor.note"></v-textarea>
+                <v-textarea color="green" type="text" name="input-5-3" label="Mô tả" disabled :value="infor.description"></v-textarea>
               </v-flex>
             </v-layout>
           </v-container>
@@ -47,7 +41,7 @@ export default {
   data() {
     return {
       dialog: false,
-      roominfor: {}
+      infor: {}
     };
   },
   props: {
@@ -56,12 +50,12 @@ export default {
     }
   },
   mounted() {
-    this.roominfor = this.room;
+    this.infor = this.room;
   },
   methods: {
     delroom() {
       axios
-        .delete("/room/" + this.roominfor.id, {})
+        .delete("/service/" + this.infor.id, {})
         .then(res => {
           if (!res.data.success) {
             console.log(this.nameerror);
@@ -74,7 +68,7 @@ export default {
           } else {
             this.$store.commit("SNACKBAR", {
               status: true,
-              content: "Đã xóa phòng : " + this.roominfor.name,
+              content: "Đã xóa Dịch vụ: " + this.infor.name,
               type: "warning",
               timeout: 1000
             });
