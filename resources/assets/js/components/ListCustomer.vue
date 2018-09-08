@@ -1,6 +1,6 @@
 <template>
-  <v-layout pa-3 mt-3 mb-5 column>
-    <v-toolbar class="elevation-1" flat color="blue--text grey lighten-2">
+  <v-layout pa-3 mb-5 column>
+    <v-toolbar class="elevation-1" flat color="blue--text grey lighten-3">
       <v-toolbar-title>Danh Sách Khách Hàng</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
       <v-text-field v-model="pagination.keyword" color="blue--text blue lighten-1" label="Tìm kiếm" append-outer-icon="search" style="margin-top: 20px"></v-text-field>
@@ -30,10 +30,7 @@
         <td class="text-xs-right">{{ props.item.phone }}</td>
         <td class="text-xs-right">{{ props.item.identity_card }}</td>
         <td class="text-xs-right">
-          <v-layout row wrap>
-            <dialog-edit :item="props.item" :dialoginfor="dialoginfor"></dialog-edit>
-            <dialog-del :item="props.item" :dialoginfor="dialoginfor"></dialog-del>
-          </v-layout>
+          {{ props.item.email }}
         </td>
       </template>
     </v-data-table>
@@ -46,12 +43,10 @@
 
 <script>
 import DialogEdit from "./DialogUsers/DialogEditUser.vue";
-import DialogDel from "./DialogUsers/DialogDelUser.vue";
 
 export default {
   components: {
-    DialogEdit,
-    DialogDel
+    DialogEdit
   },
   data() {
     return {
@@ -83,7 +78,7 @@ export default {
           value: "email",
           align: "right"
         },
-        { text: "Thao Tác", sortable: false, align: "center" }
+        { text: "Email", sortable: false, align: "right" }
       ],
       customer: {},
       pagination: {},

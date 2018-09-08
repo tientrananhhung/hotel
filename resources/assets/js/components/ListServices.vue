@@ -1,7 +1,7 @@
 <template>
   <v-layout pl-4 pr-4 mb-2 column>
     <v-layout class="elevation-1" row wrap>
-      <v-toolbar flat color="blue--text grey lighten-2">
+      <v-toolbar flat color="blue--text grey lighten-3">
         <v-toolbar-title>Bảng Dịch Vụ</v-toolbar-title>
         <v-btn fab flat small color="blue" @click="getData()">
           <v-icon>autorenew</v-icon>
@@ -9,9 +9,9 @@
         <v-spacer></v-spacer>
 
       </v-toolbar>
-      <v-toolbar flat color="blue--text grey lighten-2">
+      <v-toolbar flat color="blue--text grey lighten-3">
         <v-flex xs8>
-          <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm kiếm" append-outer-icon="search" style="margin-top: 10px"></v-text-field>
+          <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm kiếm" append-icon="search" style="margin-top: 10px"></v-text-field>
         </v-flex>
         <v-divider class="mx-3" inset vertical></v-divider>
         <v-spacer></v-spacer>
@@ -37,7 +37,6 @@
           <v-layout row wrap>
             <v-spacer></v-spacer>
             <dialog-edit :room="props.item"></dialog-edit>
-            <dialog-del :room="props.item"></dialog-del>
           </v-layout>
         </td>
       </template>
@@ -49,14 +48,12 @@
 </template>
 
 <script>
-import DialogEdit from "./DialogServices/DialogEditService.vue";
-import DialogDel from "./DialogServices/DialogDelService.vue";
-import DialogAdd from "./DialogServices/DialogAddService.vue";
+import DialogEdit from "./DialogServices/DialogEditService";
+import DialogAdd from "./DialogServices/DialogAddService";
 
 export default {
   components: {
     DialogEdit,
-    DialogDel,
     DialogAdd
   },
   data() {

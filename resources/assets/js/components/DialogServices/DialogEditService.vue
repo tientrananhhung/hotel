@@ -1,9 +1,11 @@
 <template>
   <v-layout row justify-center>
+
     <v-dialog v-model="dialog" persistent max-width="600">
       <v-btn slot="activator" flat icon color="blue lighten-1">
         <v-icon>edit</v-icon>
       </v-btn>
+
       <v-card>
         <v-card-title class="white--text blue lighten-1">
           <span class="headline">Cập nhật service</span>
@@ -15,7 +17,6 @@
               <v-flex xs12 sm12 md12>
                 <v-text-field color="blue lighten-1" v-model="infor.name" label="Tên dịch vụ" :hint="texthint" required></v-text-field>
               </v-flex>
-
               <v-flex xs12 sm12 md12>
                 <v-text-field v-model="infor.price" color="blue lighten-1" label="Giá" :hint="texthint" required></v-text-field>
               </v-flex>
@@ -27,11 +28,31 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue lighten-1" flat @click="getoldroom()">Đóng</v-btn>
-          <v-btn color="blue lighten-1" flat @click.native="setinfor()">Cập Nhật</v-btn>
+          <v-btn color="white--text red" @click="dialogdel = !dialogdel">Xóa Dịch Vụ</v-btn>
+          <v-btn color="blue lighten-1" outline="" @click="dialog = !dialog">Đóng</v-btn>
+          <v-btn color="blue lighten-1" outline="" @click.native="setinfor()">Cập Nhật</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog persistent v-model="dialogdel" max-width="350">
+      <v-card>
+        <v-card-title class="white--text orange lighten-2">Xóa dịch vụ</v-card-title>
+        <v-card-text>
+          Bạn có muốn xóa dịch vụ {{infor.name}} ?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" flat="flat" @click="dialogdel = false">
+            Trở Lại
+          </v-btn>
+          <v-btn color="blue darken-1" flat="flat" @click="del()">
+            Xóa
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-layout>
 </template>
 
@@ -40,6 +61,7 @@ export default {
   data() {
     return {
       dialog: false,
+      dialogdel: false,
       texthint: "Đây là trường bắt buộc không được để trống",
       infor: {},
       inforold: {},
@@ -94,10 +116,32 @@ export default {
         });
       this.dialog = false;
     },
-    // xử lí lấy lịch sử phòng để chèn lại khi đóng nút hủy
-    getoldroom() {
-      this.inforold = this.detailroom;
-      this.dialog = false;
+    del() {
+      axios
+        .delete("/service/" + this.infor.id, {})
+        .then(res => {
+          if (!res.data.success) {
+            console.log(this.nameerror);
+            this.$store.commit("SNACKBAR", {
+              status: true,
+              content: "Xóa Thất Bại",
+              type: "error",
+              timeout: 1000
+            });
+          } else {
+            this.$store.commit("SNACKBAR", {
+              status: true,
+              content: "Đã xóa Dịch vụ: " + this.infor.name,
+              type: "warning",
+              timeout: 1000
+            });
+          }
+          console.log(res.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      this.dialogdel = false;
     }
   }
 };

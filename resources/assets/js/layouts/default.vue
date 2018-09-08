@@ -1,15 +1,17 @@
 <template>
-  <v-content>
+  <div class="fill-height">
     <Toolbar></Toolbar>
-    <v-breadcrumbs pl-3>
-      <v-icon slot="divider">chevron_right</v-icon>
-      <v-breadcrumbs-item v-for="(item,index) in $route.matched" v-if="item.meta" :to="'/'+item.path" :key="index+'bread'">
-        {{ item.meta.title }}
-      </v-breadcrumbs-item>
-    </v-breadcrumbs>
-    <router-view height="500" />
+    <v-content class="fill-height">
+      <v-breadcrumbs pl-3>
+        <v-icon slot="divider">chevron_right</v-icon>
+        <v-breadcrumbs-item v-for="(item,index) in $route.matched" v-if="item.meta" :to="'/'+item.path" :key="index+'bread'">
+          {{ item.meta.title }}
+        </v-breadcrumbs-item>
+      </v-breadcrumbs>
+      <router-view height="500" />
+    </v-content>
     <Footer></Footer>
-  </v-content>
+  </div>
 </template>
 
 <script>

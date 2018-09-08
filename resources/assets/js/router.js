@@ -7,6 +7,7 @@ import UserMg from "./views/Usersmg.vue";
 import RoomMg from "./views/Roomsmg.vue";
 import Customer from "./views/Customersmg.vue";
 import Booking from "./views/Booking.vue";
+import Oders from "./views/Oders.vue";
 import Billbook from "./views/Billbook.vue";
 
 Vue.use(Router);
@@ -26,13 +27,12 @@ const route = new Router({
           name: "Home",
           component: Home,
           meta: {
-            auth: true,
-            title: "Dashboard"
+            auth: true
           }
         },
         {
           path: "/usersmg",
-          name: "usersmg",
+          name: "Usersmg",
           component: UserMg,
           meta: {
             title: "Quản Lý Nhân Viên"
@@ -60,6 +60,14 @@ const route = new Router({
           component: Booking,
           meta: {
             title: "Đặt Phòng"
+          }
+        },
+        {
+          path: "/oders",
+          name: "Oders",
+          component: Oders,
+          meta: {
+            title: "Danh Sách Đơn Đặt"
           }
         },
         {

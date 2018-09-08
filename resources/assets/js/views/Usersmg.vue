@@ -1,7 +1,7 @@
 <template>
-  <v-layout>
+  <v-container fluid grid-list-md>
     <list-users></list-users>
-  </v-layout>
+  </v-container>
 </template>
 
 <script>

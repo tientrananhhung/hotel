@@ -1,55 +1,67 @@
 <template>
   <v-layout pa-3 mb-5 column>
-    <v-toolbar class="elevation-1" flat color="blue--text grey lighten-2">
-      <v-toolbar-title>Mục Quản Lý Nhân Viên</v-toolbar-title>
+
+    <v-toolbar class="elevation-1" flat color="blue--text grey lighten-3">
+      <v-toolbar-title>Nhân Viên</v-toolbar-title>
       <v-btn fab flat small color="blue" @click="getData()">
         <v-icon>autorenew</v-icon>
       </v-btn>
       <v-divider class="mx-2" inset vertical></v-divider>
-      <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm kiếm" append-outer-icon="search" style="margin-top: 20px"></v-text-field>
+      <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm kiếm nhân viên" append-icon="search" style="margin-top: 20px"></v-text-field>
       <v-spacer></v-spacer>
-
       <dialog-add-user style="margin-top: 50px" :dialoginfor="dialoginfor"></dialog-add-user>
-
     </v-toolbar>
-    <v-data-table :loading="loading" :headers="headers" :items="users.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="users.total" hide-actions class="elevation-1">
-      <template slot="headerCell" slot-scope="props">
-        <v-tooltip bottom>
-          <span slot="activator">
-            {{ props.header.text }}
-          </span>
-          <span>
-            {{ props.header.text }}
-          </span>
-        </v-tooltip>
-      </template>
-      <template slot="items" slot-scope="props">
-        <td>
-          <v-avatar ma-3 :tile="false" :size="40" color="grey lighten-4">
-            <img src="images/person.png" alt="avatar">
-          </v-avatar>
-        </td>
-        <td class="text-xs-right">{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.phone }}</td>
-        <td class="text-xs-right">{{ props.item.email }}</td>
-        <td class="text-xs-right">
+
+    <v-data-iterator mt-4 :items="users.data" :search="pagination.keyword" :pagination.sync="pagination" content-tag="v-layout" hide-actions :total-items="users.total" :loading="loading" row wrap>
+      <v-flex slot="item" slot-scope="props" xs12 sm6 ma4 lg3>
+        <v-card>
           <v-layout row wrap>
-            <dialog-edit-user :item="props.item" :dialoginfor="dialoginfor"></dialog-edit-user>
-            <dialog-del-user :item="props.item" :dialoginfor="dialoginfor"></dialog-del-user>
+            <v-flex xs10>
+              <v-card-title class="align-center subheading font-weight-bold">{{ props.item.name }}</v-card-title>
+            </v-flex>
+            <v-flex xs1>
+              <dialog-edit-user :item="props.item" :dialoginfor="dialoginfor"></dialog-edit-user>
+            </v-flex>
+
           </v-layout>
-        </td>
-      </template>
-    </v-data-table>
+
+          <v-divider></v-divider>
+
+          <v-list dense>
+            <v-list-tile>
+              <v-avatar ma-3 :tile="false" :size="40" color="grey lighten-4">
+                <img src="images/person.png" alt="avatar">
+              </v-avatar>
+            </v-list-tile>
+
+            <v-list-tile>
+              <v-list-tile-content>Số điện Thoại :</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ props.item.phone }}</v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile>
+              <v-list-tile-content>Email :</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ props.item.email }}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>Địa chỉ :</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ props.item.address }}</v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-card>
+      </v-flex>
+    </v-data-iterator>
+
     <div class="text-xs-center pt-2">
       <v-pagination color="white--text blue darken-1" v-model="pagination.page" :length="users.last_page" circle></v-pagination>
     </div>
+
   </v-layout>
 
 </template>
 
 <script>
 import DialogEditUser from "./DialogUsers/DialogEditUser.vue";
-import DialogDelUser from "./DialogUsers/DialogDelUser.vue";
 import DialogAddUser from "./DialogUsers/DialogAddUser.vue";
 import axios from "axios";
 import Vue from "vue";
@@ -57,7 +69,6 @@ import Vue from "vue";
 export default {
   components: {
     DialogEditUser,
-    DialogDelUser,
     DialogAddUser
   },
   data() {
@@ -113,7 +124,7 @@ export default {
     getData(withPagination = false) {
       this.loading = true;
       axios
-        .get("/user?limit=7", {
+        .get("/user?limit=8", {
           params: withPagination ? this.pagination : null
         })
         .then(response => {
