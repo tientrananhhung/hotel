@@ -1,7 +1,7 @@
 <template>
-    <v-layout column height="800">
-        <list-oder></list-oder>
-    </v-layout>
+  <v-container fluid grid-list-md>
+    <list-oder></list-oder>
+  </v-container>
 </template>
 
 <script>
