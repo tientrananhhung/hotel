@@ -1,13 +1,15 @@
 <template>
   <div>
     <v-toolbar :clipped-left="$vuetify.breakpoint.lgAndUp" color="blue lighten-1" dark app fixed>
-      <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
-        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title>
+        <v-toolbar-side-icon @click.stop="drawer = !drawer">
+        </v-toolbar-side-icon>
+
         <span class="hidden-sm-and-down">
           {{$store.state.user.isadmin ? "Quản lý : "+$store.state.user.name : "Nhân viên : "+$store.state.user.name}}
         </span>
       </v-toolbar-title>
-      <v-text-field flat solo-inverted hide-details prepend-inner-icon="search" label="Tìm kiếm" class="hidden-sm-and-down"></v-text-field>
+      <!-- <v-text-field flat solo-inverted hide-details prepend-inner-icon="search" label="Tìm kiếm" class="hidden-sm-and-down"></v-text-field> -->
       <v-spacer></v-spacer>
       <v-btn icon>
         <v-icon>apps</v-icon>
@@ -43,7 +45,7 @@
                 </v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile v-for="(child, i) in item.children" :key="i" @click="goto(child.name)">
+            <v-list-tile v-for="(child, i) in item.children" :key="i" v-if="child.role.includes(is_admin)" @click="goto(child.name)">
               <v-list-tile-action v-if="child.icon">
                 <v-icon>{{ child.icon }}</v-icon>
               </v-list-tile-action>
@@ -54,7 +56,7 @@
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
-          <v-list-tile v-else :key="item.text" @click="goto(item.name)">
+          <v-list-tile v-else-if="item.role.includes(is_admin)" :key="item.text" @click="goto(item.name)">
             <v-list-tile-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-tile-action>

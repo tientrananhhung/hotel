@@ -23,7 +23,7 @@
       <template slot="items" slot-scope="props">
         <td>
           <v-avatar ma-3 :tile="false" :size="40" color="grey lighten-4">
-            <img src="images/manager.png" alt="avatar">
+            <img src="images/customer.png" alt="avatar">
           </v-avatar>
         </td>
         <td class="text-xs-right">{{ props.item.name }}</td>

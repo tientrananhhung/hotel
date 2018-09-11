@@ -1,69 +1,83 @@
 <template>
-  <v-layout pl-4 pr-4 mb-2 column>
-    <v-layout class="elevation-1" row wrap>
-      <v-toolbar flat color="blue--text grey lighten-3">
-        <v-toolbar-title>Danh sách phòng đặt</v-toolbar-title>
-        <v-btn fab flat small color="blue" @click="getData()">
-          <v-icon>autorenew</v-icon>
-        </v-btn>
-        <v-spacer></v-spacer>
-      </v-toolbar>
-      <v-toolbar flat color="blue--text grey lighten-3">
-        <v-flex xs4>
-          <v-combobox v-model="itemchoose" :items="items" chips>
-            <template slot="selection" slot-scope="data">
-              <v-chip :selected="data.selected" :disabled="data.disabled" :key="JSON.stringify(data.item)" class="v-chip--select-multi " @input="data.parent.selectItem(data.item)">
-                <v-avatar class="accent white--text">
-                  {{ data.item.slice(0, 1).toUpperCase() }}
-                </v-avatar>
-                {{ data.item }}
-              </v-chip>
+  <v-layout column>
+    <v-layout pl-4 pr-4 mb-1 column>
+      <v-card color="blue--text">
+
+        <v-card-title class="align-center display-1 font-weight-bold">
+
+          <v-list-tile-content>
+            Danh sách phòng đặt
+          </v-list-tile-content>
+          <v-spacer></v-spacer>
+          <v-btn fab flat color="blue" @click="getData()">
+            <v-icon>autorenew</v-icon>
+          </v-btn>
+
+          <v-flex xs12>
+            <v-layout row wrap class="body-1">
+              <v-flex xs5>
+                <v-menu style="margin-top: 10px" ref="menu" :close-on-content-click="false" v-model="menu" :nudge-right="40" :return-value.sync="dates" lazy transition="scale-transition" offset-y full-width min-width="290px">
+                  <v-combobox slot="activator" color="blue" v-model="dates" multiple chips small-chips label="Ngày khách chọn đặt" append-icon="event" readonly></v-combobox>
+                  <v-date-picker v-model="dates" :min="today" multiple no-title scrollable>
+                    <v-spacer></v-spacer>
+                    <v-btn flat color="primary" @click="datecancel(menu); $refs.menu.save(dates)">Xóa</v-btn>
+                    <v-btn flat color="primary" @click="menu = false">Trở lại</v-btn>
+                    <v-btn flat color="primary" @click="$refs.menu.save(dates); gettofrom()">Chọn</v-btn>
+                  </v-date-picker>
+                </v-menu>
+              </v-flex>
+              <!-- <v-divider class="mx-3" inset vertical></v-divider> -->
+              <v-flex xs6>
+                <!-- <v-combobox v-model="itemchoose" :items="items" chips>
+                  <template slot="selection" slot-scope="data">
+                    <v-chip :selected="data.selected" :disabled="data.disabled" :key="JSON.stringify(data.item)" class="v-chip--select-multi " @input="data.parent.selectItem(data.item)">
+                      <v-avatar class="accent white--text">
+                        {{ data.item.slice(0, 1).toUpperCase() }}
+                      </v-avatar>
+                      {{ data.item }}
+                    </v-chip>
+                  </template>
+                </v-combobox> -->
+                <!-- <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm kiếm" append-icon="search" style="margin-top: 10px"></v-text-field> -->
+              </v-flex>
+            </v-layout>
+
+          </v-flex>
+
+        </v-card-title>
+
+        <v-card-text>
+
+          <v-data-table :loading="loading" :headers="headers" :items="rooms.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="rooms.total" class="elevation-1" hide-actions>
+            <template slot="headerCell" slot-scope="props">
+              <v-tooltip bottom>
+                <span slot="activator">
+                  {{ props.header.text }}
+                </span>
+                <span>
+                  {{ props.header.text }}
+                </span>
+              </v-tooltip>
             </template>
-          </v-combobox>
-          <!-- <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm kiếm" append-icon="search" style="margin-top: 10px"></v-text-field> -->
-        </v-flex>
+            <template slot="items" slot-scope="props">
+              <td class="text-xs-left">{{ props.item.name }}</td>
+              <td class="text-xs-left">{{ props.item.type }}</td>
+              <td class="text-xs-left">{{ props.item.price }}</td>
+              <td class="text-xs-right">
+                <v-layout row wrap>
+                  <v-spacer></v-spacer>
+                  <dialog-booking :datebook="datebook" :room="props.item"></dialog-booking>
+                </v-layout>
+              </td>
+            </template>
+          </v-data-table>
+          <div class="text-xs-center pt-2">
+            <v-pagination color="white--text blue darken-1" v-model="pagination.page" :length="rooms.last_page" circle></v-pagination>
+          </div>
+        </v-card-text>
 
-        <v-divider class="mx-3" inset vertical></v-divider>
-        <v-flex xs5>
-          <v-menu style="margin-top: 10px" ref="menu" :close-on-content-click="false" v-model="menu" :nudge-right="40" :return-value.sync="dates" lazy transition="scale-transition" offset-y full-width min-width="290px">
-            <v-combobox slot="activator" color="blue" v-model="dates" multiple chips small-chips label="Ngày khách chọn đặt" append-icon="event" readonly></v-combobox>
-            <v-date-picker v-model="dates" :min="today" multiple no-title scrollable>
-              <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="datecancel(menu); $refs.menu.save(dates)">Xóa</v-btn>
-              <v-btn flat color="primary" @click="menu = false">Trở lại</v-btn>
-              <v-btn flat color="primary" @click="$refs.menu.save(dates); gettofrom()">Chọn</v-btn>
-            </v-date-picker>
-          </v-menu>
-        </v-flex>
-      </v-toolbar>
+      </v-card>
     </v-layout>
-
-    <v-data-table :loading="loading" :headers="headers" :items="rooms.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="rooms.total" class="elevation-1" hide-actions>
-      <template slot="headerCell" slot-scope="props">
-        <v-tooltip bottom>
-          <span slot="activator">
-            {{ props.header.text }}
-          </span>
-          <span>
-            {{ props.header.text }}
-          </span>
-        </v-tooltip>
-      </template>
-      <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ props.item.name }}</td>
-        <td class="text-xs-left">{{ props.item.type }}</td>
-        <td class="text-xs-left">{{ props.item.price }}</td>
-        <td class="text-xs-right">
-          <v-layout row wrap>
-            <v-spacer></v-spacer>
-            <dialog-booking :datebook="datebook" :room="props.item"></dialog-booking>
-          </v-layout>
-        </td>
-      </template>
-    </v-data-table>
-    <div class="text-xs-center pt-2">
-      <v-pagination color="white--text blue darken-1" v-model="pagination.page" :length="rooms.last_page" circle></v-pagination>
-    </div>
   </v-layout>
 </template>
 
@@ -120,14 +134,13 @@ export default {
       deep: true
     },
     dates() {
-      this.datebook.to = null;
       this.datebook.from = null;
-      //   this.dates[0] = this.formatDate(this.dates[0]);
-      //   this.dates[1] = this.formatDate(this.dates[1]);
+      this.datebook.to = null;
+
       if (this.dates.length == 2) {
-        var to = this.dates[0].split("-");
-        var from = this.dates[1].split("-");
-        if (from[1] - to[1] < 0) {
+        var from = this.dates[0].split("-");
+        var to = this.dates[1].split("-");
+        if (to[1] - from[1] < 0) {
           // chọn ngày khác tháng mà số tháng tới nhở hơn hơn tháng đi
           this.$store.commit("SNACKBAR", {
             status: true,
@@ -136,11 +149,11 @@ export default {
             timeout: 2000
           });
           this.dates = [];
-          this.datebook.to = null;
           this.datebook.from = null;
-        } else if (from[1] - to[1] === 0) {
+          this.datebook.to = null;
+        } else if (to[1] - from[1] === 0) {
           // chọn ngày cùng tháng
-          if (from[2] - to[2] < 0) {
+          if (to[2] - from[2] < 0) {
             this.$store.commit("SNACKBAR", {
               status: true,
               content: "Lỗi chọn ngày không hợp lí!",
@@ -148,26 +161,26 @@ export default {
               timeout: 2000
             });
             this.dates = [];
-            this.datebook.to = null;
             this.datebook.from = null;
+            this.datebook.to = null;
           } else {
             // ngày to
-            this.datebook.to = this.dates[0];
+            this.datebook.from = this.dates[0];
             // ngày from
-            this.datebook.from = this.dates[1];
+            this.datebook.to = this.dates[1];
           }
         } else {
           // ngày to
-          this.datebook.to = this.dates[0];
+          this.datebook.from = this.dates[0];
           // ngày from
-          this.datebook.from = this.dates[1];
+          this.datebook.to = this.dates[1];
         }
 
         //console.log(this.datebook);
       } else if (this.dates.length == 3) {
         this.dates = [];
-        this.datebook.to = null;
         this.datebook.from = null;
+        this.datebook.to = null;
       }
     }
   },
@@ -188,9 +201,9 @@ export default {
     gettofrom() {
       if (this.dates.length == 2) {
         // ngày to
-        // console.log(this.dates[0]);
+        console.log("From", this.dates[0]);
         // ngày from
-        // console.log(this.dates[1]);
+        console.log("To", this.dates[1]);
         // xử lí lấy phòng theo ngày
       } else {
         this.$store.commit("SNACKBAR", {

@@ -17,7 +17,7 @@
                 <v-flex xs4 md4>
                   <v-flex ma-4 xs12 sm6 md8 align-center justify-center layout>
                     <v-avatar :size="150" color="grey lighten-4">
-                      <img src="images/personx96.png" alt="avatar">
+                      <img src="images/person.png" alt="avatar">
                     </v-avatar>
                   </v-flex>
                 </v-flex>

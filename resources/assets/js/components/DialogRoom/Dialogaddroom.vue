@@ -2,7 +2,7 @@
     <v-layout row wrap>
         <v-card-text style="position: relative">
             <v-fab-transition>
-                <v-btn @click="dialog = !dialog" fab color="white--text blue darken-1" dark absolute top right="">
+                <v-btn @click="dialog = !dialog" fab color="white--text blue darken-1" dark absolute top>
                     <v-icon color="white">add</v-icon>
                 </v-btn>
             </v-fab-transition>
