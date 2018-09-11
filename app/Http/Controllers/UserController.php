@@ -76,7 +76,7 @@ class UserController extends Controller
 
         //return message by json if validation false
         if($validator->fails()){
-            $response = array('messages' => $validator->messages(), 'success' => false);
+            $response = array('messages' => $validator->messages());
             return $response;
         }else{
             //get value user and save into database
@@ -89,7 +89,7 @@ class UserController extends Controller
             $user->password = bcrypt($request->password);
             $user->isadmin = $request->isadmin;
             $user->save();
-            return response()->json(['user' => $user, 'success' => true]);
+            return response()->json($user);
         }
     }
 
@@ -104,9 +104,9 @@ class UserController extends Controller
         //Find a user
         $user = User::find($id);
         if($user == null){
-            return response()->json(array('success' => false));
+            return response()->json(array('message' => 'This user doesn\'t exists'));
         }
-        return response()->json(['user' => $user, 'success' => true]);
+        return response()->json($user);
     }
 
     /**
@@ -150,16 +150,16 @@ class UserController extends Controller
 
         //return message by json if validation false
         if($validator->fails()){
-            $response = array('messages' => $validator->messages(), 'success' => false);
+            $response = array('messages' => $validator->messages());
             return $response;
         }else{
             //get value user and update into database
             $user = User::find($id);
             if($user != null){
                 $user->fill($request->all())->save();
-                return response()->json(['user' => $user, 'success' => true]);
+                return response()->json($user);
             }else{
-                return response()->json(array('success' => false));
+                return response()->json(array('message' => 'This user doesn\'t exists'));
             }
             
         }
@@ -176,10 +176,10 @@ class UserController extends Controller
         // find a user and delete it in database
         $user = User::find($id);
         if($user == null){
-            return response()->json(array('success' => false));
+            return response()->json(array('message' => 'This user doesn\'t exists'));
         }else{
             $user->delete();
-            return response()->json(array('success' => true));
+            return response()->json(array('message' => 'This user deleted'));
         }
     }
 

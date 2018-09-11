@@ -59,12 +59,12 @@ class ServiceController extends Controller
 
         //return message by json if validation false
         if($validator->fails()){
-            $response = array('messages' => $validator->messages(), 'success' => false);
+            $response = array('messages' => $validator->messages());
             return $response;
         }else{
             //get value services and save into database
             $service = Service::create($request->all());
-            return response()->json(['service' => $service, 'success' => true]);
+            return response()->json($service);
         }
     }
 
@@ -79,9 +79,9 @@ class ServiceController extends Controller
         //Find a user
         $service = Service::find($id);
         if($service == null){
-            return response()->json(array('success' => false));
+            return response()->json(array('message' => 'This service doesn\'t exists'));
         }
-        return response()->json(['service' => $service, 'success' => true]);
+        return response()->json($service);
     }
 
     /**
@@ -120,16 +120,16 @@ class ServiceController extends Controller
 
         //return message by json if validation false
         if($validator->fails()){
-            $response = array('messages' => $validator->messages(), 'success' => false);
+            $response = array('messages' => $validator->messages());
             return $response;
         }else{
             //get value user and update into database
             $service = Service::find($id);
             if($service == null){
-                return response()->json(array('success' => false));
+                return response()->json(array('message' => 'This service doesn\'t exists'));
             }else{
                 $service->fill($request->all())->save();
-                return response()->json(['service' => $service, 'success' => true]);
+                return response()->json($service);
             }
         }
     }
@@ -145,10 +145,10 @@ class ServiceController extends Controller
         // find a service and delete it in database
         $service = Service::find($id);
         if($service == null){
-            return response()->json(array('success' => false));
+            return response()->json(array('message' => 'This service doesn\'t exists'));
         }else{
             $service->delete();
-            return response()->json(array('success' => true));
+            return response()->json(array('message' => 'This service deleted'));
         }
     }
 }

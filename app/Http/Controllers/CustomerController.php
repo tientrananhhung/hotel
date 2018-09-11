@@ -74,12 +74,12 @@ class CustomerController extends Controller
 
         // return message by json if validation false
         if($validator->fails()){
-            $response = array('messages' => $validator->messages(), 'success' => false);
+            $response = array('messages' => $validator->messages());
             return $response;
         }else{
             // get value customer and save into database
             $customer = Customer::create($request->all());
-            return response()->json(['customer' => $customer, 'success' => true]);
+            return response()->json($customer);
         }
     }
 
@@ -95,9 +95,9 @@ class CustomerController extends Controller
         $customer = Customer::find($id);
 
         if($customer == null){
-            return response()->json(array('success' => false));
+            return response()->json(['message' => 'This customer does\'t exists']);
         }
-        return response()->json(['customer' => $customer, 'success' => true]);
+        return response()->json($customer);
     }
 
     /**
@@ -144,16 +144,16 @@ class CustomerController extends Controller
 
         // return message by json if validation false
         if($validator->fails()){
-            $response = array('messages' => $validator->messages(), 'success' => false);
+            $response = array('messages' => $validator->messages());
             return $response;
         }else{
             // get value customer and update into database
             $customer = Customer::find($id);
             if($customer == null){
-                return response()->json(array('success' => false));
+                return response()->json(['message' => 'This customer does\'t exists']);
             }else{
                 $customer->fill($request->all())->save();
-                return response()->json(['customer' => $customer, 'success' => true]);
+                return response()->json($customer);
             }
         }
     }
@@ -169,10 +169,10 @@ class CustomerController extends Controller
         // find a customer and delete it in database
         $customer = Customer::find($id);
         if($customer == null){
-            return response()->json(array('success' => false));
+            return response()->json(array('message' => 'This customer does\'t exists'));
         }else{
             $customer->delete();
-            return response()->json(array('success' => true));
+            return response()->json(array('message' => 'This customer deleted'));
         }
     }
 

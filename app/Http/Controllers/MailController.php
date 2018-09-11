@@ -28,21 +28,21 @@ class MailController extends Controller
 
         //return message by json if validation false
         if($validator->fails()){
-            $response = array('messages' => $validator->messages(), 'success' => false);
+            $response = array('messages' => $validator->messages());
             return $response;
         }else{
             $customer = Customer::where('email', $request->get('email'))->first();
             if($customer == null){
-                return response()->json(['message' => 'This customer dont have email', 'success' => false]);
+                return response()->json(['message' => 'This customer doesn\'t have email']);
             }else{
                 Mail::to($customer->email)->send(new HappyBirthdayMailable($customer));
-                return response()->json(['message' => 'Send email completed', 'success' => true]);
+                return response()->json(['message' => 'Send email completed']);
             }
         }
     }
 
-     public function sendMarketing(Request $request)
-     {
+    public function sendMarketing(Request $request)
+    {
         //Custom Notification
         $messages = [
             'email.required'     => 'You must enter email to this field.',
@@ -61,16 +61,16 @@ class MailController extends Controller
 
         //return message by json if validation false
         if($validator->fails()){
-            $response = array('messages' => $validator->messages(), 'success' => false);
+            $response = array('messages' => $validator->messages());
             return $response;
         }else{
             $customer = Customer::where('email', $request->get('email'))->first();
             if($customer == null){
-                return response()->json(['message' => 'This customer dont have email', 'success' => false]);
+                return response()->json(['message' => 'This customer dont have email']);
             }else{
                 $content = collect(['title'=>$request->get('title'), 'body'=>$request->get('body'), 'customer'=>$customer])->all();
                 Mail::to($customer->email)->send(new MarketingMailable($content));
-                return response()->json(['message' => 'Send email completed', 'success' => true]);
+                return response()->json(['message' => 'Send email completed']);
             }
         }
     }

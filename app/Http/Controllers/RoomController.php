@@ -107,12 +107,12 @@ class RoomController extends Controller
 
             //return message by json if validation false
             if($validator->fails()){
-                $response = array('messages' => $validator->messages(), 'success' => false);
+                $response = array('messages' => $validator->messages());
                 return $response;
             }else{
                 //get value user and save into database
                 $room = Room::create($request->all());
-                return response()->json(['room' => $room, 'success' => true]);
+                return response()->json($room);
             }
 
         }
@@ -129,9 +129,9 @@ class RoomController extends Controller
         //Find a room
         $room = Room::find($id);
         if($room == null){
-            return response()->json(array('success' => false));
+            return response()->json(array('message' => 'This room doesn\'t exists'));
         }
-        return response()->json(['room' => $room, 'success' => true]);
+        return response()->json($room);
     }
 
     /**
@@ -176,16 +176,16 @@ class RoomController extends Controller
 
         //return message by json if validation false
         if($validator->fails()){
-            $response = array('messages' => $validator->messages(), 'success' => false);
+            $response = array('messages' => $validator->messages());
             return $response;
         }else{
             //get value room and update into database
             $room = Room::find($id);
             if($room == null){
-                return response()->json(array('success' => false));
+                return response()->json(array('message' => 'This room doesn\'t exists'));
             }else{
                 $room->fill($request->all())->save();
-                return response()->json(['room' => $room, 'success' => true]);
+                return response()->json($room);
             }
         }
     }
@@ -201,10 +201,10 @@ class RoomController extends Controller
         // find a room and delete it in database
         $room = Room::find($id);
         if($room == null){
-            return response()->json(array('success' => false));
+            return response()->json(array('message' => 'This room doesn\'t exists'));
         }else{
             $room->delete();
-            return response()->json(array('success' => true));
+            return response()->json(array('message' => 'This room deleted'));
         }
     }
     

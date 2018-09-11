@@ -74,7 +74,7 @@ class BillController extends Controller
 
         //return message by json if validation false
         if($validator->fails()){
-            $response = array('messages' => $validator->messages(), 'success' => false);
+            $response = array('messages' => $validator->messages());
             return $response;
         }else{
             if(empty(Bill::where('order_id', $request->order_id)->first())){
@@ -103,9 +103,9 @@ class BillController extends Controller
                 $bill->order()->update([
                     'status' => 'Đã Thanh Toán'
                 ]);
-                return response()->json(['bill' => $bill, 'success' => true]);
+                return response()->json($bill);
             }else{
-                return response()->json(['message' => 'paymented order', 'success' => false]);
+                return response()->json(['message' => 'paymented order']);
             }
             
         }
@@ -122,9 +122,9 @@ class BillController extends Controller
         //Find a bill
         $bill = Bill::with('order', 'order.customer', 'order.user', 'order.room')->find($id);
         if(!$bill){
-            return response()->json(array('success' => false));
+            return response()->json(['message' => 'This bill doesn\'t exists']);
         }else{
-            return response()->json(['bill' => $bill, 'success' => true]);
+            return response()->json($bill);
         }
     }
 
@@ -168,12 +168,12 @@ class BillController extends Controller
 
         //return message by json if validation false
         if($validator->fails()){
-            $response = array('messages' => $validator->messages(), 'success' => false);
+            $response = array('messages' => $validator->messages());
             return $response;
         }else{
             $bill = Bill::find($id);
             if($bill == null){
-                return response()->json(array('success' => false));
+                return response()->json(array('message' => 'This bill doesn\'t exists'));
             }else{
                 $order = Order::with('room', 'user', 'customer')->find($request->order_id);
 
@@ -191,7 +191,7 @@ class BillController extends Controller
 
                 $request->request->add(['total' => $total]);
                 $bill->fill($request->all())->save();
-                return response()->json(['bill' => $bill, 'success' => true]);
+                return response()->json($bill);
             }
         }
         
@@ -208,10 +208,10 @@ class BillController extends Controller
         // find a bill and delete it in database
         $bill = Bill::find($id);
         if($bill == null){
-            return response()->json(array('success' => false));
+            return response()->json(array('message' => 'This bill doesn\'t exists'));
         }else{
             $bill->delete();
-            return response()->json(array('success' => true));
+            return response()->json(array('message' => 'This bill deleted'));
         }
     }
 }

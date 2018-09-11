@@ -82,7 +82,7 @@ class OrderController extends Controller
 
         //return message by json if validation false
         if($validator->fails()){
-            $response = array('messages' => $validator->messages(), 'success' => false);
+            $response = array('messages' => $validator->messages());
             return $response;
         }else{
             //get value order and save into database
@@ -103,7 +103,7 @@ class OrderController extends Controller
             $order->room()->update([
                 'status' => '0'
             ]);
-            return response()->json(['order' => $order, 'success' => true]);
+            return response()->json($order);
         }
     }
 
@@ -119,9 +119,9 @@ class OrderController extends Controller
         $order = Order::with('customer', 'user', 'room')->find($id);
 
         if($order == null){
-            return response()->json(array('success' => false));
+            return response()->json(array('message' => 'This order doesn\'t exists'));
         }else{
-            return response()->json(['order' => $order, 'success' => true]);
+            return response()->json($order);
         }
     }
 
@@ -171,7 +171,7 @@ class OrderController extends Controller
 
         //return message by json if validation false
         if($validator->fails()){
-            $response = array('messages' => $validator->messages(), 'success' => false);
+            $response = array('messages' => $validator->messages());
             return $response;
         }else{
             //get value order and update into database
@@ -190,9 +190,9 @@ class OrderController extends Controller
                 ];
                 $request->request->add(['data' => json_encode($data)]);
                 $order->fill($request->all())->save();
-                return response()->json(['order' => $order, 'success' => true]);
+                return response()->json($order);
             }else{
-                return response()->json(['success' => false]);
+                return response()->json(['message' => 'This order doesn\'t exists']);
             }
         }
     }
@@ -208,10 +208,10 @@ class OrderController extends Controller
         // find a order and delete it in database
         $order = Order::find($id);
         if($order == null){
-            return response()->json(array('success' => false));
+            return response()->json(array('message' => 'This order doesn\'t exists'));
         }else{
             $order->delete();
-            return response()->json(array('success' => true));
+            return response()->json(array('message' => 'This order deleted'));
         }
     }
 
