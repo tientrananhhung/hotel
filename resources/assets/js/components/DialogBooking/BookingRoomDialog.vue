@@ -1,158 +1,160 @@
 <template>
-    <v-layout row wrap>
-        <v-btn @click="checkchoosedate" flat icon color="primary" class="blue lighten-2">
-            <v-icon color="white">add</v-icon>
-        </v-btn>
+  <v-layout row wrap>
+    <v-btn @click="checkchoosedate" small flat icon color="primary" class="blue lighten-2">
+      <v-icon color="white">add</v-icon>
+    </v-btn>
 
-        <v-dialog persistent v-model="dialog" max-width="900">
-            <v-card>
-                <v-card-title class="white--text blue lighten-1 headline">ĐƠN ĐẶT PHÒNG : {{room.name}}</v-card-title>
-                <v-card-text>
-                    <v-container grid-list-xs>
-                        <v-layout row wrap>
-                            <v-flex xs4>
-                                <v-flex pr-3 xs12 sm12 md12>
-                                    <v-toolbar flat color="white">
-                                        <v-toolbar-title class="text-xs-center">Thông tin phòng </v-toolbar-title>
-                                        <v-spacer></v-spacer>
-                                    </v-toolbar>
-                                    <v-divider></v-divider>
-                                </v-flex>
-                                <v-list dense>
-                                    <v-list-tile>
-                                        <v-list-tile-content>Tên phòng :</v-list-tile-content>
-                                        <v-list-tile-content class="align-end"> {{room.name}}</v-list-tile-content>
-                                    </v-list-tile>
-
-                                    <v-list-tile>
-                                        <v-list-tile-content>Giá phòng :</v-list-tile-content>
-                                        <v-list-tile-content class="align-end"> {{room.price}}</v-list-tile-content>
-                                    </v-list-tile>
-                                    <v-list-tile>
-                                        <v-list-tile-content>Kiểu Phòng :</v-list-tile-content>
-                                        <v-list-tile-content class="align-end">{{room.type}}</v-list-tile-content>
-                                    </v-list-tile>
-                                </v-list>
-                                <v-toolbar flat color="white">
-                                    <v-toolbar-title class="text-xs-center">Chi tiết ngày đặt</v-toolbar-title>
-                                    <v-spacer></v-spacer>
-                                </v-toolbar>
-                                <v-divider></v-divider>
-                                <v-list dense>
-                                    <v-list-tile>
-                                        <v-list-tile-content>Ngày nhận :</v-list-tile-content>
-                                        <v-list-tile-content class="align-end"> {{datebook.to}}</v-list-tile-content>
-                                    </v-list-tile>
-                                    <v-list-tile>
-                                        <v-list-tile-content>Ngày trả :</v-list-tile-content>
-                                        <v-list-tile-content class="align-end"> {{datebook.from}}</v-list-tile-content>
-                                    </v-list-tile>
-                                </v-list>
-
-                            </v-flex>
-                            <v-divider class="mx-3" inset vertical></v-divider>
-                            <v-flex xs7>
-                                <v-toolbar flat color="white">
-                                    <v-toolbar-title class="text-xs-center">Thông tin khách đặt</v-toolbar-title>
-                                    <v-btn ml-3 v-model="btnedit" :disabled="btnedit" @click="listeneditCustomer" flat small icon color="primary">
-                                        <v-icon>edit</v-icon>
-                                    </v-btn>
-                                    <v-spacer></v-spacer>
-                                </v-toolbar>
-                                <v-divider></v-divider>
-                                <v-flex xs12 sm12 md12>
-                                    <v-layout row wrap>
-                                        <v-flex xs8>
-                                            <v-text-field v-model="keyword" :label="titledit" :hint="checkhint" required></v-text-field>
-                                        </v-flex>
-                                        <v-flex mt-2 pr-4 xs2>
-
-                                            <v-btn @click.stop="getDataCustomer(); dialoglist=true  " outline small color="primary">Kiểm tra thông tin</v-btn>
-                                            <v-dialog persistent v-model="dialoglist" max-width="600">
-                                                <v-card>
-                                                    <v-card-title class="white--text blue lighten-1 headline">Danh sách khách hàng</v-card-title>
-                                                    <v-card-text>
-                                                        <v-data-table :headers="headers" :loading="loading" :items="customer.data" :search="keyword" :pagination.sync="pagination" :total-items="customer.total" hide-actions>
-                                                            <template slot="headerCell" slot-scope="props">
-                                                                <v-tooltip bottom>
-                                                                    <span slot="activator">
-                                                                        {{ props.header.text }}
-                                                                    </span>
-                                                                    <span>
-                                                                        {{ props.header.text }}
-                                                                    </span>
-                                                                </v-tooltip>
-                                                            </template>
-                                                            <template slot="items" slot-scope="props">
-                                                                <td>
-                                                                    <v-avatar ma-3 :tile="false" :size="35" color="grey lighten-4">
-                                                                        <img src="images/manager.png" alt="avatar">
-                                                                    </v-avatar>
-                                                                </td>
-                                                                <td>{{ props.item.name }}</td>
-                                                                <td>{{ props.item.phone }}</td>
-                                                                <td>
-                                                                    <v-btn @click="setDataCustomer(props.item)" flat icon color="success">
-                                                                        <v-icon>done</v-icon>
-                                                                    </v-btn>
-                                                                </td>
-                                                            </template>
-                                                        </v-data-table>
-                                                        <div class="text-xs-center pt-2">
-                                                            <v-pagination color="white--text blue darken-1" v-model="pagination.page" :length="customer.last_page" :total-visible="5" circle></v-pagination>
-                                                        </div>
-                                                        <v-card-text v-model="result">
-                                                            {{result.name}}
-                                                        </v-card-text>
-
-                                                    </v-card-text>
-                                                    <v-card-actions>
-                                                        <v-spacer></v-spacer>
-
-                                                        <v-btn color="blue darken-1" flat="flat" @click.stop="dialoglist = false; result.name = ''; customer = {}">
-                                                            Đóng
-                                                        </v-btn>
-
-                                                    </v-card-actions>
-                                                </v-card>
-                                            </v-dialog>
-
-                                        </v-flex>
-                                    </v-layout>
-                                </v-flex>
-                                <v-flex xs12>
-                                    <v-text-field :disabled="result.flag" v-model="phone" color="light-blue darken-1" append-icon="local_phone" label="Số điện thoại" :hint="checkhint" required></v-text-field>
-                                </v-flex>
-                                <v-flex xs12>
-                                    <v-text-field :disabled="result.flag" v-model="identity_card" color="light-blue darken-1" append-icon="credit_card" label="Số chứng minh nhân dân" :hint="checkhint" required></v-text-field>
-                                </v-flex>
-                                <v-flex xs12 class="text-xs-center">
-                                    <v-layout column align-center justify-center>
-                                        <v-btn @click.stop="listenbtnupdate" v-show="btnsendupdate" flat outline color="warning">
-                                            Cập nhật thông tin
-                                        </v-btn>
-                                        <v-btn @click="listenbtninsert" v-show="btninsert" flat outline color="success">
-                                            Thêm mới khách hàng
-                                        </v-btn>
-                                    </v-layout>
-                                </v-flex>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
-                </v-card-text>
-                <v-card-actions>
+    <v-dialog persistent v-model="dialog" max-width="900">
+      <v-card>
+        <v-card-title pl-3 dark class="blue--text title text-uppercase  ">Đơn đặt phòng : {{room.name}}</v-card-title>
+        <v-divider></v-divider>
+        <v-card-text>
+          <v-container grid-list-xs>
+            <v-layout pl-4 pt-1 pb-3 row wrap elevation-1>
+              <v-flex xs4>
+                <v-flex xs12 sm12 md12>
+                  <v-list-tile-title flat color="white">
+                    <v-list-tile-content class=" blue--text">Thông tin phòng </v-list-tile-content>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" flat="flat" @click="dialog = false">
-                        Trở Lại
-                    </v-btn>
-                    <v-btn v-show="btnbooking" color="blue darken-1" flat="flat" @click.stop="listenbooking">
-                        Đồng ý đặt Phòng
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+                  </v-list-tile-title>
+                  <v-divider ma-3></v-divider>
+                </v-flex>
+                <v-list dense>
+                  <v-list-tile>
+                    <v-list-tile-content>Tên phòng :</v-list-tile-content>
+                    <v-list-tile-content class="align-end"> {{room.name}}</v-list-tile-content>
+                  </v-list-tile>
 
-    </v-layout>
+                  <v-list-tile>
+                    <v-list-tile-content>Giá phòng :</v-list-tile-content>
+                    <v-list-tile-content class="align-end"> {{room.price | currency}}</v-list-tile-content>
+                  </v-list-tile>
+                  <v-list-tile>
+                    <v-list-tile-content>Kiểu Phòng :</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{room.type}}</v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+                <v-list-tile-title flat color="white">
+                  <v-list-tile-content class=" blue--text">Chi tiết ngày đặt</v-list-tile-content>
+                  <v-spacer></v-spacer>
+                </v-list-tile-title>
+                <v-divider></v-divider>
+                <v-list dense>
+                  <v-list-tile>
+                    <v-list-tile-content>Ngày nhận :</v-list-tile-content>
+                    <v-list-tile-content class="align-end"> {{datebook.to}}</v-list-tile-content>
+                  </v-list-tile>
+                  <v-list-tile>
+                    <v-list-tile-content>Ngày trả :</v-list-tile-content>
+                    <v-list-tile-content class="align-end"> {{datebook.from}}</v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+
+              </v-flex>
+              <v-divider class="mx-3" inset vertical></v-divider>
+              <v-flex xs7>
+                <v-toolbar flat color="white">
+                  <v-toolbar-title class="text-xs-center blue--text">Thông tin khách đặt</v-toolbar-title>
+                  <v-btn ml-3 v-model="btnedit" :disabled="btnedit" @click="listeneditCustomer" flat small icon color="primary">
+                    <v-icon>edit</v-icon>
+                  </v-btn>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
+                <v-divider></v-divider>
+                <v-flex xs12 sm12 md12>
+                  <v-layout row wrap>
+                    <v-flex xs8>
+                      <v-text-field v-model="namecustomer" @keyup.enter="keyword = namecustomer; getDataCustomer(); dialoglist=true" :label="titledit" :hint="checkhint" required></v-text-field>
+                    </v-flex>
+                    <v-flex mt-2 pr-4 xs2>
+
+                      <v-btn @click.stop="keyword = namecustomer;getDataCustomer(); dialoglist=true  " outline small color="primary">Kiểm tra thông tin</v-btn>
+                      <v-dialog persistent v-model="dialoglist" max-width="600">
+                        <v-card>
+                          <v-card-title dark class="blue--text title text-uppercase">Danh sách khách hàng</v-card-title>
+                          <v-divider></v-divider>
+                          <v-card-text>
+                            <v-data-table :headers="headers" :loading="loading" :items="customer.data" :search="keyword" :pagination.sync="pagination" :total-items="customer.total" hide-actions>
+                              <template slot="headerCell" slot-scope="props">
+                                <v-tooltip bottom>
+                                  <span slot="activator">
+                                    {{ props.header.text }}
+                                  </span>
+                                  <span>
+                                    {{ props.header.text }}
+                                  </span>
+                                </v-tooltip>
+                              </template>
+                              <template slot="items" slot-scope="props">
+                                <td>
+                                  <v-avatar ma-3 :tile="false" :size="35" color="grey lighten-4">
+                                    <img src="images/customer.png" alt="avatar">
+                                  </v-avatar>
+                                </td>
+                                <td class="blue--text text-uppercase">{{ props.item.name }}</td>
+                                <td>{{ props.item.phone }}</td>
+                                <td>
+                                  <v-btn @click="setDataCustomer(props.item)" flat icon color="success">
+                                    <v-icon>done</v-icon>
+                                  </v-btn>
+                                </td>
+                              </template>
+                            </v-data-table>
+                            <div class="text-xs-center pt-2">
+                              <v-pagination color="white--text blue darken-1" v-model="pagination.page" :length="customer.last_page" :total-visible="5" circle></v-pagination>
+                            </div>
+                            <v-card-text v-model="result">
+                              {{result.name}}
+                            </v-card-text>
+
+                          </v-card-text>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+
+                            <v-btn color="blue darken-1" flat="flat" @click.stop="dialoglist = false; result.name = ''; customer = {}">
+                              Đóng
+                            </v-btn>
+
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field :disabled="result.flag" v-model="phone" color="light-blue darken-1" append-icon="local_phone" label="Số điện thoại" :hint="checkhint" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field :disabled="result.flag" v-model="identity_card" color="light-blue darken-1" append-icon="credit_card" label="Số chứng minh nhân dân" :hint="checkhint" required></v-text-field>
+                </v-flex>
+                <v-flex xs12 class="text-xs-center">
+                  <v-layout column align-center justify-center>
+                    <v-btn @click.stop="listenbtnupdate" v-show="btnsendupdate" flat outline color="warning">
+                      Cập nhật thông tin
+                    </v-btn>
+                    <v-btn @click="listenbtninsert" v-show="btninsert" flat outline color="success">
+                      Thêm mới khách hàng
+                    </v-btn>
+                  </v-layout>
+                </v-flex>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color=" blue darken-1" flat="flat" @click="dialog = false">
+            Trở Lại
+          </v-btn>
+          <v-btn v-show="btnbooking" color="blue darken-5" flat="flat" @click.stop="listenbooking">
+            Đồng ý đặt Phòng
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+  </v-layout>
 </template>
 
 <script>
@@ -187,12 +189,23 @@ export default {
       btnbooking: false,
       id: null,
       keyword: "",
+      namecustomer: "",
       phone: "",
       identity_card: "",
       customer: {},
       pagination: {},
       result: { name: "", flag: true }
     };
+  },
+  filters: {
+    currency(value) {
+      var formatter = Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "VND",
+        minimumFractionDigits: 0
+      });
+      return formatter.format(value);
+    }
   },
   props: {
     room: {
@@ -207,11 +220,14 @@ export default {
       handler() {},
       deep: true
     },
-    keyword() {
-      if (this.keyword == "") {
-        this.phone = "";
-        this.identity_card = "";
-        this.btnbooking = false;
+    namecustomer() {
+      if (!this.btnsendupdate) {
+        if (this.namecustomer == "") {
+          this.namecustomer = "";
+          this.phone = "";
+          this.identity_card = "";
+          this.btnbooking = false;
+        }
       }
     }
   },
@@ -240,7 +256,7 @@ export default {
       // sự kiện thêm khách hàng mới
       axios
         .post("/customer", {
-          name: this.keyword,
+          name: this.namecustomer,
           phone: this.phone,
           identity_card: this.identity_card
         })
@@ -280,7 +296,7 @@ export default {
       if (this.id != null) {
         axios
           .put("/customer/" + this.id, {
-            name: this.keyword,
+            name: this.namecustomer,
             phone: this.phone,
             identity_card: this.identity_card
           })
@@ -300,7 +316,8 @@ export default {
             } else {
               this.$store.commit("SNACKBAR", {
                 status: true,
-                content: "Cập Nhật khách hàng " + this.keyword + " thành công",
+                content:
+                  "Cập Nhật khách hàng " + this.namecustomer + " thành công",
                 type: "success",
                 timeout: 2000
               });
@@ -327,11 +344,14 @@ export default {
     listeneditCustomer() {
       // sự kiện khi click vào sửa thì sẽ cho người dùng sửa nhân viên
       this.result.flag = !this.result.flag;
-      this.btnsendupdate = !this.btnsendupdate;
+      console.log(this.result.flag);
+      !this.result.flag
+        ? (this.btnsendupdate = true)
+        : (this.btnsendupdate = false);
       this.btnbooking = false;
     },
     setDataCustomer(item) {
-      this.keyword = item.name;
+      this.namecustomer = item.name;
       this.phone = item.phone;
       this.identity_card = item.identity_card;
       // get id customer when user choose it
@@ -356,9 +376,15 @@ export default {
                 flag: false
               };
               // active btn thêm khách hàng mới
+
+              if (!this.btnsendupdate) {
+                this.btnedit = true;
+                this.btnsendupdate = false;
+              }
               this.btninsert = true;
               this.btnbooking = false;
               this.customer = {};
+              this.namecustomer = "";
               this.phone = "";
               this.identity_card = "";
               this.loading = false;

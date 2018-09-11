@@ -1,7 +1,7 @@
 <template>
   <v-container fluid grid-list-md>
-    <v-layout column mb-4>
-      <v-layout pl-4 pr-4 mb-5 row wrap>
+    <v-layout column>
+      <v-layout pl-4 pr-4 mb-1 row wrap>
         <v-flex d-flex xs12 sm6 md6>
           <v-card color="blue--text">
             <v-card-title class="align-center headline font-weight-bold">
@@ -81,7 +81,7 @@
                     </v-list-tile>
                     <v-list-tile>
                       <v-list-tile-content>Giá phòng :</v-list-tile-content>
-                      <v-list-tile-content v-model="order.room.price" class="align-end">{{order.room.price}}</v-list-tile-content>
+                      <v-list-tile-content v-model="order.room.price" class="align-end">{{order.room.price | currency}}</v-list-tile-content>
                     </v-list-tile>
 
                     <v-divider></v-divider>
@@ -144,7 +144,7 @@
                         </template>
                         <template slot="items" slot-scope="props">
                           <td class="text-xs-left">{{ props.item.name }}</td>
-                          <td class="text-xs-left">{{ props.item.price }}</td>
+                          <td class="text-xs-left">{{ props.item.price | currency }}</td>
                         </template>
                       </v-data-table>
 
@@ -234,6 +234,16 @@ export default {
         }
       }
     };
+  },
+  filters: {
+    currency(value) {
+      var formatter = Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "VND",
+        minimumFractionDigits: 0
+      });
+      return formatter.format(value);
+    }
   },
   watch: {
     pagination: {

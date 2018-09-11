@@ -49,7 +49,7 @@
 
                   <v-list-tile>
                     <v-list-tile-content>Số điện Thoại :</v-list-tile-content>
-                    <v-list-tile-content class="align-end">{{ props.item.phone }}</v-list-tile-content>
+                    <v-list-tile-content class="align-end font font-weight-bold blue--text">{{ props.item.phone }}</v-list-tile-content>
                   </v-list-tile>
 
                   <v-list-tile>

@@ -32,7 +32,7 @@
       </template>
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.name }}</td>
-        <td class="text-xs-left">{{ props.item.price }}</td>
+        <td class="text-xs-left">{{ props.item.price | currency }}</td>
         <td class="text-xs-right">
           <v-layout row wrap>
             <v-spacer></v-spacer>
@@ -72,6 +72,16 @@ export default {
       pagination: {},
       loading: false
     };
+  },
+  filters: {
+    currency(value) {
+      var formatter = Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "VND",
+        minimumFractionDigits: 0
+      });
+      return formatter.format(value);
+    }
   },
   created() {
     this.getData();
