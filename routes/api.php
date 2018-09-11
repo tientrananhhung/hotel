@@ -78,7 +78,8 @@ Route::resource('bill', 'BillController')->middleware('auth:api');
 
 /**
  * LOGIN
- * api/login dạng POST sẽ đăng nhập thành công và trả về TOKEN
+ * api/login dạng POST gồm email và password sẽ đăng nhập thành công và trả về TOKEN
+ * api/details dạng POST để lấy thông tin người đăng nhập
  */
 
 Route::post('login', 'API\UserController@login');
