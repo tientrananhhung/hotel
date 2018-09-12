@@ -22,16 +22,20 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //get all order
-        $keyword = request()->query('keyword');
-        $limit = request()->query('limit');
-        $data = Order::whereHas('customer', function ($query) use ($keyword) {
-            $query->where('name', 'LIKE', "%$keyword%")
-            ->orwhere('email', 'LIKE', "%$keyword%")
-            ->orwhere('phone', 'LIKE', "%$keyword%")
-            ->orwhere('identity_card', 'LIKE', "%$keyword%");
-        })->with('customer', 'user', 'room')->paginate($limit);
-        return response()->json($data);
+        try{
+            //get all order
+            $keyword = request()->query('keyword');
+            $limit = request()->query('limit');
+            $data = Order::whereHas('customer', function ($query) use ($keyword) {
+                $query->where('name', 'LIKE', "%$keyword%")
+                ->orwhere('email', 'LIKE', "%$keyword%")
+                ->orwhere('phone', 'LIKE', "%$keyword%")
+                ->orwhere('identity_card', 'LIKE', "%$keyword%");
+            })->with('customer', 'user', 'room')->paginate($limit);
+            return response()->json($data, 200);
+        }catch(\Exception $e){
+            return response()->json($e->getMessage(), 500);
+        }
     }
 
     /**
@@ -52,58 +56,62 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //Custom Notification
-        $messages = [
-            'from.required'        => 'You must choose date to this field.',
-            'to.required'          => 'You must choose date to this field.',
-            'from.date'            => 'You must choose date to this field.',
-            'to.date'              => 'You must choose date to this field.',
-            'customer_id.required' => 'You must choose customer to this field.',
-            'user_id.required'     => 'You must choose user to this field.',
-            'room_id.required'     => 'You must choose room to this field.',
-            'customer_id.exists'   => 'This Customer doesn\'t exists',
-            'user_id.exists'       => 'This User doesn\'t exists',
-            'room_id.exists'       => 'This Room doesn\'t exists',
-            'service.exists'       => 'This Service doesn\'t exists',
-            'status.required'      => 'You must enter status to this field.'
-        ];
-
-        $validation = [
-            'from'        => 'required|date',
-            'to'          => 'required|date',
-            'customer_id' => 'required|exists:customers,id',
-            'user_id'     => 'required|exists:users,id',
-            'room_id'     => 'required|exists:rooms,id',
-            'status'      => 'required',
-            'service'     => 'exists:services,id'
-        ];
-
-        $validator = Validator::make($request->all(),$validation,$messages);
-
-        //return message by json if validation false
-        if($validator->fails()){
-            $response = array('messages' => $validator->messages());
-            return $response;
-        }else{
-            //get value order and save into database
-            if($request->has('service')){
-                $services = Service::whereIn('id',$request->get('service'))->get();
-            }else{
-                $services = [];
-            }
-            
-            $room = Room::find($request->get('room_id'));
-            $data = [
-                'services' => $services,
-                'room' => $room
+        try{
+            //Custom Notification
+            $messages = [
+                'from.required'        => 'You must choose date to this field.',
+                'to.required'          => 'You must choose date to this field.',
+                'from.date'            => 'You must choose date to this field.',
+                'to.date'              => 'You must choose date to this field.',
+                'customer_id.required' => 'You must choose customer to this field.',
+                'user_id.required'     => 'You must choose user to this field.',
+                'room_id.required'     => 'You must choose room to this field.',
+                'customer_id.exists'   => 'This Customer doesn\'t exists',
+                'user_id.exists'       => 'This User doesn\'t exists',
+                'room_id.exists'       => 'This Room doesn\'t exists',
+                'service.exists'       => 'This Service doesn\'t exists',
+                'status.required'      => 'You must enter status to this field.'
             ];
 
-            $request->request->add(['data' => json_encode($data), 'from_rent' => $request->from]);
-            $order = Order::with('customer', 'user', 'room')->create($request->all());
-            $order->room()->update([
-                'status' => '0'
-            ]);
-            return response()->json($order);
+            $validation = [
+                'from'        => 'required|date',
+                'to'          => 'required|date',
+                'customer_id' => 'required|exists:customers,id',
+                'user_id'     => 'required|exists:users,id',
+                'room_id'     => 'required|exists:rooms,id',
+                'status'      => 'required',
+                'service'     => 'exists:services,id'
+            ];
+
+            $validator = Validator::make($request->all(),$validation,$messages);
+
+            //return message by json if validation false
+            if($validator->fails()){
+                $response = array('message' => $validator->messages());
+                return $response;
+            }else{
+                //get value order and save into database
+                if($request->has('service')){
+                    $services = Service::whereIn('id',$request->get('service'))->get();
+                }else{
+                    $services = [];
+                }
+                
+                $room = Room::find($request->get('room_id'));
+                $data = [
+                    'services' => $services,
+                    'room' => $room
+                ];
+
+                $request->request->add(['data' => json_encode($data), 'from_rent' => $request->from]);
+                $order = Order::with('customer', 'user', 'room')->create($request->all());
+                $order->room()->update([
+                    'status' => '0'
+                ]);
+                return response()->json($order, 201);
+            }
+        }catch(\Exception $e){
+            return response()->json($e->getMessage(), 500);
         }
     }
 
@@ -115,13 +123,17 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        //Find a order
-        $order = Order::with('customer', 'user', 'room')->find($id);
+        try{
+            //Find a order
+            $order = Order::with('customer', 'user', 'room')->find($id);
 
-        if($order == null){
-            return response()->json(array('message' => 'This order doesn\'t exists'));
-        }else{
-            return response()->json($order);
+            if($order == null){
+                return response()->json(['message' => 'This order doesn\'t exists'], 404);
+            }else{
+                return response()->json($order, 200);
+            }
+        }catch(\Exception $e){
+            return response()->json($e->getMessage(), 500);
         }
     }
 
@@ -145,55 +157,59 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Custom Notification
-        $messages = [
-            'from.date'          => 'You must choose date to this field.',
-            'to.date'            => 'You must choose date to this field.',
-            'service.exists'     => 'This Service doesn\'t exists',
-            'from_rent.date'     => 'You must choose date to this field.',
-            'customer_id.exists' => 'This Customer doesn\'t exists',
-            'user_id.exists'     => 'This User doesn\'t exists',
-            'room_id.required'   => 'You must choose room to this field.',
-            'room_id.exists'     => 'This Room doesn\'t exists'
-        ];
+        try{
+            //Custom Notification
+            $messages = [
+                'from.date'          => 'You must choose date to this field.',
+                'to.date'            => 'You must choose date to this field.',
+                'service.exists'     => 'This Service doesn\'t exists',
+                'from_rent.date'     => 'You must choose date to this field.',
+                'customer_id.exists' => 'This Customer doesn\'t exists',
+                'user_id.exists'     => 'This User doesn\'t exists',
+                'room_id.required'   => 'You must choose room to this field.',
+                'room_id.exists'     => 'This Room doesn\'t exists'
+            ];
 
-        $validation = [
-            'from'        => 'date',
-            'to'          => 'date',
-            'service'     => 'exists:services,id',
-            'from_rent'   => 'date',
-            'customer_id' => 'exists:customers,id',
-            'user_id'     => 'exists:users,id',
-            'room_id'     => 'required|exists:rooms,id'
-        ];
+            $validation = [
+                'from'        => 'date',
+                'to'          => 'date',
+                'service'     => 'exists:services,id',
+                'from_rent'   => 'date',
+                'customer_id' => 'exists:customers,id',
+                'user_id'     => 'exists:users,id',
+                'room_id'     => 'required|exists:rooms,id'
+            ];
 
-        $validator = Validator::make($request->all(),$validation,$messages);
+            $validator = Validator::make($request->all(),$validation,$messages);
 
-        //return message by json if validation false
-        if($validator->fails()){
-            $response = array('messages' => $validator->messages());
-            return $response;
-        }else{
-            //get value order and update into database
-            $order = Order::with('customer', 'user', 'room')->find($id);
-
-            if($order != null){
-                if($request->has('service')){
-                    $services = Service::whereIn('id',$request->get('service'))->get();
-                }else{
-                    $services = [];
-                }
-                $room = Room::find($request->get('room_id'));
-                $data = [
-                    'services' => $services,
-                    'room' => $room
-                ];
-                $request->request->add(['data' => json_encode($data)]);
-                $order->fill($request->all())->save();
-                return response()->json($order);
+            //return message by json if validation false
+            if($validator->fails()){
+                $response = array('message' => $validator->messages());
+                return $response;
             }else{
-                return response()->json(['message' => 'This order doesn\'t exists']);
+                //get value order and update into database
+                $order = Order::with('customer', 'user', 'room')->find($id);
+
+                if($order != null){
+                    if($request->has('service')){
+                        $services = Service::whereIn('id',$request->get('service'))->get();
+                    }else{
+                        $services = [];
+                    }
+                    $room = Room::find($request->get('room_id'));
+                    $data = [
+                        'services' => $services,
+                        'room' => $room
+                    ];
+                    $request->request->add(['data' => json_encode($data)]);
+                    $order->fill($request->all())->save();
+                    return response()->json($order, 201);
+                }else{
+                    return response()->json(['message' => 'This order doesn\'t exists'], 404);
+                }
             }
+        }catch(\Exception $e){
+            return response()->json($e->getMessage(), 500);
         }
     }
 
@@ -205,13 +221,17 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        // find a order and delete it in database
-        $order = Order::find($id);
-        if($order == null){
-            return response()->json(array('message' => 'This order doesn\'t exists'));
-        }else{
-            $order->delete();
-            return response()->json(array('message' => 'This order deleted'));
+        try{
+            // find a order and delete it in database
+            $order = Order::find($id);
+            if($order == null){
+                return response()->json(['message' => 'This order doesn\'t exists'], 404);
+            }else{
+                $order->delete();
+                return response()->json(['message' => 'This order deleted'], 201);
+            }
+        }catch(\Exception $e){
+            return response()->json($e->getMessage(), 500);
         }
     }
 
