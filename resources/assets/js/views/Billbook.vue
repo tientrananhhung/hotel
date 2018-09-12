@@ -14,7 +14,7 @@
                 </v-btn>
               </v-list-tile-content>
             </v-card-title>
-
+            <v-divider></v-divider>
             <v-card-text>
               <v-text-field class="align-center" v-model="search" @keyup.enter="pagination.keyword = search" color="white--text blue lighten-1" label="Nhập tên khách hàng cần thanh toán" append-icon="search"></v-text-field>
               <v-data-table :loading="loading" :headers="headers" :items="infor.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="infor.total" hide-actions class="elevation-1">

@@ -5,17 +5,22 @@
       <v-card color="blue--text">
 
         <v-card-title class="align-center display-1 font-weight-bold">
-          <v-list-tile-content>
-            Nhân viên
-          </v-list-tile-content>
-
-          <v-spacer></v-spacer>
-          <v-btn fab flat color="blue" @click="getData()">
-            <v-icon>autorenew</v-icon>
-          </v-btn>
+          <v-toolbar flat color="white">
+            <v-toolbar-title style="margin-left:-25px" class="text-xs-center blue--text display-1">
+              Nhân viên
+            </v-toolbar-title>
+            <dialog-add-user style="margin-top:-17px; margin-left:-25px" :dialoginfor="dialoginfor"></dialog-add-user>
+            <v-spacer></v-spacer>
+            <v-btn fab flat color="blue" @click="getData()">
+              <v-icon>autorenew</v-icon>
+            </v-btn>
+          </v-toolbar>
 
           <v-flex xs12>
+            <v-divider></v-divider>
+
             <v-layout row wrap class="body-1">
+
               <v-flex xs5>
                 <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm kiếm nhân viên" append-icon="search"></v-text-field>
               </v-flex>
@@ -72,10 +77,9 @@
 
         <v-dialog v-model="dialog" persistent max-width="700">
           <v-card>
-            <v-card-title class="light-blue darken-1">
-              <span class="headline">{{dialoginfor.titleEdit}}</span>
-              <p></p>
-            </v-card-title>
+            <v-card-title dark class="blue--text title text-uppercase">{{dialoginfor.titleEdit}}</v-card-title>
+            <v-divider></v-divider>
+
             <v-card-text>
               <v-container grid-list-md>
                 <v-layout wrap>
@@ -122,7 +126,8 @@
               <v-btn @click="dialogdel = true" flat color="red accent-2">Xóa Nhân Viên</v-btn>
               <v-dialog v-model="dialogdel" max-width="350">
                 <v-card>
-                  <v-card-title class="white--text blue lighten-1 headline">Xóa Nhân Viên</v-card-title>
+                  <v-card-title dark class="blue--text title text-uppercase">{{dialoginfor.titleDel}}</v-card-title>
+                  <v-divider></v-divider>
                   <v-card-text>
                     Bạn có muốn xóa nhân viên {{infor.name}} ?
                   </v-card-text>
@@ -131,7 +136,7 @@
                     <v-btn color="blue darken-1" flat="flat" @click="dialogdel = false">
                       Trở Lại
                     </v-btn>
-                    <v-btn color="blue darken-1" flat="flat" @click="del()">
+                    <v-btn color="red darken-1" flat="flat" @click="del()">
                       Xóa
                     </v-btn>
                   </v-card-actions>
@@ -139,7 +144,7 @@
               </v-dialog>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" flat @click="dialog = !dialog">Đóng</v-btn>
-              <v-btn color="blue darken-1" flat @click.native="update()">Cập Nhật Chỉnh Sửa</v-btn>
+              <v-btn color="blue darken-1" flat @click.native="update()">Cập Nhật</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>

@@ -6,7 +6,7 @@
 
     <v-dialog persistent v-model="dialog" max-width="900">
       <v-card>
-        <v-card-title pl-3 dark class="blue--text title text-uppercase  ">Đơn đặt phòng : {{room.name}}</v-card-title>
+        <v-card-title dark class="blue--text title text-uppercase  ">Đơn đặt phòng : {{room.name}}</v-card-title>
         <v-divider></v-divider>
         <v-card-text>
           <v-container grid-list-xs>

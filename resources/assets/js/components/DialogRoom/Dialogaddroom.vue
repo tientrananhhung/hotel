@@ -2,8 +2,8 @@
     <v-layout row wrap>
         <v-card-text style="position: relative">
             <v-fab-transition>
-                <v-btn @click="dialog = !dialog" fab color="white--text blue darken-1" dark absolute top>
-                    <v-icon color="white">add</v-icon>
+                <v-btn @click="dialog = !dialog" flat fab color="blue lighten-1" dark>
+                    <v-icon>library_add</v-icon>
                 </v-btn>
             </v-fab-transition>
         </v-card-text>

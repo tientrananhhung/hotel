@@ -1,49 +1,62 @@
 <template>
-  <v-layout pl-4 pr-4 mb-2 column>
-    <v-layout class="elevation-1" row wrap>
-      <v-toolbar flat color="blue--text grey lighten-3">
-        <v-toolbar-title>Bảng Dịch Vụ</v-toolbar-title>
-        <v-btn fab flat small color="blue" @click="getData()">
-          <v-icon>autorenew</v-icon>
-        </v-btn>
-        <v-spacer></v-spacer>
+  <v-layout column>
+    <v-layout pr-4 mb-2 column>
+      <v-card color="blue--text">
 
-      </v-toolbar>
-      <v-toolbar flat color="blue--text grey lighten-3">
-        <v-flex xs8>
-          <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm kiếm" append-icon="search" style="margin-top: 10px"></v-text-field>
-        </v-flex>
-        <v-divider class="mx-3" inset vertical></v-divider>
-        <v-spacer></v-spacer>
-        <dialog-add style="margin-top: -35px"></dialog-add>
-      </v-toolbar>
-    </v-layout>
+        <v-card-title class="align-center display-1 font-weight-bold">
 
-    <v-data-table :loading="loading" :headers="headers" :items="infor.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="infor.total" hide-actions class="elevation-1">
-      <template slot="headerCell" slot-scope="props">
-        <v-tooltip bottom>
-          <span slot="activator">
-            {{ props.header.text }}
-          </span>
-          <span>
-            {{ props.header.text }}
-          </span>
-        </v-tooltip>
-      </template>
-      <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ props.item.name }}</td>
-        <td class="text-xs-left">{{ props.item.price | currency }}</td>
-        <td class="text-xs-right">
-          <v-layout row wrap>
+          <v-toolbar flat color="white">
+            <v-toolbar-title style="margin-left:-25px" class="text-xs-center blue--text display-1">
+              Dịch Vụ
+            </v-toolbar-title>
+            <dialog-add style="margin-left: -20px"></dialog-add>
             <v-spacer></v-spacer>
-            <dialog-edit :room="props.item"></dialog-edit>
-          </v-layout>
-        </td>
-      </template>
-    </v-data-table>
-    <div class="text-xs-center pt-2">
-      <v-pagination color="white--text blue darken-1" v-model="pagination.page" :length="infor.last_page" circle></v-pagination>
-    </div>
+            <v-btn fab flat small color="blue" @click="getData()">
+              <v-icon>autorenew</v-icon>
+            </v-btn>
+          </v-toolbar>
+
+          <v-flex xs12>
+            <v-divider></v-divider>
+            <v-layout pt-2 row wrap class="body-1">
+              <v-flex xs12>
+                <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm kiếm" append-icon="search"></v-text-field>
+              </v-flex>
+
+            </v-layout>
+          </v-flex>
+
+        </v-card-title>
+
+        <v-card-text>
+          <v-data-table :loading="loading" :headers="headers" :items="infor.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="infor.total" hide-actions class="elevation-1">
+            <template slot="headerCell" slot-scope="props">
+              <v-tooltip bottom>
+                <span slot="activator">
+                  {{ props.header.text }}
+                </span>
+                <span>
+                  {{ props.header.text }}
+                </span>
+              </v-tooltip>
+            </template>
+            <template slot="items" slot-scope="props">
+              <td class="text-xs-left">{{ props.item.name }}</td>
+              <td class="text-xs-left">{{ props.item.price | currency }}</td>
+              <td class="text-xs-right">
+                <v-layout row wrap>
+                  <v-spacer></v-spacer>
+                  <dialog-edit :room="props.item"></dialog-edit>
+                </v-layout>
+              </td>
+            </template>
+          </v-data-table>
+          <div class="text-xs-center pt-2">
+            <v-pagination color="white--text blue darken-1" v-model="pagination.page" :length="infor.last_page" circle></v-pagination>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-layout>
   </v-layout>
 </template>
 

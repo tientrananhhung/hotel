@@ -13,10 +13,9 @@
         <v-layout row justify-center>
             <v-dialog v-model="dialog" persistent max-width="700">
                 <v-card>
-                    <v-card-title class="white--text light-blue darken-1">
-                        <span class="headline">{{digInfor.titlebtnadd}}</span>
-                        <p></p>
-                    </v-card-title>
+                    <v-card-title dark class="blue--text title text-uppercase  ">{{digInfor.titlebtnadd}}</v-card-title>
+                    <v-divider></v-divider>
+
                     <v-card-text>
                         <v-container grid-list-md>
                             <v-layout wrap>

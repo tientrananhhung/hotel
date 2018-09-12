@@ -14,6 +14,7 @@
           </v-btn>
 
           <v-flex xs12>
+            <v-divider></v-divider>
             <v-layout row wrap class="body-1">
               <v-flex xs5>
                 <v-menu style="margin-top: 10px" ref="menu" :close-on-content-click="false" v-model="menu" :nudge-right="40" :return-value.sync="dates" lazy transition="scale-transition" offset-y full-width min-width="290px">

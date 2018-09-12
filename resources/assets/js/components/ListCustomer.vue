@@ -42,12 +42,8 @@
 </template>
 
 <script>
-import DialogEdit from "./DialogUsers/DialogEditUser.vue";
-
 export default {
-  components: {
-    DialogEdit
-  },
+  components: {},
   data() {
     return {
       dialoginfor: {
