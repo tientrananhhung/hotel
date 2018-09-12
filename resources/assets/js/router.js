@@ -7,7 +7,7 @@ import UserMg from "./views/Usersmg.vue";
 import RoomMg from "./views/Roomsmg.vue";
 import Customer from "./views/Customersmg.vue";
 import Booking from "./views/Booking.vue";
-import Oders from "./views/Oders.vue";
+import Oderservices from "./views/Oderservices.vue";
 import Billbook from "./views/Billbook.vue";
 
 Vue.use(Router);
@@ -63,11 +63,11 @@ const route = new Router({
           }
         },
         {
-          path: "/oders",
-          name: "Oders",
-          component: Oders,
+          path: "/oderservice",
+          name: "Oderservice",
+          component: Oderservices,
           meta: {
-            title: "Danh Sách Đơn Đặt"
+            title: "Gọi dịch vụ"
           }
         },
         {
