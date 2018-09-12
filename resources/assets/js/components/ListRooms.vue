@@ -11,16 +11,23 @@
             </v-toolbar-title>
             <dialog-add-room style="margin-left:-20px"></dialog-add-room>
             <v-spacer></v-spacer>
-            <v-btn fab flat small color="blue" @click="getData()">
-              <v-icon>autorenew</v-icon>
-            </v-btn>
+
+            <v-fab-transition>
+              <v-tooltip dark="" color="blue lighten-1" bottom="">
+                <v-btn slot="activator" flat fab color="blue lighten-1" dark @click="getData()">
+                  <v-icon>autorenew</v-icon>
+                </v-btn>
+                <span>Tải lại dữ liệu phòng</span>
+              </v-tooltip>
+            </v-fab-transition>
+
           </v-toolbar>
 
           <v-flex xs12>
             <v-divider></v-divider>
             <v-layout pt-2 row wrap class="body-1">
               <v-flex xs7>
-                <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm kiếm" append-icon="search"></v-text-field>
+                <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm phòng" append-icon="search"></v-text-field>
               </v-flex>
               <v-flex xs1>
 

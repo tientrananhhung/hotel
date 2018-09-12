@@ -54,7 +54,7 @@
               <v-divider class="mx-3" inset vertical></v-divider>
               <v-flex xs7>
                 <v-toolbar flat color="white">
-                  <v-toolbar-title class="text-xs-center blue--text">Thông tin khách đặt</v-toolbar-title>
+                  <v-toolbar-title style="margin-left:-25px" class="text-xs-center blue--text">Thông tin khách đặt</v-toolbar-title>
                   <v-btn ml-3 v-model="btnedit" :disabled="btnedit" @click="listeneditCustomer" flat small icon color="primary">
                     <v-icon>edit</v-icon>
                   </v-btn>

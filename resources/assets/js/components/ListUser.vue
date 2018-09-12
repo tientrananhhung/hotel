@@ -11,9 +11,16 @@
             </v-toolbar-title>
             <dialog-add-user style="margin-top:-17px; margin-left:-25px" :dialoginfor="dialoginfor"></dialog-add-user>
             <v-spacer></v-spacer>
-            <v-btn fab flat color="blue" @click="getData()">
-              <v-icon>autorenew</v-icon>
-            </v-btn>
+
+            <v-fab-transition>
+              <v-tooltip dark="" color="blue lighten-1" bottom="">
+                <v-btn slot="activator" flat fab color="blue lighten-1" dark @click="getData()">
+                  <v-icon>autorenew</v-icon>
+                </v-btn>
+                <span>Tải lại dữ liệu nhân viên</span>
+              </v-tooltip>
+            </v-fab-transition>
+
           </v-toolbar>
 
           <v-flex xs12>
@@ -37,9 +44,16 @@
                     {{ props.item.name }}
                   </v-list-tile-content>
                   <v-list-tile-content class="align-end">
-                    <v-btn small @click="dialog = !dialog; infor = props.item ; date = props.item.birthday" flat icon color="blue darken-1">
-                      <v-icon>edit</v-icon>
-                    </v-btn>
+
+                    <v-fab-transition>
+                      <v-tooltip dark="" color="blue lighten-1" bottom="">
+                        <v-btn style="margin-right:-2px" small @click="dialog = !dialog; infor = props.item ; date = props.item.birthday" slot="activator" flat fab color="blue lighten-1" dark>
+                          <v-icon>info</v-icon>
+                        </v-btn>
+                        <span>Thông tin chi tiết</span>
+                      </v-tooltip>
+                    </v-fab-transition>
+
                   </v-list-tile-content>
                 </v-card-title>
 
@@ -54,7 +68,7 @@
 
                   <v-list-tile>
                     <v-list-tile-content>Số điện Thoại :</v-list-tile-content>
-                    <v-list-tile-content class="align-end font font-weight-bold blue--text">{{ props.item.phone }}</v-list-tile-content>
+                    <v-list-tile-content class="align-end font font-weight-bold ">{{ props.item.phone }}</v-list-tile-content>
                   </v-list-tile>
 
                   <v-list-tile>
@@ -126,7 +140,7 @@
               <v-btn @click="dialogdel = true" flat color="red accent-2">Xóa Nhân Viên</v-btn>
               <v-dialog v-model="dialogdel" max-width="350">
                 <v-card>
-                  <v-card-title dark class="blue--text title text-uppercase">{{dialoginfor.titleDel}}</v-card-title>
+                  <v-card-title dark class="red--text title text-uppercase">{{dialoginfor.titleDel}}</v-card-title>
                   <v-divider></v-divider>
                   <v-card-text>
                     Bạn có muốn xóa nhân viên {{infor.name}} ?

@@ -2,11 +2,11 @@
     <v-layout row wrap>
         <v-card-text style=" position: relative">
             <v-fab-transition>
-                <v-tooltip bottom>
+                <v-tooltip dark="" color="blue lighten-1" right>
                     <v-btn @click="dialog = !dialog" slot="activator" flat fab color="blue lighten-1" dark>
                         <v-icon>person_add</v-icon>
                     </v-btn>
-                    <span>{{digInfor.titlebtnadd}}</span>
+                    <span>Thêm nhân viên</span>
                 </v-tooltip>
             </v-fab-transition>
         </v-card-text>

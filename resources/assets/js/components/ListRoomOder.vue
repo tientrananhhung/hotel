@@ -9,9 +9,15 @@
             Danh sách phòng đặt
           </v-list-tile-content>
           <v-spacer></v-spacer>
-          <v-btn fab flat color="blue" @click="getData()">
-            <v-icon>autorenew</v-icon>
-          </v-btn>
+
+          <v-fab-transition>
+            <v-tooltip dark="" color="blue lighten-1" bottom="">
+              <v-btn slot="activator" flat fab color="blue lighten-1" dark @click="getData()">
+                <v-icon>autorenew</v-icon>
+              </v-btn>
+              <span>Tải lại dữ liệu phòng đặt</span>
+            </v-tooltip>
+          </v-fab-transition>
 
           <v-flex xs12>
             <v-divider></v-divider>

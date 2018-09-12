@@ -2,15 +2,13 @@
   <v-layout row justify-center>
 
     <v-dialog v-model="dialog" persistent max-width="600">
-      <v-btn slot="activator" flat icon color="blue lighten-1">
-        <v-icon>edit</v-icon>
+      <v-btn slot="activator" flat icon color="primary">
+        <v-icon>info</v-icon>
       </v-btn>
 
       <v-card>
-        <v-card-title class="white--text blue lighten-1">
-          <span class="headline">Cập nhật service</span>
-          <p></p>
-        </v-card-title>
+        <v-card-title dark class="blue--text title text-uppercase  ">Chỉnh sửa Dịch Vụ</v-card-title>
+        <v-divider></v-divider>
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
@@ -27,17 +25,19 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
+          <v-btn flat="" dark="" color="red" @click="dialogdel = !dialogdel">Xóa Dịch Vụ</v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="white--text red" @click="dialogdel = !dialogdel">Xóa Dịch Vụ</v-btn>
-          <v-btn color="blue lighten-1" outline="" @click="dialog = !dialog">Đóng</v-btn>
-          <v-btn color="blue lighten-1" outline="" @click.native="setinfor()">Cập Nhật</v-btn>
+
+          <v-btn flat="" dark="" color="primary" @click="dialog = !dialog">Đóng</v-btn>
+          <v-btn flat="" dark="" color="primary" @click.native="setinfor()">Cập Nhật</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     <v-dialog persistent v-model="dialogdel" max-width="350">
       <v-card>
-        <v-card-title class="white--text orange lighten-2">Xóa dịch vụ</v-card-title>
+        <v-card-title dark class="red--text title text-uppercase  ">Xóa Dịch Vụ</v-card-title>
+        <v-divider></v-divider>
         <v-card-text>
           Bạn có muốn xóa dịch vụ {{infor.name}} ?
         </v-card-text>
@@ -46,7 +46,7 @@
           <v-btn color="blue darken-1" flat="flat" @click="dialogdel = false">
             Trở Lại
           </v-btn>
-          <v-btn color="blue darken-1" flat="flat" @click="del()">
+          <v-btn color="red darken-1" flat="flat" @click="del()">
             Xóa
           </v-btn>
         </v-card-actions>

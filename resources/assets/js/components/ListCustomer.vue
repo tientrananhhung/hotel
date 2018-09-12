@@ -1,44 +1,73 @@
 <template>
-  <v-layout pa-3 mb-5 column>
-    <v-toolbar class="elevation-1" flat color="blue--text grey lighten-3">
-      <v-toolbar-title>Danh Sách Khách Hàng</v-toolbar-title>
-      <v-divider class="mx-2" inset vertical></v-divider>
-      <v-text-field v-model="pagination.keyword" color="blue--text blue lighten-1" label="Tìm kiếm" append-outer-icon="search" style="margin-top: 20px"></v-text-field>
-      <v-spacer></v-spacer>
-      <v-btn fab flat small color="blue" @click="getData()">
-        <v-icon>autorenew</v-icon>
-      </v-btn>
-    </v-toolbar>
-    <v-data-table :loading="loading" :headers="headers" :items="customer.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="customer.total" class="elevation-1" hide-actions>
-      <template slot="headerCell" slot-scope="props">
-        <v-tooltip bottom>
-          <span slot="activator">
-            {{ props.header.text }}
-          </span>
-          <span>
-            {{ props.header.text }}
-          </span>
-        </v-tooltip>
-      </template>
-      <template slot="items" slot-scope="props">
-        <td>
-          <v-avatar ma-3 :tile="false" :size="40" color="grey lighten-4">
-            <img src="images/customer.png" alt="avatar">
-          </v-avatar>
-        </td>
-        <td class="text-xs-right">{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.phone }}</td>
-        <td class="text-xs-right">{{ props.item.identity_card }}</td>
-        <td class="text-xs-right">
-          {{ props.item.email }}
-        </td>
-      </template>
-    </v-data-table>
-    <div class="text-xs-center pt-2">
-      <v-pagination color="white--text blue darken-1" v-model="pagination.page" :length="customer.last_page" circle></v-pagination>
-    </div>
-  </v-layout>
+  <v-layout column>
+    <v-layout pl-4 pr-4 mb-1 column>
+      <v-card color="blue--text">
 
+        <v-card-title class="align-center display-1 font-weight-bold">
+          <v-toolbar flat color="white">
+            <v-toolbar-title style="margin-left:-25px" class="text-xs-center blue--text display-1">
+              Khách Hàng
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+
+            <v-fab-transition>
+              <v-tooltip dark="" color="blue lighten-1" bottom="">
+                <v-btn slot="activator" flat fab color="blue lighten-1" dark @click="getData()">
+                  <v-icon>autorenew</v-icon>
+                </v-btn>
+                <span>Tải lại dữ liệu khách hàng</span>
+              </v-tooltip>
+            </v-fab-transition>
+
+          </v-toolbar>
+
+          <v-flex xs12>
+            <v-divider></v-divider>
+
+            <v-layout pt-2 row wrap class="body-1">
+
+              <v-flex xs5>
+                <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm khách hàng" append-icon="search"></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+        </v-card-title>
+
+        <v-card-text>
+          <v-data-table :loading="loading" :headers="headers" :items="customer.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="customer.total" class="elevation-1" hide-actions>
+            <template slot="headerCell" slot-scope="props">
+              <v-tooltip bottom>
+                <span slot="activator">
+                  {{ props.header.text }}
+                </span>
+                <span>
+                  {{ props.header.text }}
+                </span>
+              </v-tooltip>
+            </template>
+            <template slot="items" slot-scope="props">
+              <td>
+                <v-avatar ma-3 :tile="false" :size="40" color="grey lighten-4">
+                  <img src="images/customer.png" alt="avatar">
+                </v-avatar>
+              </td>
+              <td class="text-xs-right">{{ props.item.name }}</td>
+              <td class="text-xs-right">{{ props.item.phone }}</td>
+              <td class="text-xs-right">{{ props.item.identity_card }}</td>
+              <td class="text-xs-right">
+                {{ props.item.email }}
+              </td>
+            </template>
+          </v-data-table>
+          <div class="text-xs-center pt-2">
+            <v-pagination color="white--text blue darken-1" v-model="pagination.page" :length="customer.last_page" circle></v-pagination>
+          </div>
+        </v-card-text>
+
+      </v-card>
+
+    </v-layout>
+  </v-layout>
 </template>
 
 <script>

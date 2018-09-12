@@ -9,9 +9,15 @@
                 Tìm kiếm đơn đặt
               </v-list-tile-content>
               <v-list-tile-content class="align-end">
-                <v-btn @click.stop="getData" flat icon color="blue darken-1">
-                  <v-icon>autorenew</v-icon>
-                </v-btn>
+                <v-fab-transition>
+                  <v-tooltip dark="" color="blue lighten-1" bottom="">
+                    <v-btn @click.stop="getData" slot="activator" flat fab color="blue lighten-1" dark>
+                      <v-icon>autorenew</v-icon>
+                    </v-btn>
+                    <span>Tải lại dữ liệu khách đặt</span>
+                  </v-tooltip>
+                </v-fab-transition>
+
               </v-list-tile-content>
             </v-card-title>
             <v-divider></v-divider>
@@ -32,8 +38,8 @@
                   <td class="text-xs-left">{{ props.item.order.customer.name }}</td>
                   <td class="text-xs-left">{{ props.item.order.from.split(" ")[0] }}</td>
                   <td class="text-xs-center">
-                    <v-btn @click.stop="order = props.item.order" small flat icon color="primary">
-                      <v-icon>infor</v-icon>
+                    <v-btn @click.stop="order = props.item.order" flat icon color="primary">
+                      <v-icon>info</v-icon>
                     </v-btn>
                   </td>
                 </template>
@@ -131,7 +137,7 @@
 
                       <v-divider></v-divider>
 
-                      <v-data-table :loading="loading" :headers="headers1" :items="order.data.services" :total-items="infor.total" hide-actions class="elevation-1">
+                      <v-data-table :headers="headers1" :items="order.data.services" :total-items="infor.total" hide-actions class="elevation-1">
                         <template slot="headerCell" slot-scope="props">
                           <v-tooltip bottom>
                             <span slot="activator">
