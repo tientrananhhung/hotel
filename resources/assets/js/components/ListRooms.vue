@@ -7,7 +7,7 @@
 
           <v-toolbar flat color="white">
             <v-toolbar-title style="margin-left:-25px" class="text-xs-center blue--text display-1">
-              Bảng phòng
+              Phòng
             </v-toolbar-title>
             <dialog-add-room style="margin-left:-20px"></dialog-add-room>
             <v-spacer></v-spacer>
@@ -26,15 +26,15 @@
           <v-flex xs12>
             <v-divider></v-divider>
             <v-layout pt-2 row wrap class="body-1">
-              <v-flex xs7>
-                <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm phòng" append-icon="search"></v-text-field>
+              <v-flex xs12 sm7 md7 lg7>
+                <v-text-field @keyup.enter="pagination.keyword = search" v-model="search" color="white--text blue lighten-1" label="Tìm phòng" append-icon="search"></v-text-field>
               </v-flex>
-              <v-flex xs1>
+              <v-flex sm1 md1 lg1>
 
               </v-flex>
-              <v-flex xs4>
+              <v-flex xs12 sm4 md4 lg4>
                 <v-spacer></v-spacer>
-                <v-combobox v-model="pagination.keyword" :items="items" label="Loại phòng">
+                <v-combobox v-model="itemselect" :items="items" label="Loại phòng">
                   <template slot="selection" slot-scope="data">
                     <v-chip :selected="data.selected" :disabled="data.disabled" :key="JSON.stringify(data.item)" class="v-chip--select-multi " @input="data.parent.selectItem(data.item)">
                       <v-avatar class="accent white--text">
@@ -51,7 +51,7 @@
 
         <v-card-text>
 
-          <v-data-table :loading="loading" :headers="headers" :items="rooms.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="rooms.total" class="elevation-1" hide-actions>
+          <v-data-table :loading="loading" :headers="headers" :items="rooms.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="rooms.total" hide-actions>
             <template slot="headerCell" slot-scope="props">
               <v-tooltip bottom>
                 <span slot="activator">
@@ -110,7 +110,9 @@ export default {
       ],
       rooms: {},
       pagination: {},
+      search: "",
       loading: false,
+      itemselect: "",
       items: ["Phòng Đôi", "Phòng Đơn", "Phòng Gia Đình", "Phòng Vip"]
     };
   },
@@ -134,6 +136,16 @@ export default {
         this.getData(true);
       },
       deep: true
+    },
+    search() {
+      this.search == ""
+        ? (this.pagination.keyword = "")
+        : (this.itemselect = "");
+    },
+    itemselect() {
+      this.itemselect != ""
+        ? (this.pagination.keyword = this.itemselect)
+        : null;
     }
   },
   methods: {

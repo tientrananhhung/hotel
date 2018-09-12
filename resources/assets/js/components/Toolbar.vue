@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar :clipped-left="$vuetify.breakpoint.lgAndUp" color="blue lighten-1" dark app fixed>
-      <v-toolbar-title>
+      <v-toolbar-title style="margin-left:-20px">
         <v-toolbar-side-icon @click.stop="drawer = !drawer">
         </v-toolbar-side-icon>
 
@@ -109,6 +109,12 @@ export default {
         role: ["admin", "user"]
       },
       {
+        text: "Gọi dịch vụ",
+        icon: "room_service",
+        name: "Oderservice",
+        role: ["admin", "user"]
+      },
+      {
         text: "Thanh Toán",
         icon: "payment",
         name: "Billbook",
@@ -136,12 +142,6 @@ export default {
             text: "Khách Hàng",
             icon: "supervisor_account",
             name: "Customer",
-            role: ["admin", "user"]
-          },
-          {
-            text: "Đơn Đặt",
-            icon: "list",
-            name: "Oders",
             role: ["admin", "user"]
           }
         ]

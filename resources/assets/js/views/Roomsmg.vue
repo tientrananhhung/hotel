@@ -1,9 +1,9 @@
 <template>
   <v-layout row wrap>
-    <v-flex xs7>
+    <v-flex xs12 sm12 md7 lg7>
       <list-rooms></list-rooms>
     </v-flex>
-    <v-flex xs5>
+    <v-flex xs12 sm12 md5 lg5>
       <list-services></list-services>
     </v-flex>
   </v-layout>

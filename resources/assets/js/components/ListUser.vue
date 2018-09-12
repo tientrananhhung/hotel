@@ -28,8 +28,8 @@
 
             <v-layout row wrap class="body-1">
 
-              <v-flex xs5>
-                <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm kiếm nhân viên" append-icon="search"></v-text-field>
+              <v-flex xs12 sm5 md4 lg4>
+                <v-text-field @keyup.enter="pagination.keyword = search" v-model="search" color="white--text blue lighten-1" label="Tìm kiếm nhân viên" append-icon="search"></v-text-field>
               </v-flex>
             </v-layout>
           </v-flex>
@@ -218,6 +218,7 @@ export default {
         { text: "Thao Tác", sortable: false, align: "center" }
       ],
       users: {},
+      search: "",
       pagination: {},
       loading: false
     };
@@ -235,6 +236,9 @@ export default {
     },
     date(val) {
       this.dateFormatted = this.formatDate(this.date);
+    },
+    search() {
+      this.search == "" ? (this.pagination.keyword = "") : null;
     }
   },
   methods: {

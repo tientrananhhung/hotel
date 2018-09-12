@@ -6,7 +6,7 @@
         <v-card-title class="align-center display-1 font-weight-bold">
 
           <v-list-tile-content>
-            Danh sách phòng đặt
+            Đặt phòng
           </v-list-tile-content>
           <v-spacer></v-spacer>
 
@@ -22,7 +22,7 @@
           <v-flex xs12>
             <v-divider></v-divider>
             <v-layout row wrap class="body-1">
-              <v-flex xs5>
+              <v-flex xs12 sm5 md5 lg5>
                 <v-menu style="margin-top: 10px" ref="menu" :close-on-content-click="false" v-model="menu" :nudge-right="40" :return-value.sync="dates" lazy transition="scale-transition" offset-y full-width min-width="290px">
                   <v-combobox slot="activator" color="blue" v-model="dates" multiple chips small-chips label="Ngày khách chọn đặt" append-icon="event" readonly></v-combobox>
                   <v-date-picker v-model="dates" :min="today" multiple no-title scrollable>
@@ -55,7 +55,7 @@
 
         <v-card-text>
 
-          <v-data-table :loading="loading" :headers="headers" :items="rooms.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="rooms.total" class="elevation-1" hide-actions>
+          <v-data-table :loading="loading" :headers="headers" :items="rooms.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="rooms.total" hide-actions>
             <template slot="headerCell" slot-scope="props">
               <v-tooltip bottom>
                 <span slot="activator">

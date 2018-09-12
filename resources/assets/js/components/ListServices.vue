@@ -1,6 +1,6 @@
 <template>
   <v-layout column>
-    <v-layout pr-4 mb-2 column>
+    <v-layout pl-4 pr-4 mb-2 column>
       <v-card color="blue--text">
 
         <v-card-title class="align-center display-1 font-weight-bold">
@@ -27,7 +27,7 @@
             <v-divider></v-divider>
             <v-layout pt-2 row wrap class="body-1">
               <v-flex xs12>
-                <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm dịch vụ" append-icon="search"></v-text-field>
+                <v-text-field @keyup.enter="pagination.keyword = search" v-model="search" color="white--text blue lighten-1" label="Tìm dịch vụ" append-icon="search"></v-text-field>
               </v-flex>
 
             </v-layout>
@@ -36,7 +36,7 @@
         </v-card-title>
 
         <v-card-text>
-          <v-data-table :loading="loading" :headers="headers" :items="infor.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="infor.total" hide-actions class="elevation-1">
+          <v-data-table :loading="loading" :headers="headers" :items="infor.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="infor.total" hide-actions>
             <template slot="headerCell" slot-scope="props">
               <v-tooltip bottom>
                 <span slot="activator">
@@ -90,6 +90,7 @@ export default {
       ],
       infor: {},
       pagination: {},
+      search: "",
       loading: false
     };
   },
@@ -113,6 +114,9 @@ export default {
         this.getData(true);
       },
       deep: true
+    },
+    search() {
+      this.search == "" ? (this.pagination.keyword = "") : null;
     }
   },
   methods: {

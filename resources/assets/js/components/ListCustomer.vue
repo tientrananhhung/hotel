@@ -26,7 +26,7 @@
 
             <v-layout pt-2 row wrap class="body-1">
 
-              <v-flex xs5>
+              <v-flex xs12 sm5 md4 lg4>
                 <v-text-field v-model="pagination.keyword" color="white--text blue lighten-1" label="Tìm khách hàng" append-icon="search"></v-text-field>
               </v-flex>
             </v-layout>
@@ -34,7 +34,7 @@
         </v-card-title>
 
         <v-card-text>
-          <v-data-table :loading="loading" :headers="headers" :items="customer.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="customer.total" class="elevation-1" hide-actions>
+          <v-data-table :loading="loading" :headers="headers" :items="customer.data" :search="pagination.keyword" :pagination.sync="pagination" :total-items="customer.total" hide-actions>
             <template slot="headerCell" slot-scope="props">
               <v-tooltip bottom>
                 <span slot="activator">
