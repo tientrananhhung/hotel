@@ -1,9 +1,6 @@
 <template>
   <v-footer dark height="auto">
-    <v-card flat tile class="light-green darken-1 white--text text-xs-center">
-
-    </v-card>
-    <v-card-text class="white--text light-green darken-1">
+    <v-card-text class="text-xs-center white--text blue lighten-1">
       &copy; 2018 -
       <strong>{{make}}</strong>
     </v-card-text>

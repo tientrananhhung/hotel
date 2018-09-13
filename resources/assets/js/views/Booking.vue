@@ -1,15 +1,15 @@
 <template>
   <v-container fluid grid-list-md>
-    <list-users></list-users>
+    <list-oder></list-oder>
   </v-container>
 </template>
 
 <script>
-import ListUsers from "../components/ListUser";
+import ListOder from "../components/ListRoomOder";
 
 export default {
   components: {
-    ListUsers
+    ListOder
   }
 };
 </script>

@@ -1,14 +1,16 @@
 <template>
-    <v-container md-3>
-        <form>
-            <v-text-field v-model="email" :error-messages="emailErrors" label="Email Đăng Nhập" required @input="$v.email.$touch()" @blur="$v.email.$touch()"></v-text-field>
-            <v-text-field type="password" v-model="password" :error-messages="passErrors" label="Mật Khẩu" required @input="$v.password.$touch()" @blur="$v.password.$touch()"></v-text-field>
-            <v-checkbox v-model="checkbox" :error-messages="checkboxErrors" label="Nhớ tên đăng nhập và mật khẩu ?" required @change="$v.checkbox.$touch()" @blur="$v.checkbox.$touch()"></v-checkbox>
+  <v-card width="400">
+    <v-card-text>
+      <form>
+        <v-text-field v-model="email" :error-messages="emailErrors" label="Email Đăng Nhập" required @input="$v.email.$touch()" @blur="$v.email.$touch()"></v-text-field>
+        <v-text-field type="password" v-model="password" :error-messages="passErrors" label="Mật Khẩu" required @input="$v.password.$touch()" @blur="$v.password.$touch()"></v-text-field>
+        <v-checkbox v-model="checkbox" :error-messages="checkboxErrors" label="Nhớ tên đăng nhập và mật khẩu ?" required @change="$v.checkbox.$touch()" @blur="$v.checkbox.$touch()"></v-checkbox>
 
-            <v-btn color="success" @click="submit">Đồng ý</v-btn>
-            <v-btn color="error" @click="clear">Quên Mật Khẩu</v-btn>
-        </form>
-    </v-container>
+        <v-btn color="error" @click="clear">Quên Mật Khẩu</v-btn>
+        <v-btn color="success" @click="login">Dang nhap</v-btn>
+      </form>
+    </v-card-text>
+  </v-card>
 
 </template>
 
@@ -56,13 +58,23 @@ export default {
   },
 
   methods: {
-    submit() {
-      this.$v.$touch();
+    login() {
+      // this.$v.$touch();
 
       // var email = "Mail của bạn là :" + this.email;
       // if (this.$v.name.$dirty || this.$v.email.$dirty) {
       //   alert(str + "\n" + email);
       // }
+      axios
+        .post("/login", {
+          email: "admin@gmail.com",
+          password: "123456"
+        })
+        .then(res => {
+          console.log(res.data);
+          this.$store.dispatch("setToken", res.data.success.token);
+          this.$router.replace({ name: "Home" });
+        });
     },
     clear() {
       this.$v.$reset();
